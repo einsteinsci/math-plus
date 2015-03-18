@@ -6,21 +6,10 @@ using System.Threading.Tasks;
 
 namespace MathPlus.Desktop
 {
-	public static class Algebra
+	public static partial class MathPlus
 	{
-		public static double Csc(double value)
+		public static class Algebra
 		{
-			return 1.0 / Math.Sin(value);
 		}
-		public static double Sec(double value)
-		{
-			return 1.0 / Math.Cos(value);
-		}
-		public static double Cot(double value)
-		{
-			return 1.0 / Math.Tan(value);
-		}
-
-		
 	}
 }
