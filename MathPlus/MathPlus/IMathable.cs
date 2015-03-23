@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MathPlus.Desktop
+namespace MathPlus
 {
 	public interface IMathable<T> : IComparable<T>
 	{
@@ -14,6 +14,6 @@ namespace MathPlus.Desktop
 		T Divide(T other);
 		T Exponent(T other);
 
-		T AbsoluteValue(T other);
+		T AbsoluteValue();
 	}
 }

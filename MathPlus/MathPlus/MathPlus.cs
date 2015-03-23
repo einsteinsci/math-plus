@@ -4,21 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MathPlus.Desktop
+namespace MathPlus
 {
-	public static partial class MathPlus
+	public static partial class ExtraMath
 	{
-		public static double Csc(double value)
-		{
-			return 1.0 / Math.Sin(value);
-		}
-		public static double Sec(double value)
-		{
-			return 1.0 / Math.Cos(value);
-		}
-		public static double Cot(double value)
-		{
-			return 1.0 / Math.Tan(value);
-		}
+		
 	}
 }

@@ -1,8 +1,11 @@
-﻿using System;
+﻿#define DESKTOP
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathPlus;
 
 namespace MathPlus.Desktop
 {
@@ -274,14 +277,14 @@ namespace MathPlus.Desktop
 			return new Number(Math.Pow(Value, other.Value));
 		}
 
-		public Number AbsoluteValue(Number other)
+		public Number AbsoluteValue()
 		{
-			if (other < 0)
+			if (this < 0)
 			{
-				return -other;
+				return -this;
 			}
 
-			return other;
+			return this;
 		}
 
 		#endregion
