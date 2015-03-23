@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathPlus.Test", "MathPlus.Test\MathPlus.Test.csproj", "{3EB4C197-30D4-4ED3-B7E7-44D481BBE1C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "d", "d\d.csproj", "{ED5068EF-DF36-4B07-812B-FA1B94AAC53B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathPlus.Desktop", "MathPlus\MathPlus.Desktop.csproj", "{C6A18B47-2FFF-45FC-9AD5-CD033D320051}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathPlus.Portable", "MathPlus\MathPlus.Portable.csproj", "{EE68BE1E-D16E-11E4-B9D6-1681E6B88EC1}"
@@ -21,10 +19,6 @@ Global
 		{3EB4C197-30D4-4ED3-B7E7-44D481BBE1C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EB4C197-30D4-4ED3-B7E7-44D481BBE1C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EB4C197-30D4-4ED3-B7E7-44D481BBE1C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED5068EF-DF36-4B07-812B-FA1B94AAC53B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED5068EF-DF36-4B07-812B-FA1B94AAC53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED5068EF-DF36-4B07-812B-FA1B94AAC53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED5068EF-DF36-4B07-812B-FA1B94AAC53B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6A18B47-2FFF-45FC-9AD5-CD033D320051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C6A18B47-2FFF-45FC-9AD5-CD033D320051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6A18B47-2FFF-45FC-9AD5-CD033D320051}.Release|Any CPU.ActiveCfg = Release|Any CPU
