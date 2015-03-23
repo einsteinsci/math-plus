@@ -7,7 +7,7 @@
     <ProjectGuid>{C6A18B47-2FFF-45FC-9AD5-CD033D320051}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MathPlus.Desktop</RootNamespace>
+    <RootNamespace>MathPlus</RootNamespace>
     <AssemblyName>MathPlus.Desktop</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
