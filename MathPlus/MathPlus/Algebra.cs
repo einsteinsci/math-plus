@@ -37,6 +37,10 @@ namespace MathPlus.Desktop
 			{
 				return 1.0 / Cot(theta);
 			}
+			public Number ASin(Number proportion)
+			{
+				return Math.Asin(proportion);
+			}
 		}
 	}
 }
