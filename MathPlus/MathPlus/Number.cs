@@ -9,14 +9,37 @@ namespace MathPlus.Desktop
 	/// <summary>
 	/// To help split between mobile and desktop versions of double
 	/// </summary>
-	public struct Number : IComparable, IFormattable, IConvertible, IMathable<Number>, IEquatable<Number>
+	public struct Number : IComparable, IFormattable, IConvertible, 
+		IMathable<Number>, IEquatable<Number>
 	{
 		private double Value
 		{ get; set; }
 
-		private Number(double value)
+		private Number(double value) : this()
 		{
 			Value = value;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj is Number)
+			{
+				Number other = (Number)obj;
+
+				return Value == other.Value;
+			}
+
+			return false;
+		}
+
+		public override int GetHashCode()
+		{
+			return Value.GetHashCode();
+		}
+
+		public override string ToString()
+		{
+			return Value.ToString();
 		}
 
 		#region Interfaces
@@ -41,6 +64,8 @@ namespace MathPlus.Desktop
 		{
 			return Value.ToString(format, formatProvider);
 		}
+
+		#region IConvertible
 
 		internal TypeCode GetTypeCode()
 		{
@@ -132,6 +157,88 @@ namespace MathPlus.Desktop
 			return (ulong)Value;
 		}
 
+		TypeCode IConvertible.GetTypeCode()
+		{
+			return GetTypeCode();
+		}
+
+		bool IConvertible.ToBoolean(IFormatProvider provider)
+		{
+			return ToBoolean(provider);
+		}
+
+		byte IConvertible.ToByte(IFormatProvider provider)
+		{
+			return ToByte(provider);
+		}
+
+		char IConvertible.ToChar(IFormatProvider provider)
+		{
+			return ToChar(provider);
+		}
+
+		DateTime IConvertible.ToDateTime(IFormatProvider provider)
+		{
+			throw new InvalidCastException("Cannot cast Number to DateTime");
+		}
+
+		decimal IConvertible.ToDecimal(IFormatProvider provider)
+		{
+			return ToDecimal(provider);
+		}
+
+		double IConvertible.ToDouble(IFormatProvider provider)
+		{
+			return ToDouble(provider);
+		}
+
+		short IConvertible.ToInt16(IFormatProvider provider)
+		{
+			return ToInt16(provider);
+		}
+
+		int IConvertible.ToInt32(IFormatProvider provider)
+		{
+			return ToInt32(provider);
+		}
+
+		long IConvertible.ToInt64(IFormatProvider provider)
+		{
+			return ToInt64(provider);
+		}
+
+		sbyte IConvertible.ToSByte(IFormatProvider provider)
+		{
+			return ToSByte(provider);
+		}
+
+		float IConvertible.ToSingle(IFormatProvider provider)
+		{
+			return ToSingle(provider);
+		}
+
+		object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+		{
+			return ToType(conversionType, provider);
+		}
+
+		ushort IConvertible.ToUInt16(IFormatProvider provider)
+		{
+			return ToUInt16(provider);
+		}
+
+		uint IConvertible.ToUInt32(IFormatProvider provider)
+		{
+			return ToUInt32(provider);
+		}
+
+		ulong IConvertible.ToUInt64(IFormatProvider provider)
+		{
+			return ToUInt64(provider);
+		}
+
+		#endregion
+
 		public int CompareTo(Number other)
 		{
 			return (int)(Value - other.Value);
@@ -167,6 +274,16 @@ namespace MathPlus.Desktop
 			return new Number(Math.Pow(Value, other.Value));
 		}
 
+		public Number AbsoluteValue(Number other)
+		{
+			if (other < 0)
+			{
+				return -other;
+			}
+
+			return other;
+		}
+
 		#endregion
 
 		#region operator overloads
@@ -194,23 +311,20 @@ namespace MathPlus.Desktop
 		{
 			return a.Subtract(b);
 		}
-		// yep, not xor anymore
+		/// <summary>
+		/// Exponent here, not a XOR function
+		/// </summary>
+		/// <param name="a">Base</param>
+		/// <param name="b">Exponent</param>
+		/// <returns>Base ^ Exponent</returns>
 		public static Number operator^(Number a, Number b)
 		{
 			return a.Exponent(b);
 		}
 
-		public static explicit operator Number(double d)
-		{
-			return new Number(d);
-		}
 		public static implicit operator Number(double d)
 		{
 			return new Number(d);
-		}
-		public static explicit operator double(Number n)
-		{
-			return n.Value;
 		}
 		public static implicit operator double(Number n)
 		{

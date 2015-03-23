@@ -14,6 +14,6 @@ namespace MathPlus.Desktop
 		T Divide(T other);
 		T Exponent(T other);
 
-
+		T AbsoluteValue(T other);
 	}
 }
