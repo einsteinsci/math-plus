@@ -5,6 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using MathPlusLib;
 
+/// Created for the sole purpose of maintaining the same source code
+/// between Portable and Desktop projects where possible
+namespace MathPlusLib.Desktop
+{ }
+
 namespace MathPlusLib.Portable
 {
 	public struct Number : IMathable<Number>, IComparable, 
