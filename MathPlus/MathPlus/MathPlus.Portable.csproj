@@ -8,8 +8,8 @@
     <ProjectGuid>{EE68BE1E-D16E-11E4-B9D6-1681E6B88EC1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MathPlus</RootNamespace>
-    <AssemblyName>MathPlus.Portable</AssemblyName>
+    <RootNamespace>MathPlusLib</RootNamespace>
+    <AssemblyName>MathPlusLib.Portable</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,12 +41,15 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algebra.cs" />
+    <Compile Include="Calculus.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="IMathable.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Number.Portable.cs" />
+    <Compile Include="Probability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

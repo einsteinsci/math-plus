@@ -1,16 +1,19 @@
-﻿#define DESKTOP
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathPlus;
+using MathPlusLib;
 
-namespace MathPlus.Desktop
+// Just declared here so you don't have to use #if.
+namespace MathPlusLib.Portable
+{ }
+
+namespace MathPlusLib.Desktop
 {
 	/// <summary>
-	/// To help split between mobile and desktop versions of double
+	/// Simple wrapper around the double struct, with additional functionality.
+	/// Implicit conversion to and from double.
 	/// </summary>
 	public struct Number : IComparable, IFormattable, IConvertible, 
 		IMathable<Number>, IEquatable<Number>
@@ -21,6 +24,18 @@ namespace MathPlus.Desktop
 		private Number(double value) : this()
 		{
 			Value = value;
+		}
+
+		public Number Parse(string s)
+		{
+			try
+			{
+				return double.Parse(s);
+			}
+			catch (FormatException e)
+			{
+				throw e;
+			}
 		}
 
 		public override bool Equals(object obj)

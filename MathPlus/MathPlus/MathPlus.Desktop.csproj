@@ -7,8 +7,8 @@
     <ProjectGuid>{C6A18B47-2FFF-45FC-9AD5-CD033D320051}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MathPlus</RootNamespace>
-    <AssemblyName>MathPlus.Desktop</AssemblyName>
+    <RootNamespace>MathPlusLib</RootNamespace>
+    <AssemblyName>MathPlusLib.Desktop</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,7 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algebra.cs" />
+    <Compile Include="Calculus.cs" />
+    <Compile Include="Probability.cs" />
+    <Compile Include="Trig.cs" />
+    <Compile Include="Complex.cs" />
     <Compile Include="IMathable.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />

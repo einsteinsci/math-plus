@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathPlus.Desktop;
+using MathPlusLib.Desktop;
 
-namespace MathPlus.Test
+namespace MathPlusLib.Test
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("sin 30 = " + ExtraMath.Algebra.Sin(30));
+			Console.WriteLine("sin 30 = " + MathPlus.Trig.Sin(30));
 
 			Console.ReadKey();
 		}

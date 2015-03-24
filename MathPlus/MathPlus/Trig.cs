@@ -4,30 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if (PORTABLE)
-using MathPlus.Portable;
-#endif
-#if (DESKTOP)
-using MathPlus.Desktop;
-#endif
+using MathPlusLib.Portable;
+using MathPlusLib.Desktop;
 
-namespace MathPlus
+namespace MathPlusLib
 {
-	public static partial class ExtraMath
+	public static partial class MathPlus
 	{
-		public static class Algebra
+		public static class Trig
 		{
-			/// <summary>
-			/// Ratio of a circle's diameter to its cicumference: 
-			/// &#x3c0; = 3.14159265358979323846
-			/// </summary>
-			public static readonly Number PI = 3.14159265358979323846;
-
-			/// <summary>
-			/// Euler's number e = 2.7182818284590452354
-			/// </summary>
-			public static readonly Number E = 2.7182818284590452354;
-
 			#region trig
 			public static Number Sin(Number theta)
 			{
@@ -68,9 +53,17 @@ namespace MathPlus
 			}
 			#endregion
 
-			public static Number Abs(Number value)
+			public static Number Log10(Number value)
 			{
-				return value.AbsoluteValue();
+				return Math.Log10(value);
+			}
+			public static Number Log(Number value, Number baseNum)
+			{
+				return Math.Log(value, baseNum);
+			}
+			public static Number Ln(Number value)
+			{
+				return Math.Log(value);
 			}
 		}
 	}

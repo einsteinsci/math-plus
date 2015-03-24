@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MathPlus.Test")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("MathPlus Testing Project")]
+[assembly: AssemblyDescription("Simple console app to test the capabilities of MathPlus")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MathPlus.Test")]
+[assembly: AssemblyProduct("MathPlus Testing Project")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

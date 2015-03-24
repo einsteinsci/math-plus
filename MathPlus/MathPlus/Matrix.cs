@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MathPlus
+namespace MathPlusLib
 {
 	public class Matrix<T>
 	{
