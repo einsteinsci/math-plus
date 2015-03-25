@@ -106,16 +106,6 @@ namespace MathPlusLib
 			return value;
 		}
 
-		private static void UpdatePrimes(int max)
-		{
-			if (primes.Last() >= max)
-			{
-				return;
-			}
-
-
-		}
-
 		public static int LeastCommonMultiplier(int a, int b)
 		{
 			int max = (int)Max(a, b);
@@ -129,6 +119,22 @@ namespace MathPlusLib
 			}
 
 			return max;
+		}
+
+		public static Number Sigma(Function2D exp, Number lower,
+			Number upper, Number increment)
+		{
+			Number total = 0;
+			for (Number i = lower; i <= upper; i += increment)
+			{
+				total += exp(i);
+			}
+			return total;
+		}
+		public static Number Sigma(Function2D exp, Number lower,
+			Number upper)
+		{
+			return Sigma(exp, lower, upper, 1.0);
 		}
 	}
 }

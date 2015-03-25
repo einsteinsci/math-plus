@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathPlusLib;
 using MathPlusLib.Desktop;
 
 namespace MathPlusLib.Test
@@ -11,8 +12,12 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("sin 30 = " + MathPlus.Trig.Sin(30));
+			Function2D battery2 = (x) => 1.0 / x;
+			Number two = MathPlus.Calculus.Integrate(battery2, 1, 
+				MathPlus.E * MathPlus.E, 1000, IntegrationType.Trapezoidal);
+			Console.WriteLine("Battery " + two.ToString());
 
+			// End of Line
 			Console.ReadKey();
 		}
 	}

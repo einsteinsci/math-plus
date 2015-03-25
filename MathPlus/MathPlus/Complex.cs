@@ -37,16 +37,13 @@ namespace MathPlusLib
 				MathPlus.Trig.Sin(arg) * abs);
 		}
 
-		public Complex(Number real, Number imag)
+		public Complex(Number real, Number imag) : this()
 		{
 			Real = real;
 			Imag = imag;
 		}
-		public Complex(Number real)
-		{
-			Real = real;
-			Imag = 0;
-		}
+		public Complex(Number real) : this(real, 0)
+		{ }
 
 		public Complex Conjugate()
 		{

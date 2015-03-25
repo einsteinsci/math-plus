@@ -153,11 +153,11 @@ namespace MathPlusLib.Portable
 		}
 		public static Number operator *(Number a, Number b)
 		{
-			return a.Subtract(b);
+			return a.Multiply(b);
 		}
 		public static Number operator /(Number a, Number b)
 		{
-			return a.Subtract(b);
+			return a.Divide(b);
 		}
 		/// <summary>
 		/// Exponent here, not a XOR function
