@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculus.cs" />
+    <Compile Include="IModel.cs" />
+    <Compile Include="NormalModel.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Trig.cs" />
     <Compile Include="Complex.cs" />

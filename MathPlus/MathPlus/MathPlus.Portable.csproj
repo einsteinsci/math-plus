@@ -44,11 +44,14 @@
     <Compile Include="Calculus.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="IMathable.cs" />
+    <Compile Include="IModel.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />
+    <Compile Include="NormalModel.cs" />
     <Compile Include="Number.Portable.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stats.cs" />
     <Compile Include="Trig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

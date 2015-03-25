@@ -29,6 +29,10 @@ namespace MathPlusLib
 		{
 			return baseNum ^ exponent;
 		}
+		public static Number Exp(Number exponent)
+		{
+			return Pow(E, exponent);
+		}
 
 		public static Number Sqrt(Number radicand)
 		{
