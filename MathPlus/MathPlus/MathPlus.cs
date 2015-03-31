@@ -52,15 +52,22 @@ namespace MathPlusLib
 		{
 			Number mult = Pow(10.0, digits);
 			Number bigger = value * mult;
-			int lower = (int)bigger;
-			int upper = lower + 1;
+			int lowerInt = (int)bigger;
+			int upperInt = lowerInt + 1;
+			Number lower = lowerInt;
+			Number upper = upperInt;
 
+			Number result;
 			if (upper - bigger >= bigger - lower)
 			{
-				return upper;
+				result = lower;
+			}
+			else
+			{
+				result = upper;
 			}
 
-			return lower;
+			return result / mult;
 		}
 
 		public static int Floor(Number value)
