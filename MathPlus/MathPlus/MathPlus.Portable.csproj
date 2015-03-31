@@ -51,6 +51,7 @@
     <Compile Include="Number.Portable.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatisticInappropriateException.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="TModel.cs" />
     <Compile Include="Trig.cs" />
