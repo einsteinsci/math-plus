@@ -43,6 +43,7 @@
     <Compile Include="IModel.cs" />
     <Compile Include="NormalModel.cs" />
     <Compile Include="Probability.cs" />
+    <Compile Include="Stats.cs" />
     <Compile Include="TModel.cs" />
     <Compile Include="Trig.cs" />
     <Compile Include="Complex.cs" />
