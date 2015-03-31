@@ -23,12 +23,27 @@ namespace MathPlusLib
 			SD = sigma;
 		}
 
-		public Number Probability(Number value)
+		public Number ZScore(Number value)
 		{
-			throw new NotImplementedException();
+			return (value - Mean) / SD;
 		}
 
-		private static Number phi(double x)
+		public Number Probability(Number bottom, Number top)
+		{
+			return ProbabilityUnscaled(ZScore(bottom), ZScore(top));
+		}
+
+		public override string ToString()
+		{
+			return "N(" + Mean.ToString() + ", " + SD.ToString() + ")";
+		}
+
+		public static Number ProbabilityUnscaled(Number zBot, Number zTop)
+		{
+			return phi(zTop) - phi(zBot);
+		}
+
+		private static Number phi(Number x)
 		{
 			// constants
 			Number a1 = 0.254829592;

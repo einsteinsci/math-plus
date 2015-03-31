@@ -10,6 +10,6 @@ namespace MathPlusLib
 {
 	public interface IModel
 	{
-		Number Probability(Number value);
+		Number Probability(Number bottom, Number top);
 	}
 }

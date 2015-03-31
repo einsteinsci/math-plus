@@ -170,6 +170,11 @@ namespace MathPlusLib
 			public static Number Integrate(Function2D function, Number lower,
 				Number upper, int divisions, IntegrationType type)
 			{
+				if (lower == upper)
+				{
+					return 0;
+				}
+
 				switch (type)
 				{
 				case IntegrationType.Low:

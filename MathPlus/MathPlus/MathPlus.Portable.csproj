@@ -52,6 +52,7 @@
     <Compile Include="Probability.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats.cs" />
+    <Compile Include="TModel.cs" />
     <Compile Include="Trig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
