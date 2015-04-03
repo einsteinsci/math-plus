@@ -29,14 +29,14 @@ namespace MathPlusLib
 			DF = df;
 		}
 
-		public Number TValue(Number value)
+		public Number TScore(Number value)
 		{
 			return (value - Mean) / SD;
 		}
 
 		public Number Probability(Number low, Number high)
 		{
-			return ProbabilityUnscaled(TValue(low), TValue(high), DF);
+			return ProbabilityUnscaled(TScore(low), TScore(high), DF);
 		}
 
 		// Experimental

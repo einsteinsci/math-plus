@@ -9,20 +9,53 @@ using MathPlusLib.Portable;
 
 namespace MathPlusLib
 {
-	public enum ComparisonDirection
+	public enum InequalityType
 	{
-		Negative = -1,
-		Equal = 0,
-		Positive = 1
+		LessThan = -1,
+		NotEqual = 0,
+		GreaterThan = 1
 	}
 
-	public class StatsTestResults
+	public class ZTestResults
 	{
-		public bool Passed
-		{ get; set; }
+		public ZTestResults(Number prob, Number alpha, Number se)
+		{
+			RejectNullHypothesis = prob < alpha;
+			Probability = prob;
+			StandardError = se;
+		}
+
+		public bool RejectNullHypothesis
+		{ get; private set; }
 
 		public Number Probability
-		{ get; set; }
+		{ get; private set; }
+
+		public Number StandardError
+		{ get; private set; }
+	}
+
+	public class TTestResults
+	{
+		public TTestResults(Number prob, Number alpha, Number se, Number df)
+		{
+			RejectNullHypothesis = prob < alpha;
+			Probability = prob;
+			StandardError = se;
+			DegreesOfFreedom = df;
+		}
+
+		public bool RejectNullHypothesis
+		{ get; private set; }
+
+		public Number Probability
+		{ get; private set; }
+
+		public Number StandardError
+		{ get; private set; }
+
+		public Number DegreesOfFreedom
+		{ get; private set; }
 	}
 
 	public static partial class MathPlus
@@ -88,7 +121,7 @@ namespace MathPlusLib
 				return (double)on / (double)total;
 			}
 
-			public static StatsTestResults OnePropZTest(Number H0, ComparisonDirection HA, 
+			public static ZTestResults OnePropZTest(Number p0, InequalityType HA, 
 				Number proportion, int n, Number alpha)
 			{
 				Number q = 1.0 - proportion;
@@ -100,7 +133,7 @@ namespace MathPlusLib
 						"Proportion cannot be outside of range (0, 1).");
 				}
 
-				if (H0 > 1.0 || H0 < 0.0)
+				if (p0 > 1.0 || p0 < 0.0)
 				{
 					throw new ArgumentOutOfRangeException("H0",
 						"Null Hypothesis cannot be outside of range (0, 1).");
@@ -115,20 +148,20 @@ namespace MathPlusLib
 
 				Number se = Sqrt((proportion * q) / (double)n);
 
-				NormalModel model = new NormalModel(H0, se);
+				NormalModel model = new NormalModel(p0, se);
 
 				Number prob = -1;
-				Number z = model.ZScore(proportion);
+				Number z = Constrain(model.ZScore(proportion), -98.9, 98.9);
 
-				if (HA == ComparisonDirection.Negative)
+				if (HA == InequalityType.LessThan)
 				{
 					prob = NormalModel.ProbabilityUnscaled(-99.0, z);
 				}
-				else if (HA == ComparisonDirection.Positive)
+				else if (HA == InequalityType.GreaterThan)
 				{
 					prob = NormalModel.ProbabilityUnscaled(z, 99.0);
 				}
-				else if (HA == ComparisonDirection.Equal)
+				else if (HA == InequalityType.NotEqual)
 				{
 					prob = NormalModel.ProbabilityUnscaled(Abs(z), 99.0) * 2.0;
 				}
@@ -136,13 +169,18 @@ namespace MathPlusLib
 				if (prob == -1)
 				{
 					throw new ArgumentOutOfRangeException(
-						"Alternate hypothesis was not a valid ComparisonDirection: " +
+						"Alternate hypothesis was not a valid InequalityType: " +
 						HA.ToString());
 				}
 
-				return new StatsTestResults() { Passed = (prob < alpha), Probability = prob };
+				return new ZTestResults(prob, alpha, se);
 			}
-			public static StatsTestResults TwoPropZTest(ComparisonDirection HA,
+			public static ZTestResults OnePropZTest(Number p0, InequalityType HA, 
+				Number proportion, int n)
+			{
+				return OnePropZTest(p0, HA, proportion, n, 0.05);
+			}
+			public static ZTestResults TwoPropZTest(InequalityType HA,
 				Number p1, Number p2, int n1, int n2, Number alpha)
 			{
 				Number q1 = 1.0 - p1;
@@ -183,27 +221,103 @@ namespace MathPlusLib
 					((pPooled * qPooled) / (double)n2));
 
 				NormalModel model = new NormalModel(0.0, sePooled);
-				Number z = model.ZScore(pDelta);
+				Number z = Constrain(model.ZScore(pDelta), -98.9, 98.9);
 
 				Number prob = -1;
 
-				if (HA == ComparisonDirection.Negative)
+				if (HA == InequalityType.LessThan)
 				{
 					prob = NormalModel.ProbabilityUnscaled(-99.0, z);
 				}
-				else if (HA == ComparisonDirection.Positive)
+				else if (HA == InequalityType.GreaterThan)
 				{
 					prob = NormalModel.ProbabilityUnscaled(z, 99.0);
 				}
-				else if (HA == ComparisonDirection.Equal)
+				else if (HA == InequalityType.NotEqual)
 				{
 					prob = NormalModel.ProbabilityUnscaled(Abs(z), 99.0) * 2.0;
 				}
 
-				return new StatsTestResults() { Passed = (prob < alpha), Probability = prob };
+				if (prob == -1)
+				{
+					throw new ArgumentOutOfRangeException(
+						"Alternate hypothesis was not a valid InequalityType: " +
+						HA.ToString());
+				}
+
+				return new ZTestResults(prob, alpha, sePooled);
+			}
+			public static ZTestResults TwoPropZTest(InequalityType HA,
+				Number p1, Number p2, int n1, int n2)
+			{
+				return TwoPropZTest(HA, p1, p2, n1, n2, 0.05);
 			}
 
-			
+			public static TTestResults OneSampleTTest(Number mu0, InequalityType HA,
+				Number mean, Number sd, int n, Number alpha)
+			{
+				Number se = sd / Sqrt(n);
+				Number df = n - 1;
+
+				TModel model = new TModel(mu0, se, df);
+				Number prob = -1;
+				Number t = Constrain(model.TScore(mean), -98.9, 98.9);
+
+				if (HA == InequalityType.LessThan)
+				{
+					prob = TModel.ProbabilityUnscaled(-99.0, t, df);
+				}
+				else if (HA == InequalityType.GreaterThan)
+				{
+					prob = TModel.ProbabilityUnscaled(t, 99.0, df);
+				}
+				else if (HA == InequalityType.NotEqual)
+				{
+					prob = TModel.ProbabilityUnscaled(Abs(t), 99.0, df) * 2.0;
+				}
+
+				if (prob == -1)
+				{
+					throw new ArgumentOutOfRangeException(
+						"Alternate hypothesis was not a valid InequalityType: " +
+						HA.ToString());
+				}
+
+				return new TTestResults(prob, alpha, se, df);
+			}
+			public static TTestResults OneSampleTTest(Number mu0, InequalityType HA,
+				Number mean, Number sd, int n)
+			{
+				return OneSampleTTest(mu0, HA, mean, sd, n, 0.05);
+			}
+			public static TTestResults TwoSampleTTest(InequalityType HA,
+				Number mean1, Number mean2, Number sd1, Number sd2, 
+				int n1, int n2, Number alpha)
+			{
+				Number se = Sqrt(((sd1 * sd1) / (Number)n1) + ((sd2 * sd2) / (Number)n2));
+				Number df = DegreesOfFreedom(sd1, sd2, n1, n2);
+
+				TModel model = new TModel(0, se, df);
+				Number prob = -1;
+				Number t = 
+			}
+
+			public static Number DegreesOfFreedom(Number s1, Number s2, int n1, int n2)
+			{
+				Number upperInnerA = (s1 * s1) / (Number)n1;
+				Number upperInnerB = (s2 * s2) / (Number)n2;
+				Number upper = (upperInnerA + upperInnerB) * (upperInnerA + upperInnerB);
+
+				Number lowerA = 1.0 / ((Number)n1 - 1.0);
+				Number lowerBInner = (s1 * s1) / (Number)n1;
+				Number lowerB = lowerBInner * lowerBInner;
+				Number lowerC = 1.0 / ((Number)n2 - 1.0);
+				Number lowerDInner = (s2 * s2) / (Number)n2;
+				Number lowerD = lowerDInner * lowerDInner;
+				Number lower = (lowerA * lowerB) + (lowerC * lowerD);
+
+				return upper / lower;
+			}
 		}
 	}
 }
