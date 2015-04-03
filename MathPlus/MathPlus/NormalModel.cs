@@ -43,6 +43,11 @@ namespace MathPlusLib
 			return phi(zTop) - phi(zBot);
 		}
 
+		public static Number Inverse(Number probability)
+		{
+			throw new NotImplementedException();
+		}
+
 		private static Number phi(Number x)
 		{
 			// constants

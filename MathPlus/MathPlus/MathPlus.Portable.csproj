@@ -45,6 +45,7 @@
     <Compile Include="Complex.cs" />
     <Compile Include="IMathable.cs" />
     <Compile Include="IModel.cs" />
+    <Compile Include="Interval.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="NormalModel.cs" />

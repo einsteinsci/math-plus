@@ -18,12 +18,16 @@ namespace MathPlusLib
 
 	public class ZTestResults
 	{
-		public ZTestResults(Number prob, Number alpha, Number se)
+		public ZTestResults(Number tested, Number prob, Number alpha, Number se)
 		{
+			TestedValue = tested;
 			RejectNullHypothesis = prob < alpha;
 			Probability = prob;
 			StandardError = se;
 		}
+
+		public Number TestedValue
+		{ get; private set; }
 
 		public bool RejectNullHypothesis
 		{ get; private set; }
@@ -37,13 +41,17 @@ namespace MathPlusLib
 
 	public class TTestResults
 	{
-		public TTestResults(Number prob, Number alpha, Number se, Number df)
+		public TTestResults(Number tested, Number prob, Number alpha, Number se, Number df)
 		{
+			TestedValue = tested;
 			RejectNullHypothesis = prob < alpha;
 			Probability = prob;
 			StandardError = se;
 			DegreesOfFreedom = df;
 		}
+
+		public Number TestedValue
+		{ get; private set; }
 
 		public bool RejectNullHypothesis
 		{ get; private set; }
@@ -173,7 +181,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new ZTestResults(prob, alpha, se);
+				return new ZTestResults(proportion, prob, alpha, se);
 			}
 			public static ZTestResults OnePropZTest(Number p0, InequalityType HA, 
 				Number proportion, int n)
@@ -245,7 +253,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new ZTestResults(prob, alpha, sePooled);
+				return new ZTestResults(p2 - p1, prob, alpha, sePooled);
 			}
 			public static ZTestResults TwoPropZTest(InequalityType HA,
 				Number p1, Number p2, int n1, int n2)
@@ -283,7 +291,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new TTestResults(prob, alpha, se, df);
+				return new TTestResults(mean, prob, alpha, se, df);
 			}
 			public static TTestResults OneSampleTTest(Number mu0, InequalityType HA,
 				Number mean, Number sd, int n)
@@ -299,7 +307,49 @@ namespace MathPlusLib
 
 				TModel model = new TModel(0, se, df);
 				Number prob = -1;
-				Number t = 
+				Number t = Constrain(model.TScore(mean2 - mean1), -98.9, 98.9);
+
+				if (HA == InequalityType.LessThan)
+				{
+					prob = TModel.ProbabilityUnscaled(-99.0, t, df);
+				}
+				else if (HA == InequalityType.GreaterThan)
+				{
+					prob = TModel.ProbabilityUnscaled(t, 99.0, df);
+				}
+				else if (HA == InequalityType.NotEqual)
+				{
+					prob = TModel.ProbabilityUnscaled(Abs(t), 99.0, df) * 2.0;
+				}
+
+				if (prob == -1)
+				{
+					throw new ArgumentOutOfRangeException(
+						"Alternate hypothesis was not a valid InequalityType: " +
+						HA.ToString());
+				}
+
+				return new TTestResults(mean2 - mean1, prob, alpha, se, df);
+			}
+			public static TTestResults TwoSampleTTest(InequalityType HA,
+				Number mean1, Number mean2, Number sd1, Number sd2, 
+				int n1, int n2)
+			{
+				return TwoSampleTTest(HA, mean1, mean2, sd1, sd2, n1, n2, 0.05);
+			}
+
+			public static Interval OnePropZInterval(Number proportion, int n, Number confidence)
+			{
+				if (confidence <= 0.0 || confidence >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("confidence", 
+						"Confidence must be between 0 and 1, exclusively.");
+				}
+
+				Number q = 1.0 - proportion;
+				
+				Number se = Sqrt((proportion * q) / (Number)n);
+				Number zCrit = NormalModel.Inverse(1 - ((1.0 - confidence) / 2.0));
 			}
 
 			public static Number DegreesOfFreedom(Number s1, Number s2, int n1, int n2)
