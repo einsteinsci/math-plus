@@ -47,6 +47,7 @@
     <Compile Include="IModel.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="MathPlus.cs" />
+    <Compile Include="MathPlusExtensions.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="NormalModel.cs" />
     <Compile Include="Probability.cs" />

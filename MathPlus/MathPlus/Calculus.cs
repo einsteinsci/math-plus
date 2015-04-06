@@ -32,7 +32,6 @@ namespace MathPlusLib
 		High,
 		Midpoint,
 		Trapezoidal,
-		[Obsolete("Simpson integration not completely implemented")]
 		Simpson
 	}
 
@@ -124,49 +123,56 @@ namespace MathPlusLib
 				return area;
 			}
 			private static double IntegrateTrapezoidal(Function2D function,
-				double lower, double upper, int divisions)
+				double lower, double upper, int divisions = 2)
 			{
 				double increment = (upper - lower) / divisions;
-				double area = 0;
-				for (double x = lower; x < upper; x += increment)
+				double offset = increment;
+				double sum = 0.5 * (function(lower) + function(upper));
+				for (double i = 0; i < divisions - 1; i++)
 				{
-					double a1 = function(x);
-					double a2 = function(x + increment);
-					area += ((a1 + a2) / 2.0) * increment;
+					sum += function(lower + offset);
+					offset += increment;
 				}
 
-				return area;
+				return increment * sum;
 			}
 			private static double IntegrateSimpson(Function2D function,
-				double lower, double upper, int divisions)
+				double lower, double upper, int divisions = 3)
 			{
-				if (divisions % 2 != 0)
+				if (divisions.IsOdd())
 				{
-					throw new ArgumentException(
-						"double of segments must be even for Simpson's Rule.");
+					throw new ArgumentException("Division count must be even.", "divisions");
 				}
 
-				double increment = (upper - lower) / divisions;
-				double total = function(lower);
-				bool odd = true;
-				for (double x = lower + increment; x < upper; x += increment)
-				{
-					if (odd)
-					{
-						total += 4.0 * function(x);
-					}
-					else
-					{
-						total += 2.0 * function(x);
-					}
-				}
-				total += function(upper);
+				double step = (lower - upper) / (double)divisions;
+				double factor = step / 3.0;
 
-				return increment * total / 3.0;
+				double offset = step;
+				int m = 4;
+				double sum = function(lower) + function(upper);
+				for (int i = 0; i < divisions - 1; i++)
+				{
+					sum += m * function(lower + offset);
+					m = 6 - m; // alternate 4 and 2
+					offset += step;
+				}
+
+				return factor * sum;
 			}
 			public static double Integrate(Function2D function, double lower,
 				double upper, int divisions, IntegrationType type)
 			{
+				if (function == null)
+				{
+					throw new ArgumentNullException("function");
+				}
+
+				if (divisions <= 0)
+				{
+					throw new ArgumentOutOfRangeException("divisions",
+						"Division count must be positive and greater than zero.");
+				}
+
 				if (lower == upper)
 				{
 					return 0;
@@ -183,7 +189,14 @@ namespace MathPlusLib
 				case IntegrationType.Trapezoidal:
 					return IntegrateTrapezoidal(function, lower, upper, divisions);
 				case IntegrationType.Simpson:
-					return IntegrateSimpson(function, lower, upper, divisions);
+					try
+					{
+						return IntegrateSimpson(function, lower, upper, divisions);
+					}
+					catch (ArgumentException e)
+					{
+						throw e;
+					}
 				}
 
 				throw new ArgumentOutOfRangeException("Invalid IntegrationType " +

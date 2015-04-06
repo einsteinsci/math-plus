@@ -13,15 +13,13 @@ namespace MathPlusLib
 		/// Ratio of a circle's diameter to its cicumference: 
 		/// &#x3c0; = 3.14159265358979323846
 		/// </summary>
-		public static readonly double PI = 3.14159265358979323846;
+		public const double PI = 3.1415926535897932384626433832795028841971693993751d;
 
 		/// <summary>
 		/// Euler's number e = 2.7182818284590452354
 		/// </summary>
-		public static readonly double E = 2.7182818284590452354;
+		public const double E = 2.7182818284590452353602874713526624977572470937000d;
 		#endregion
-
-		private static readonly List<int> primes = new List<int>();
 
 		public static double Pow(double baseNum, double exponent)
 		{

@@ -36,27 +36,11 @@ namespace MathPlusLib
 			return ProbabilityUnscaled(TScore(low), TScore(high), DF);
 		}
 
-		// Experimental
 		public static double ProbabilityUnscaled(double tLow, double tHigh, double df)
 		{
 			return cdf(tHigh, df) - cdf(tLow, df);
 		}
 
-		// Experimental
-		private static double beta(double x, double a, double b)
-		{
-			if (x == 1.0)
-			{
-				return 1.0;
-			}
-
-			return MathPlus.Calculus.Integrate(
-				(t) => MathPlus.Pow(t, a - 1.0) * (MathPlus.Pow(1.0 - t, b - 1.0)), 
-				0.0, x, (int)(MathPlus.Abs(a - b) * 30.0), 
-				IntegrationType.Trapezoidal);
-		}
-
-		// Experimental
 		private static double cdf(double t, double v)
 		{
 			if (t <= MAX_LOWER)
@@ -69,17 +53,22 @@ namespace MathPlusLib
 				return MathPlus.Calculus.Integrate((x) =>
 				{
 					return MathPlus.Pow(x, n - 1.0) * MathPlus.Pow(MathPlus.E, -x);
-				}, 0, 100000, 1000, IntegrationType.Trapezoidal);
+				}, 0, 100000, 1000, IntegrationType.Simpson);
 			};
 
-			return MathPlus.Calculus.Integrate((_t) =>
-			{
-				double part1 = gamma((v + 1.0) / 2.0) / gamma(v / 2.0);
-				double part2 = 1.0 / MathPlus.Sqrt(v * MathPlus.PI);
-				double part3 = 1.0 / ((1.0 + (_t * _t) / v) * ((v + 1.0) / 2.0));
+			double part1 = gamma((v + 1.0) / 2.0) / gamma(v / 2.0);
+			double part2 = 1.0 / MathPlus.Sqrt(v * MathPlus.PI);
+			double part3 = MathPlus.Calculus.Integrate(
+				(_t) => 1.0 / ((1.0 + (_t * _t) / v) * ((v + 1.0) / 2.0)), 
+				-10000, t, 100, IntegrationType.Simpson);
 
-				return part1 * part2 * part3;
-			}, -10000, t, 100, IntegrationType.Trapezoidal);
+			return part1 * part2 * part3;
+		}
+
+		public static double Inverse(double prob, double df)
+		{
+			throw new NotImplementedException(
+				"Apparently nobody on the planet knows how to do this.");
 		}
 	}
 }

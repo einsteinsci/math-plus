@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculus.cs" />
+    <Compile Include="MathPlusExtensions.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="NormalModel.cs" />
