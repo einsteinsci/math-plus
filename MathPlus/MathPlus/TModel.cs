@@ -4,49 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MathPlusLib.Desktop;
-using MathPlusLib.Portable;
-
 namespace MathPlusLib
 {
 	public struct TModel : IModel
 	{
-		public static readonly Number MAX_LOWER = -1.0 * MathPlus.Pow(10.0, 10.0);
+		public static readonly double MAX_LOWER = -1.0 * MathPlus.Pow(10.0, 10.0);
 
-		public Number Mean
+		public double Mean
 		{ get; set; }
 
-		public Number SD
+		public double SD
 		{ get; set; }
 
-		public Number DF
+		public double DF
 		{ get; set; }
 
-		public TModel(Number mean, Number sd, Number df)
+		public TModel(double mean, double sd, double df)
 		{
 			Mean = mean;
 			SD = sd;
 			DF = df;
 		}
 
-		public Number TScore(Number value)
+		public double TScore(double value)
 		{
 			return (value - Mean) / SD;
 		}
 
-		public Number Probability(Number low, Number high)
+		public double Probability(double low, double high)
 		{
 			return ProbabilityUnscaled(TScore(low), TScore(high), DF);
 		}
 
 		// Experimental
-		public static Number ProbabilityUnscaled(Number tLow, Number tHigh, Number df)
+		public static double ProbabilityUnscaled(double tLow, double tHigh, double df)
 		{
 			return cdf(tHigh, df) - cdf(tLow, df);
 		}
 
 		// Experimental
-		private static Number beta(Number x, Number a, Number b)
+		private static double beta(double x, double a, double b)
 		{
 			if (x == 1.0)
 			{
@@ -54,20 +51,20 @@ namespace MathPlusLib
 			}
 
 			return MathPlus.Calculus.Integrate(
-				(t) => (t ^ (a - 1.0)) * (MathPlus.Pow((1.0 - t), (b - 1.0))), 
+				(t) => MathPlus.Pow(t, a - 1.0) * (MathPlus.Pow(1.0 - t, b - 1.0)), 
 				0.0, x, (int)(MathPlus.Abs(a - b) * 30.0), 
 				IntegrationType.Trapezoidal);
 		}
 
 		// Experimental
-		private static Number cdf(Number t, Number v)
+		private static double cdf(double t, double v)
 		{
 			if (t <= MAX_LOWER)
 			{
 				return 0;
 			}
 
-			Func<Number, Number, Number> x = (_t, _v) => _v / ((_t * _t) + _v);
+			Func<double, double, double> x = (_t, _v) => _v / ((_t * _t) + _v);
 
 			return MathPlus.Calculus.Integrate(
 				(u) => 1.0 - (0.5 * beta(x(t, v), v * 0.5, 0.5)),

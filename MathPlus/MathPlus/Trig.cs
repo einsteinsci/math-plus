@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MathPlusLib.Portable;
-using MathPlusLib.Desktop;
-
 namespace MathPlusLib
 {
 	public static partial class MathPlus
@@ -14,54 +11,54 @@ namespace MathPlusLib
 		public static class Trig
 		{
 			#region trig
-			public static Number Sin(Number theta)
+			public static double Sin(double theta)
 			{
 				double n = E;
 				return Math.Sin(theta);
 			}
-			public static Number Cos(Number theta)
+			public static double Cos(double theta)
 			{
 				return Math.Cos(theta);
 			}
-			public static Number Tan(Number theta)
+			public static double Tan(double theta)
 			{
 				return Math.Tan(theta);
 			}
-			public static Number Csc(Number theta)
+			public static double Csc(double theta)
 			{
 				return 1.0 / Sin(theta);
 			}
-			public static Number Sec(Number theta)
+			public static double Sec(double theta)
 			{
 				return 1.0 / Cos(theta);
 			}
-			public static Number Cot(Number theta)
+			public static double Cot(double theta)
 			{
 				return 1.0 / Cot(theta);
 			}
-			public static Number ASin(Number proportion)
+			public static double ASin(double proportion)
 			{
 				return Math.Asin(proportion);
 			}
-			public static Number ACos(Number proportion)
+			public static double ACos(double proportion)
 			{
 				return Math.Acos(proportion);
 			}
-			public static Number ATan(Number proportion)
+			public static double ATan(double proportion)
 			{
 				return Math.Atan(proportion);
 			}
 			#endregion
 
-			public static Number Log10(Number value)
+			public static double Log10(double value)
 			{
 				return Math.Log10(value);
 			}
-			public static Number Log(Number value, Number baseNum)
+			public static double Log(double value, double baseNum)
 			{
 				return Math.Log(value, baseNum);
 			}
-			public static Number Ln(Number value)
+			public static double Ln(double value)
 			{
 				return Math.Log(value);
 			}

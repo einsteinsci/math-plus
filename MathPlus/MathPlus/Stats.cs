@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MathPlusLib.Desktop;
-using MathPlusLib.Portable;
-
 namespace MathPlusLib
 {
 	public enum InequalityType
@@ -18,7 +15,7 @@ namespace MathPlusLib
 
 	public class ZTestResults
 	{
-		public ZTestResults(Number tested, Number prob, Number alpha, Number se)
+		public ZTestResults(double tested, double prob, double alpha, double se)
 		{
 			TestedValue = tested;
 			RejectNullHypothesis = prob < alpha;
@@ -26,22 +23,22 @@ namespace MathPlusLib
 			StandardError = se;
 		}
 
-		public Number TestedValue
+		public double TestedValue
 		{ get; private set; }
 
 		public bool RejectNullHypothesis
 		{ get; private set; }
 
-		public Number Probability
+		public double Probability
 		{ get; private set; }
 
-		public Number StandardError
+		public double StandardError
 		{ get; private set; }
 	}
 
 	public class TTestResults
 	{
-		public TTestResults(Number tested, Number prob, Number alpha, Number se, Number df)
+		public TTestResults(double tested, double prob, double alpha, double se, double df)
 		{
 			TestedValue = tested;
 			RejectNullHypothesis = prob < alpha;
@@ -50,19 +47,19 @@ namespace MathPlusLib
 			DegreesOfFreedom = df;
 		}
 
-		public Number TestedValue
+		public double TestedValue
 		{ get; private set; }
 
 		public bool RejectNullHypothesis
 		{ get; private set; }
 
-		public Number Probability
+		public double Probability
 		{ get; private set; }
 
-		public Number StandardError
+		public double StandardError
 		{ get; private set; }
 
-		public Number DegreesOfFreedom
+		public double DegreesOfFreedom
 		{ get; private set; }
 	}
 
@@ -70,9 +67,9 @@ namespace MathPlusLib
 	{
 		public static class Stats
 		{
-			public static List<Number> MakeNumbers(IEnumerable<IComparable> input)
+			public static List<double> MakeNumbers(IEnumerable<IComparable> input)
 			{
-				List<Number> result = new List<Number>();
+				List<double> result = new List<double>();
 				foreach (IComparable n in input)
 				{
 					try
@@ -81,7 +78,7 @@ namespace MathPlusLib
 					}
 					catch (InvalidCastException)
 					{
-						throw new ArgumentException("Type cannot be converted to Number: "
+						throw new ArgumentException("Type cannot be converted to double: "
 							+ n.GetType().ToString());
 					}
 				}
@@ -89,25 +86,25 @@ namespace MathPlusLib
 				return result;
 			}
 
-			public static Number Sum(IEnumerable<Number> values)
+			public static double Sum(IEnumerable<double> values)
 			{
 				return values.Aggregate((n, total) => total + n);
 			}
 
-			public static Number Mean(IEnumerable<Number> values)
+			public static double Mean(IEnumerable<double> values)
 			{
-				Number sigma = Sum(values);
+				double sigma = Sum(values);
 
 				return sigma / (double)(values.Count());
 			}
 
-			public static Number StandardDev(IEnumerable<Number> values)
+			public static double StandardDev(IEnumerable<double> values)
 			{
-				Number mean = Mean(values);
-				Func<Number, Number> deviation = (xi) => (xi - mean) * (xi - mean);
+				double mean = Mean(values);
+				Func<double, double> deviation = (xi) => (xi - mean) * (xi - mean);
 
-				Number sigmaDev = 0;
-				foreach (Number i in values)
+				double sigmaDev = 0;
+				foreach (double i in values)
 				{
 					sigmaDev += deviation(i);
 				}
@@ -117,7 +114,7 @@ namespace MathPlusLib
 				return sigmaDev / (double)(n - 1);
 			}
 
-			public static Number Proportion(IEnumerable<bool> sample)
+			public static double Proportion(IEnumerable<bool> sample)
 			{
 				int on = 0;
 				foreach (bool b in sample)
@@ -129,10 +126,10 @@ namespace MathPlusLib
 				return (double)on / (double)total;
 			}
 
-			public static ZTestResults OnePropZTest(Number p0, InequalityType HA, 
-				Number proportion, int n, Number alpha)
+			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
+				double proportion, int n, double alpha)
 			{
-				Number q = 1.0 - proportion;
+				double q = 1.0 - proportion;
 
 				#region checking
 				if (proportion > 1.0 || proportion < 0.0)
@@ -154,12 +151,12 @@ namespace MathPlusLib
 				}
 				#endregion checking
 
-				Number se = Sqrt((proportion * q) / (double)n);
+				double se = Sqrt((proportion * q) / (double)n);
 
 				NormalModel model = new NormalModel(p0, se);
 
-				Number prob = -1;
-				Number z = Constrain(model.ZScore(proportion), -98.9, 98.9);
+				double prob = -1;
+				double z = Constrain(model.ZScore(proportion), -98.9, 98.9);
 
 				if (HA == InequalityType.LessThan)
 				{
@@ -183,16 +180,16 @@ namespace MathPlusLib
 
 				return new ZTestResults(proportion, prob, alpha, se);
 			}
-			public static ZTestResults OnePropZTest(Number p0, InequalityType HA, 
-				Number proportion, int n)
+			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
+				double proportion, int n)
 			{
 				return OnePropZTest(p0, HA, proportion, n, 0.05);
 			}
 			public static ZTestResults TwoPropZTest(InequalityType HA,
-				Number p1, Number p2, int n1, int n2, Number alpha)
+				double p1, double p2, int n1, int n2, double alpha)
 			{
-				Number q1 = 1.0 - p1;
-				Number q2 = 1.0 - p2;
+				double q1 = 1.0 - p1;
+				double q2 = 1.0 - p2;
 
 				#region checking
 				if (p1 > 1.0 || p1 < 0.0)
@@ -221,17 +218,17 @@ namespace MathPlusLib
 				int total1 = (int)(p1 * n1);
 				int total2 = (int)(p2 * n2);
 
-				Number pPooled = (double)(total1 + total2) / (double)(n1 + n2);
-				Number qPooled = 1.0 - pPooled;
-				Number pDelta = p2 - p1;
+				double pPooled = (double)(total1 + total2) / (double)(n1 + n2);
+				double qPooled = 1.0 - pPooled;
+				double pDelta = p2 - p1;
 
-				Number sePooled = Sqrt(((pPooled * qPooled) / (double)n1) + 
+				double sePooled = Sqrt(((pPooled * qPooled) / (double)n1) + 
 					((pPooled * qPooled) / (double)n2));
 
 				NormalModel model = new NormalModel(0.0, sePooled);
-				Number z = Constrain(model.ZScore(pDelta), -98.9, 98.9);
+				double z = Constrain(model.ZScore(pDelta), -98.9, 98.9);
 
-				Number prob = -1;
+				double prob = -1;
 
 				if (HA == InequalityType.LessThan)
 				{
@@ -256,20 +253,20 @@ namespace MathPlusLib
 				return new ZTestResults(p2 - p1, prob, alpha, sePooled);
 			}
 			public static ZTestResults TwoPropZTest(InequalityType HA,
-				Number p1, Number p2, int n1, int n2)
+				double p1, double p2, int n1, int n2)
 			{
 				return TwoPropZTest(HA, p1, p2, n1, n2, 0.05);
 			}
 
-			public static TTestResults OneSampleTTest(Number mu0, InequalityType HA,
-				Number mean, Number sd, int n, Number alpha)
+			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
+				double mean, double sd, int n, double alpha)
 			{
-				Number se = sd / Sqrt(n);
-				Number df = n - 1;
+				double se = sd / Sqrt(n);
+				double df = n - 1;
 
 				TModel model = new TModel(mu0, se, df);
-				Number prob = -1;
-				Number t = Constrain(model.TScore(mean), -98.9, 98.9);
+				double prob = -1;
+				double t = Constrain(model.TScore(mean), -98.9, 98.9);
 
 				if (HA == InequalityType.LessThan)
 				{
@@ -293,21 +290,21 @@ namespace MathPlusLib
 
 				return new TTestResults(mean, prob, alpha, se, df);
 			}
-			public static TTestResults OneSampleTTest(Number mu0, InequalityType HA,
-				Number mean, Number sd, int n)
+			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
+				double mean, double sd, int n)
 			{
 				return OneSampleTTest(mu0, HA, mean, sd, n, 0.05);
 			}
 			public static TTestResults TwoSampleTTest(InequalityType HA,
-				Number mean1, Number mean2, Number sd1, Number sd2, 
-				int n1, int n2, Number alpha)
+				double mean1, double mean2, double sd1, double sd2, 
+				int n1, int n2, double alpha)
 			{
-				Number se = Sqrt(((sd1 * sd1) / (Number)n1) + ((sd2 * sd2) / (Number)n2));
-				Number df = DegreesOfFreedom(sd1, sd2, n1, n2);
+				double se = Sqrt(((sd1 * sd1) / (double)n1) + ((sd2 * sd2) / (double)n2));
+				double df = DegreesOfFreedom(sd1, sd2, n1, n2);
 
 				TModel model = new TModel(0, se, df);
-				Number prob = -1;
-				Number t = Constrain(model.TScore(mean2 - mean1), -98.9, 98.9);
+				double prob = -1;
+				double t = Constrain(model.TScore(mean2 - mean1), -98.9, 98.9);
 
 				if (HA == InequalityType.LessThan)
 				{
@@ -332,13 +329,13 @@ namespace MathPlusLib
 				return new TTestResults(mean2 - mean1, prob, alpha, se, df);
 			}
 			public static TTestResults TwoSampleTTest(InequalityType HA,
-				Number mean1, Number mean2, Number sd1, Number sd2, 
+				double mean1, double mean2, double sd1, double sd2, 
 				int n1, int n2)
 			{
 				return TwoSampleTTest(HA, mean1, mean2, sd1, sd2, n1, n2, 0.05);
 			}
 
-			public static Interval OnePropZInterval(Number proportion, int n, Number confidence)
+			public static Interval OnePropZInterval(double proportion, int n, double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -346,25 +343,43 @@ namespace MathPlusLib
 						"Confidence must be between 0 and 1, exclusively.");
 				}
 
-				Number q = 1.0 - proportion;
+				double q = 1.0 - proportion;
 				
-				Number se = Sqrt((proportion * q) / (Number)n);
-				Number zCrit = NormalModel.Inverse(1 - ((1.0 - confidence) / 2.0));
+				double se = Sqrt((proportion * q) / (double)n);
+				double zCrit = NormalModel.Inverse(1.0 - ((1.0 - confidence) / 2.0));
+
+				return Interval.FromCenter(proportion, se * zCrit);
+			}
+			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, double confidence)
+			{
+				if (confidence <= 0.0 || confidence >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("confidence",
+						"Confidence must be between 0 and 1, exclusively.");
+				}
+
+				double q1 = 1.0 - p1;
+				double q2 = 1.0 - p2;
+
+				double se = Sqrt(((p1 * q1) / (double)n1) + ((p2 * q2) / (double)n2));
+				double zCrit = NormalModel.Inverse(1.0 - ((1.0 - confidence) / 2.0));
+
+				return Interval.FromCenter(p2 - p1, se * zCrit);
 			}
 
-			public static Number DegreesOfFreedom(Number s1, Number s2, int n1, int n2)
+			public static double DegreesOfFreedom(double s1, double s2, int n1, int n2)
 			{
-				Number upperInnerA = (s1 * s1) / (Number)n1;
-				Number upperInnerB = (s2 * s2) / (Number)n2;
-				Number upper = (upperInnerA + upperInnerB) * (upperInnerA + upperInnerB);
+				double upperInnerA = (s1 * s1) / (double)n1;
+				double upperInnerB = (s2 * s2) / (double)n2;
+				double upper = (upperInnerA + upperInnerB) * (upperInnerA + upperInnerB);
 
-				Number lowerA = 1.0 / ((Number)n1 - 1.0);
-				Number lowerBInner = (s1 * s1) / (Number)n1;
-				Number lowerB = lowerBInner * lowerBInner;
-				Number lowerC = 1.0 / ((Number)n2 - 1.0);
-				Number lowerDInner = (s2 * s2) / (Number)n2;
-				Number lowerD = lowerDInner * lowerDInner;
-				Number lower = (lowerA * lowerB) + (lowerC * lowerD);
+				double lowerA = 1.0 / ((double)n1 - 1.0);
+				double lowerBInner = (s1 * s1) / (double)n1;
+				double lowerB = lowerBInner * lowerBInner;
+				double lowerC = 1.0 / ((double)n2 - 1.0);
+				double lowerDInner = (s2 * s2) / (double)n2;
+				double lowerD = lowerDInner * lowerDInner;
+				double lower = (lowerA * lowerB) + (lowerC * lowerD);
 
 				return upper / lower;
 			}

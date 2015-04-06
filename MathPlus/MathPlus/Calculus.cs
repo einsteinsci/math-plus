@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using MathPlusLib.Desktop;
-using MathPlusLib.Portable;
-
 namespace MathPlusLib
 {
 	/// <summary>
@@ -14,14 +11,14 @@ namespace MathPlusLib
 	/// </summary>
 	/// <param name="x">X input of the function</param>
 	/// <returns>Y output of the function</returns>
-	public delegate Number Function2D(Number x);
+	public delegate double Function2D(double x);
 	/// <summary>
 	/// Represents a function that can be plotted in a 3D space
 	/// </summary>
 	/// <param name="x">X input of the function</param>
 	/// <param name="y">Y input of the function</param>
 	/// <returns>Z output of the function</returns>
-	public delegate Number Function3D(Number x, Number y);
+	public delegate double Function3D(double x, double y);
 	/// <summary>
 	/// Represents an input-output mathematical function
 	/// </summary>
@@ -43,15 +40,15 @@ namespace MathPlusLib
 	{
 		public static class Calculus
 		{
-			public static Number FuncMin(Function2D exp, Number lower, 
-				Number upper, Number increment)
+			public static double FuncMin(Function2D exp, double lower, 
+				double upper, double increment)
 			{
-				Number min = exp(lower);
-				Number res = lower;
+				double min = exp(lower);
+				double res = lower;
 
-				for (Number x = lower; x <= upper; x += increment)
+				for (double x = lower; x <= upper; x += increment)
 				{
-					Number y = exp(x);
+					double y = exp(x);
 					if (y < min)
 					{
 						min = y;
@@ -61,15 +58,15 @@ namespace MathPlusLib
 
 				return res;
 			}
-			public static Number FuncMax(Function2D exp, Number lower,
-				Number upper, Number increment)
+			public static double FuncMax(Function2D exp, double lower,
+				double upper, double increment)
 			{
-				Number max = exp(lower);
-				Number res = lower;
+				double max = exp(lower);
+				double res = lower;
 
-				for (Number x = lower; x <= upper; x += increment)
+				for (double x = lower; x <= upper; x += increment)
 				{
-					Number y = exp(x);
+					double y = exp(x);
 					if (y > max)
 					{
 						max = y;
@@ -80,79 +77,79 @@ namespace MathPlusLib
 				return res;
 			}
 
-			public static Number Derivative(Function2D function, 
-				Number point, Number deltaX)
+			public static double Derivative(Function2D function, 
+				double point, double deltaX)
 			{
-				Number yMinus = function(point - deltaX);
-				Number yPlus = function(point + deltaX);
+				double yMinus = function(point - deltaX);
+				double yPlus = function(point + deltaX);
 
 				return (yPlus - yMinus) / (deltaX * 2.0);
 			}
 
-			private static Number IntegrateLow(Function2D function, Number lower,
-				Number upper, int divisions)
+			private static double IntegrateLow(Function2D function, double lower,
+				double upper, int divisions)
 			{
-				Number increment = (upper - lower) / divisions;
-				Number area = 0;
-				for (Number x = lower; x < upper; x += increment)
+				double increment = (upper - lower) / divisions;
+				double area = 0;
+				for (double x = lower; x < upper; x += increment)
 				{
 					area += function(x) * increment;
 				}
 
 				return area;
 			}
-			private static Number IntegrateHigh(Function2D function, Number lower,
-				Number upper, int divisions)
+			private static double IntegrateHigh(Function2D function, double lower,
+				double upper, int divisions)
 			{
-				Number increment = (upper - lower) / divisions;
-				Number area = 0;
-				for (Number x = lower; x < upper; x += increment)
+				double increment = (upper - lower) / divisions;
+				double area = 0;
+				for (double x = lower; x < upper; x += increment)
 				{
 					area += function(x + increment) * increment;
 				}
 
 				return area;
 			}
-			private static Number IntegrateMidpoint(Function2D function, 
-				Number lower, Number upper, int divisions)
+			private static double IntegrateMidpoint(Function2D function, 
+				double lower, double upper, int divisions)
 			{
-				Number increment = (upper - lower) / divisions;
-				Number area = 0;
-				for (Number x = lower; x < upper; x += increment)
+				double increment = (upper - lower) / divisions;
+				double area = 0;
+				for (double x = lower; x < upper; x += increment)
 				{
-					Number mid = (2.0 * x + increment) / 2.0;
+					double mid = (2.0 * x + increment) / 2.0;
 					area += function(mid) * increment;
 				}
 
 				return area;
 			}
-			private static Number IntegrateTrapezoidal(Function2D function,
-				Number lower, Number upper, int divisions)
+			private static double IntegrateTrapezoidal(Function2D function,
+				double lower, double upper, int divisions)
 			{
-				Number increment = (upper - lower) / divisions;
-				Number area = 0;
-				for (Number x = lower; x < upper; x += increment)
+				double increment = (upper - lower) / divisions;
+				double area = 0;
+				for (double x = lower; x < upper; x += increment)
 				{
-					Number a1 = function(x);
-					Number a2 = function(x + increment);
+					double a1 = function(x);
+					double a2 = function(x + increment);
 					area += ((a1 + a2) / 2.0) * increment;
 				}
 
 				return area;
 			}
-			private static Number IntegrateSimpson(Function2D function,
-				Number lower, Number upper, int divisions)
+			private static double IntegrateSimpson(Function2D function,
+				double lower, double upper, int divisions)
 			{
 				if (divisions % 2 != 0)
 				{
 					throw new ArgumentException(
-						"Number of segments must be even for Simpson's Rule.");
+						"double of segments must be even for Simpson's Rule.");
 				}
 
-				Number increment = (upper - lower) / divisions;
-				Number total = function(lower);
+				double increment = (upper - lower) / divisions;
+				double total = function(lower);
 				bool odd = true;
-				for (Number x = lower + increment; x < upper; x += increment)
+				for (double x = lower + increment; x < upper; x += increment)
 				{
 					if (odd)
 					{
@@ -167,8 +164,8 @@ namespace MathPlusLib
 
 				return increment * total / 3.0;
 			}
-			public static Number Integrate(Function2D function, Number lower,
-				Number upper, int divisions, IntegrationType type)
+			public static double Integrate(Function2D function, double lower,
+				double upper, int divisions, IntegrationType type)
 			{
 				if (lower == upper)
 				{

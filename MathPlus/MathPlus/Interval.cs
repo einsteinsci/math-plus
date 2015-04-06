@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathPlusLib.Desktop;
-using MathPlusLib.Portable;
 
 namespace MathPlusLib
 {
 	public struct Interval
 	{
-		public Number Lower
+		public double Lower
 		{ get; private set; }
 
-		public Number Upper
+		public double Upper
 		{ get; private set; }
 
-		public Number Center
+		public double Center
 		{
 			get
 			{
@@ -24,7 +22,7 @@ namespace MathPlusLib
 			}
 		}
 
-		public Number Error
+		public double Error
 		{
 			get
 			{
@@ -32,7 +30,7 @@ namespace MathPlusLib
 			}
 		}
 
-		public Interval(Number low, Number high)
+		public Interval(double low, double high)
 			: this()
 		{
 			if (low > high)
@@ -45,7 +43,7 @@ namespace MathPlusLib
 			Upper = high;
 		}
 
-		public static Interval FromCenter(Number center, Number error)
+		public static Interval FromCenter(double center, double error)
 		{
 			return new Interval(center - error, center + error);
 		}

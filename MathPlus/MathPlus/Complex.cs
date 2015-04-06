@@ -3,27 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathPlusLib.Desktop;
-using MathPlusLib.Portable;
 
 namespace MathPlusLib
 {
-	public struct Complex : IEquatable<Complex>, IEquatable<Number>
+	public struct Complex : IEquatable<Complex>, IEquatable<double>
 	{
-		public Number Real
+		public double Real
 		{ get; set; }
-		public Number Imag
+		public double Imag
 		{ get; set; }
 
 		// Polar
-		public Number Argument
+		public double Argument
 		{
 			get
 			{
 				return MathPlus.Trig.ATan(Imag / Real);
 			}
 		}
-		public Number AbsoluteValue
+		public double AbsoluteValue
 		{
 			get
 			{
@@ -31,18 +29,18 @@ namespace MathPlusLib
 			}
 		}
 		
-		public static Complex FromPolar(Number arg, Number abs)
+		public static Complex FromPolar(double arg, double abs)
 		{
 			return new Complex(MathPlus.Trig.Cos(arg) * abs,
 				MathPlus.Trig.Sin(arg) * abs);
 		}
 
-		public Complex(Number real, Number imag) : this()
+		public Complex(double real, double imag) : this()
 		{
 			Real = real;
 			Imag = imag;
 		}
-		public Complex(Number real) : this(real, 0)
+		public Complex(double real) : this(real, 0)
 		{ }
 
 		public Complex Conjugate()
@@ -56,9 +54,9 @@ namespace MathPlusLib
 			{
 				return Equals((Complex)obj);
 			}
-			else if (obj is Number)
+			else if (obj is double)
 			{
-				return Equals((Number)obj);
+				return Equals((double)obj);
 			}
 			else if (obj is IComparable)
 			{
@@ -95,7 +93,7 @@ namespace MathPlusLib
 		{
 			return Real.Equals(other.Real) && Imag.Equals(other.Imag);
 		}
-		public bool Equals(Number other)
+		public bool Equals(double other)
 		{
 			return Real.Equals(other) && Imag.Equals(0.0);
 		}
@@ -104,7 +102,7 @@ namespace MathPlusLib
 		{
 			return new Complex(Real + other.Real, Imag + other.Imag);
 		}
-		public Complex Add(Number other)
+		public Complex Add(double other)
 		{
 			return new Complex(Real + other, Imag);
 		}
@@ -112,7 +110,7 @@ namespace MathPlusLib
 		{
 			return new Complex(Real - other.Real, Imag - other.Imag);
 		}
-		public Complex Subtract(Number other)
+		public Complex Subtract(double other)
 		{
 			return new Complex(Real - other, Imag);
 		}
@@ -121,7 +119,7 @@ namespace MathPlusLib
 			return new Complex(Real * other.Real + Imag * other.Imag,
 				Real * other.Imag + Imag * other.Real);
 		}
-		public Complex Multiply(Number other)
+		public Complex Multiply(double other)
 		{
 			return new Complex(Real * other, Imag * other);
 		}
@@ -130,10 +128,10 @@ namespace MathPlusLib
 			Complex conj = Conjugate();
 			Complex top = Multiply(conj);
 			Complex bot = other.Multiply(conj);
-			Number botNum = bot.Real; // Imaginary will be zero
+			double botNum = bot.Real; // Imaginary will be zero
 			return top.Divide(botNum);
 		}
-		public Complex Divide(Number other)
+		public Complex Divide(double other)
 		{
 			return new Complex(Real / other, Imag / other);
 		}
@@ -153,7 +151,7 @@ namespace MathPlusLib
 		{
 			return a.Add(b);
 		}
-		public static Complex operator+(Complex a, Number b)
+		public static Complex operator+(Complex a, double b)
 		{
 			return a.Add(b);
 		}
@@ -161,7 +159,7 @@ namespace MathPlusLib
 		{
 			return a.Subtract(b);
 		}
-		public static Complex operator-(Complex a, Number b)
+		public static Complex operator-(Complex a, double b)
 		{
 			return a.Subtract(b);
 		}
@@ -169,7 +167,7 @@ namespace MathPlusLib
 		{
 			return a.Multiply(b);
 		}
-		public static Complex operator*(Complex a, Number b)
+		public static Complex operator*(Complex a, double b)
 		{
 			return a.Multiply(b);
 		}
@@ -177,16 +175,16 @@ namespace MathPlusLib
 		{
 			return a.Divide(b);
 		}
-		public static Complex operator/(Complex a, Number b)
+		public static Complex operator/(Complex a, double b)
 		{
 			return a.Divide(b);
 		}
 
-		public static explicit operator Number(Complex a)
+		public static explicit operator double(Complex a)
 		{
 			return a.Real;
 		}
-		public static explicit operator Complex(Number r)
+		public static explicit operator Complex(double r)
 		{
 			return new Complex(r);
 		}

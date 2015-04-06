@@ -52,7 +52,6 @@
     <Compile Include="IMathable.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />
-    <Compile Include="Number.Desktop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

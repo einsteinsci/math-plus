@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MathPlusLib.Desktop;
-using MathPlusLib.Portable;
 
 namespace MathPlusLib
 {
@@ -15,49 +13,49 @@ namespace MathPlusLib
 		/// Ratio of a circle's diameter to its cicumference: 
 		/// &#x3c0; = 3.14159265358979323846
 		/// </summary>
-		public static readonly Number PI = 3.14159265358979323846;
+		public static readonly double PI = 3.14159265358979323846;
 
 		/// <summary>
 		/// Euler's number e = 2.7182818284590452354
 		/// </summary>
-		public static readonly Number E = 2.7182818284590452354;
+		public static readonly double E = 2.7182818284590452354;
 		#endregion
 
 		private static readonly List<int> primes = new List<int>();
 
-		public static Number Pow(Number baseNum, Number exponent)
+		public static double Pow(double baseNum, double exponent)
 		{
-			return baseNum ^ exponent;
+			return Math.Pow(baseNum, exponent);
 		}
-		public static Number Exp(Number exponent)
+		public static double Exp(double exponent)
 		{
 			return Pow(E, exponent);
 		}
 
-		public static Number Sqrt(Number radicand)
+		public static double Sqrt(double radicand)
 		{
 			return Math.Sqrt(radicand);
 		}
-		public static Number Root(Number radicand, Number radical)
+		public static double Root(double radicand, double radical)
 		{
 			return Pow(radicand, 1.0 / radical);
 		}
 
-		public static Number Abs(Number value)
+		public static double Abs(double value)
 		{
-			return value.AbsoluteValue();
+			return value < 0 ? (-1.0 * value) : value;
 		}
 
-		public static Number Round(Number value, int digits = 0)
+		public static double Round(double value, int digits = 0)
 		{
-			Number mult = Pow(10.0, digits);
-			Number bigger = value * mult;
+			double mult = Pow(10.0, digits);
+			double bigger = value * mult;
 			int lowerInt = (int)bigger;
 			int upperInt = lowerInt + 1;
-			Number lower = lowerInt;
-			Number upper = upperInt;
+			double lower = lowerInt;
+			double upper = upperInt;
 
-			Number result;
+			double result;
 			if (upper - bigger >= bigger - lower)
 			{
 				result = lower;
@@ -70,7 +68,7 @@ namespace MathPlusLib
 			return result / mult;
 		}
 
-		public static int Floor(Number value)
+		public static int Floor(double value)
 		{
 			int res = (int)value;
 			if (value < 0.0)
@@ -79,7 +77,7 @@ namespace MathPlusLib
 			}
 			return res;
 		}
-		public static int Ceiling(Number value)
+		public static int Ceiling(double value)
 		{
 			int res = (int)value;
 			if (value > 0.0)
@@ -89,21 +87,21 @@ namespace MathPlusLib
 			return res;
 		}
 
-		public static Number Fractional(Number value)
+		public static double Fractional(double value)
 		{
-			Number ipart = (int)value;
+			double ipart = (int)value;
 			return value - ipart;
 		}
 
-		public static Number Min(Number a, Number b)
+		public static double Min(double a, double b)
 		{
 			return a <= b ? a : b;
 		}
-		public static Number Max(Number a, Number b)
+		public static double Max(double a, double b)
 		{
 			return a >= b ? a : b;
 		}
-		public static Number Constrain(Number value, Number min, Number max)
+		public static double Constrain(double value, double min, double max)
 		{
 			if (value < min)
 			{
@@ -132,18 +130,18 @@ namespace MathPlusLib
 			return max;
 		}
 
-		public static Number Sigma(Function2D exp, Number lower,
-			Number upper, Number increment)
+		public static double Sigma(Function2D exp, double lower,
+			double upper, double increment)
 		{
-			Number total = 0;
-			for (Number i = lower; i <= upper; i += increment)
+			double total = 0;
+			for (double i = lower; i <= upper; i += increment)
 			{
 				total += exp(i);
 			}
 			return total;
 		}
-		public static Number Sigma(Function2D exp, Number lower,
-			Number upper)
+		public static double Sigma(Function2D exp, double lower,
+			double upper)
 		{
 			return Sigma(exp, lower, upper, 1.0);
 		}
