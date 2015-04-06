@@ -10,7 +10,6 @@ namespace MathPlusLib
 	{
 		public static class Trig
 		{
-			#region trig
 			public static double Sin(double theta)
 			{
 				double n = E;
@@ -47,20 +46,6 @@ namespace MathPlusLib
 			public static double ATan(double proportion)
 			{
 				return Math.Atan(proportion);
-			}
-			#endregion
-
-			public static double Log10(double value)
-			{
-				return Math.Log10(value);
-			}
-			public static double Log(double value, double baseNum)
-			{
-				return Math.Log(value, baseNum);
-			}
-			public static double Ln(double value)
-			{
-				return Math.Log(value);
 			}
 		}
 	}

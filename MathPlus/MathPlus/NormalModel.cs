@@ -40,9 +40,35 @@ namespace MathPlusLib
 			return phi(zTop) - phi(zBot);
 		}
 
-		public static double Inverse(double probability)
+		public static double Inverse(double p)
 		{
-			throw new NotImplementedException();
+			Function2D rationalApproximation = (t) =>
+			{
+				// A & S formula 26.2.23
+				// |error| < 4.5e-4
+				double[] c = new double[] { 2.515517, 0.802853, 0.010328 };
+				double[] d = new double[] { 1.432788, 0.189269, 0.001308 };
+
+				return t - ((c[2] * t + c[1]) * t + c[0]) /
+					(((d[2] * t + d[1]) * t + d[0]) * t + 1.0);
+			};
+
+			if (p <= 0.0 || p >= 1.0)
+			{
+				throw new ArgumentOutOfRangeException("p",
+					"Probability must be between 0 and 1.");
+			}
+
+			if (p < 0.5)
+			{
+				// F^-1(p) = - G^-1(p)
+				return -rationalApproximation(MathPlus.Sqrt(-2.0 * MathPlus.Ln(p)));
+			}
+			else
+			{
+				// F^-1(p) = G^-1(1 - p)
+				return rationalApproximation(MathPlus.Sqrt(-2.0 * MathPlus.Ln(1.0 - p)));
+			}
 		}
 
 		private static double phi(double x)

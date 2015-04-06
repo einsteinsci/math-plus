@@ -64,11 +64,22 @@ namespace MathPlusLib
 				return 0;
 			}
 
-			Func<double, double, double> x = (_t, _v) => _v / ((_t * _t) + _v);
+			Function2D gamma = (n) =>
+			{
+				return MathPlus.Calculus.Integrate((x) =>
+				{
+					return MathPlus.Pow(x, n - 1.0) * MathPlus.Pow(MathPlus.E, -x);
+				}, 0, 100000, 1000, IntegrationType.Trapezoidal);
+			};
 
-			return MathPlus.Calculus.Integrate(
-				(u) => 1.0 - (0.5 * beta(x(t, v), v * 0.5, 0.5)),
-				MAX_LOWER, t, 100, IntegrationType.Trapezoidal);
+			return MathPlus.Calculus.Integrate((_t) =>
+			{
+				double part1 = gamma((v + 1.0) / 2.0) / gamma(v / 2.0);
+				double part2 = 1.0 / MathPlus.Sqrt(v * MathPlus.PI);
+				double part3 = 1.0 / ((1.0 + (_t * _t) / v) * ((v + 1.0) / 2.0));
+
+				return part1 * part2 * part3;
+			}, -10000, t, 100, IntegrationType.Trapezoidal);
 		}
 	}
 }

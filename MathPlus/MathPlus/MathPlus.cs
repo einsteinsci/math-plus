@@ -41,6 +41,19 @@ namespace MathPlusLib
 			return Pow(radicand, 1.0 / radical);
 		}
 
+		public static double Log10(double value)
+		{
+			return Math.Log10(value);
+		}
+		public static double Log(double value, double baseNum)
+		{
+			return Math.Log(value, baseNum);
+		}
+		public static double Ln(double value)
+		{
+			return Math.Log(value);
+		}
+
 		public static double Abs(double value)
 		{
 			return value < 0 ? (-1.0 * value) : value;
