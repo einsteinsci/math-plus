@@ -44,6 +44,7 @@
     <Compile Include="MathPlusExtensions.cs" />
     <Compile Include="Numerics.cs" />
     <Compile Include="Probability.cs" />
+    <Compile Include="Stats\DataFactory.cs" />
     <Compile Include="Stats\Interval.cs" />
     <Compile Include="Stats\IModel.cs" />
     <Compile Include="Stats\NormalModel.cs" />

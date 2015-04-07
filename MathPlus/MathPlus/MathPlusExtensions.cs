@@ -24,7 +24,7 @@ namespace MathPlusLib
 
 		public static bool IsInteger(this double value, int precision)
 		{
-			double rounded = MathPlus.Round(value, precision);
+			double rounded = MathPlus.Numerics.Round(value, precision);
 			int trunc = (int)rounded;
 			return rounded == (double)trunc;
 		}

@@ -63,6 +63,12 @@ namespace MathPlusLib
 
 		public double DegreesOfFreedom
 		{ get; private set; }
+
+		public override string ToString()
+		{
+			string res = "";
+			if ()
+		}
 	}
 
 	public static partial class MathPlus
@@ -102,7 +108,10 @@ namespace MathPlusLib
 
 			public static double StandardDev(IEnumerable<double> values)
 			{
-				double mean = Mean(values);
+				return StandardDev(values, Mean(values));
+			}
+			public static double StandardDev(IEnumerable<double> values, double mean)
+			{
 				Func<double, double> deviation = (xi) => (xi - mean) * (xi - mean);
 
 				double sigmaDev = 0;

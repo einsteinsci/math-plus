@@ -82,9 +82,9 @@ namespace MathPlusLib
 				Denominator = 1;
 			}
 
-			while (MathPlus.GreatestCommonDenominator(Numerator, Denominator) != -1)
+			while (MathPlus.Numerics.GreatestCommonDenominator(Numerator, Denominator) != -1)
 			{
-				int lcm = MathPlus.GreatestCommonDenominator(Numerator, Denominator);
+				int lcm = MathPlus.Numerics.GreatestCommonDenominator(Numerator, Denominator);
 				Numerator /= lcm;
 				Denominator /= lcm;
 			}
@@ -100,7 +100,7 @@ namespace MathPlusLib
 			if (obj is Fraction)
 			{
 				Fraction frac = (Fraction)obj;
-				return MathPlus.Round(FloatingPoint, 20) == MathPlus.Round(frac.FloatingPoint, 20);
+				return MathPlus.Numerics.Round(FloatingPoint, 20) == MathPlus.Numerics.Round(frac.FloatingPoint, 20);
 			}
 
 			return obj.Equals(this);
@@ -240,12 +240,12 @@ namespace MathPlusLib
 
 		public bool Equals(Fraction other)
 		{
-			return MathPlus.Round(FloatingPoint, 20) == MathPlus.Round(other.FloatingPoint, 20);
+			return MathPlus.Numerics.Round(FloatingPoint, 20) == MathPlus.Numerics.Round(other.FloatingPoint, 20);
 		}
 
 		public bool Equals(double other)
 		{
-			return MathPlus.Round(FloatingPoint, 20) == MathPlus.Round(other, 20);
+			return MathPlus.Numerics.Round(FloatingPoint, 20) == MathPlus.Numerics.Round(other, 20);
 		}
 		#endregion
 

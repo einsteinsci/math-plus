@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathPlusLib;
+using MathPlusLib.Stats;
 
 namespace MathPlusLib.Test
 {
@@ -11,12 +12,14 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			Function2D battery2 = (x) => 1.0 / x;
-			double two = MathPlus.Calculus.Integrate(battery2, 1, 
-				MathPlus.E * MathPlus.E, 1000, IntegrationType.Trapezoidal);
-			Console.WriteLine("val = " + two.ToString());
-			two = MathPlus.Round(two);
-			Console.WriteLine("Battery #" + two.ToString());
+			List<double> data = DataFactory.MakeData<double>(
+				12, 13, 14, 14, 15, 15, 15, 16, 16, 16, 16, 16,
+				17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 20, 21);
+			double mean = MathPlus.Stats.Mean(data);
+			double sd = MathPlus.Stats.StandardDev(data, mean);
+
+			TTestResults results = MathPlus.Stats.OneSampleTTest(15.0, 
+				InequalityType.GreaterThan, mean, sd, data.Count);
 
 			// End of Line
 			Console.ReadKey();
