@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MathPlusLib.Stats;
+
 namespace MathPlusLib
 {
 	public enum InequalityType
@@ -365,6 +367,47 @@ namespace MathPlusLib
 				double zCrit = NormalModel.Inverse(1.0 - ((1.0 - confidence) / 2.0));
 
 				return Interval.FromCenter(p2 - p1, se * zCrit);
+			}
+
+			public static Interval OneSampleTInterval(double mean, double sd, int n, double confidence)
+			{
+				if (confidence <= 0.0 || confidence >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("confidence",
+						"Confidence must be between 0 and 1, exclusively.");
+				}
+
+				double se = sd / Sqrt(n);
+				double tCrit = TModel.Inverse(1.0 - ((1.0 - confidence) / 2.0), n - 1);
+
+				return Interval.FromCenter(mean, se * tCrit);
+			}
+			public static Interval TwoSampleTInterval(double mean1, double mean2, 
+				double sd1, double sd2, int n1, int n2, double confidence)
+			{
+				try
+				{
+					return TwoSampleTInterval(mean2 - mean1, sd1, sd2, n1, n2, confidence);
+				}
+				catch (ArgumentOutOfRangeException e)
+				{
+					throw e; // rethrow
+				}
+			}
+			public static Interval TwoSampleTInterval(double deltaMean, double sd1, double sd2, 
+				int n1, int n2, double confidence)
+			{
+				if (confidence <= 0.0 || confidence >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("confidence",
+						"Confidence must be between 0 and 1, exclusively.");
+				}
+
+				double se = Sqrt((sd1 * sd1 / (double)n1) + (sd2 * sd2 / (double)n2));
+				double tCrit = TModel.Inverse(1.0 - ((1.0 - confidence) / 2.0),
+					DegreesOfFreedom(sd1, sd2, n1, n2));
+
+				return Interval.FromCenter(deltaMean, se * tCrit);
 			}
 
 			public static double DegreesOfFreedom(double s1, double s2, int n1, int n2)

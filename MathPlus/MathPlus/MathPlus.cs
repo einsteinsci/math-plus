@@ -57,47 +57,6 @@ namespace MathPlusLib
 			return value < 0 ? (-1.0 * value) : value;
 		}
 
-		public static double Round(double value, int digits = 0)
-		{
-			double mult = Pow(10.0, digits);
-			double bigger = value * mult;
-			int lowerInt = (int)bigger;
-			int upperInt = lowerInt + 1;
-			double lower = lowerInt;
-			double upper = upperInt;
-
-			double result;
-			if (upper - bigger >= bigger - lower)
-			{
-				result = lower;
-			}
-			else
-			{
-				result = upper;
-			}
-
-			return result / mult;
-		}
-
-		public static int Floor(double value)
-		{
-			int res = (int)value;
-			if (value < 0.0)
-			{
-				return res - 1;
-			}
-			return res;
-		}
-		public static int Ceiling(double value)
-		{
-			int res = (int)value;
-			if (value > 0.0)
-			{
-				return res + 1;
-			}
-			return res;
-		}
-
 		public static double Fractional(double value)
 		{
 			double ipart = (int)value;
@@ -124,21 +83,6 @@ namespace MathPlusLib
 			}
 
 			return value;
-		}
-
-		public static int LeastCommonMultiplier(int a, int b)
-		{
-			int max = (int)Max(a, b);
-
-			for (int i = 2; i <= max; i++)
-			{
-				if (a % i == 0 && b % i == 0)
-				{
-					return i;
-				}
-			}
-
-			return -1;
 		}
 
 		public static double Sigma(Function2D exp, double lower,

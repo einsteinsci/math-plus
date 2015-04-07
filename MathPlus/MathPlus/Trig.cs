@@ -12,7 +12,6 @@ namespace MathPlusLib
 		{
 			public static double Sin(double theta)
 			{
-				double n = E;
 				return Math.Sin(theta);
 			}
 			public static double Cos(double theta)

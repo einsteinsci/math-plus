@@ -82,9 +82,9 @@ namespace MathPlusLib
 				Denominator = 1;
 			}
 
-			while (MathPlus.LeastCommonMultiplier(Numerator, Denominator) != -1)
+			while (MathPlus.GreatestCommonDenominator(Numerator, Denominator) != -1)
 			{
-				int lcm = MathPlus.LeastCommonMultiplier(Numerator, Denominator);
+				int lcm = MathPlus.GreatestCommonDenominator(Numerator, Denominator);
 				Numerator /= lcm;
 				Denominator /= lcm;
 			}
@@ -132,7 +132,7 @@ namespace MathPlusLib
 			else if (obj is IComparable)
 			{
 				IComparable ic = (IComparable)obj;
-				return FloatingPoint.CompareTo(ic);
+				return -ic.CompareTo(FloatingPoint);
 			}
 			else
 			{
