@@ -19,7 +19,7 @@ namespace MathPlusLib
 		public double DF
 		{ get; set; }
 
-		public TModel(double mean, double sd, double df)
+		public TModel(double mean, double sd, double df) : this()
 		{
 			Mean = mean;
 			SD = sd;

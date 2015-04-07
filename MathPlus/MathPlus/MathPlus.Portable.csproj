@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Calculus.cs" />
     <Compile Include="Complex.cs" />
+    <Compile Include="Fraction.cs" />
     <Compile Include="IMathable.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="Interval.cs" />

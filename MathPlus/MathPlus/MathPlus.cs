@@ -138,7 +138,7 @@ namespace MathPlusLib
 				}
 			}
 
-			return max;
+			return -1;
 		}
 
 		public static double Sigma(Function2D exp, double lower,

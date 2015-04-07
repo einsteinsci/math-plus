@@ -21,5 +21,12 @@ namespace MathPlusLib
 		{
 			return n % divisor == 0;
 		}
+
+		public static bool IsInteger(this double value, int precision)
+		{
+			double rounded = MathPlus.Round(value, precision);
+			int trunc = (int)rounded;
+			return rounded == (double)trunc;
+		}
 	}
 }
