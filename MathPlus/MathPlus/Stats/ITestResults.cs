@@ -9,18 +9,18 @@ namespace MathPlusLib.Stats
 	public interface ITestResults
 	{
 		double TestedValue
-		{ get; set; }
+		{ get; }
 
 		bool RejectNullHypothesis
-		{ get; set; }
+		{ get; }
 
 		double NullHypothesis
-		{ get; set; }
+		{ get; }
 
 		InequalityType AltHypothesis
-		{ get; set; }
+		{ get; }
 
 		double Probability
-		{ get; set; }
+		{ get; }
 	}
 }

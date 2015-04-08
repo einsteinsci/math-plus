@@ -21,6 +21,8 @@ namespace MathPlusLib.Test
 			TTestResults results = MathPlus.Stats.OneSampleTTest(15.0, 
 				InequalityType.GreaterThan, mean, sd, data.Count);
 
+			Console.WriteLine(results.ToString());
+
 			// End of Line
 			Console.ReadKey();
 		}

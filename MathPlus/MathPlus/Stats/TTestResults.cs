@@ -18,9 +18,13 @@ namespace MathPlusLib.Stats
 			DegreesOfFreedom = df;
 			NullHypothesis = hNull;
 			AltHypothesis = alt;
+			AlphaLevel = alpha;
 		}
 
 		public double TestedValue
+		{ get; private set; }
+
+		public double AlphaLevel
 		{ get; private set; }
 
 		public bool RejectNullHypothesis
@@ -68,8 +72,9 @@ namespace MathPlusLib.Stats
 			}
 			res += " " + MathPlus.Numerics.Round(TestedValue, 4).ToString() + " ) = ";
 			res += Probability.ToString() + "\n";
-			res += "SE = " + StandardError + "\n";
-			res += "df = " + DegreesOfFreedom + "\n";
+			res += "\u03B1 = " + AlphaLevel.ToString() + "\n";
+			res += "SE = " + StandardError.ToString() + "\n";
+			res += "df = " + DegreesOfFreedom.ToString() + "\n";
 
 			return res;
 		}

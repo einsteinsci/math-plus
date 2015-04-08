@@ -17,9 +17,13 @@ namespace MathPlusLib.Stats
 			AltHypothesis = hAlt;
 			Probability = prob;
 			StandardError = se;
+			AlphaLevel = alpha;
 		}
 
 		public double TestedValue
+		{ get; private set; }
+
+		public double AlphaLevel
 		{ get; private set; }
 
 		public bool RejectNullHypothesis
@@ -64,7 +68,8 @@ namespace MathPlusLib.Stats
 			}
 			res += " " + MathPlus.Numerics.Round(TestedValue, 4).ToString() + " ) = ";
 			res += Probability.ToString() + "\n";
-			res += "SE = " + StandardError + "\n";
+			res += "\u03B1 = " + AlphaLevel.ToString() + "\n";
+			res += "SE = " + StandardError.ToString() + "\n";
 
 			return res;
 		}

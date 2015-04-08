@@ -56,17 +56,30 @@ namespace MathPlusLib
 			}
 			public static double StandardDev(IEnumerable<double> values, double mean)
 			{
-				Func<double, double> deviation = (xi) => (xi - mean) * (xi - mean);
-
-				double sigmaDev = 0;
-				foreach (double i in values)
+				double res = 0;
+				if (values.Count() > 1)
 				{
-					sigmaDev += deviation(i);
+					double sum = 0;
+					foreach (double d in values)
+					{
+						sum += (d - mean) * (d - mean);
+					}
+					res = Sqrt(sum / (values.Count() - 1));
 				}
 
-				int n = values.Count();
+				return res;
+			}
 
-				return sigmaDev / (double)(n - 1);
+			public static double RootMeanSquare(IEnumerable<double> data)
+			{
+				double sigmaSquare = 0;
+				foreach (double d in data)
+				{
+					sigmaSquare += (d * d);
+				}
+
+				double meanSquare = sigmaSquare / data.Count();
+				return Sqrt(meanSquare);
 			}
 
 			public static double Proportion(IEnumerable<bool> sample)
@@ -79,6 +92,16 @@ namespace MathPlusLib
 				int total = sample.Count();
 
 				return (double)on / (double)total;
+			}
+			public static double Proportion<T>(IEnumerable<T> sample, Predicate<T> evaluator)
+			{
+				List<bool> results = new List<bool>();
+				foreach (T t in sample)
+				{
+					results.Add(evaluator(t));
+				}
+
+				return Proportion(results);
 			}
 
 			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
@@ -133,7 +156,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new ZTestResults(proportion, prob, alpha, se);
+				return new ZTestResults(proportion, prob, p0, HA, alpha, se);
 			}
 			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
 				double proportion, int n)
@@ -205,7 +228,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new ZTestResults(p2 - p1, prob, alpha, sePooled);
+				return new ZTestResults(pDelta, prob, 0, HA, alpha, sePooled);
 			}
 			public static ZTestResults TwoPropZTest(InequalityType HA,
 				double p1, double p2, int n1, int n2)
@@ -243,7 +266,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new TTestResults(mean, prob, alpha, se, df);
+				return new TTestResults(mean, prob, mu0, HA, alpha, se, df);
 			}
 			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
 				double mean, double sd, int n)
@@ -281,7 +304,7 @@ namespace MathPlusLib
 						HA.ToString());
 				}
 
-				return new TTestResults(mean2 - mean1, prob, alpha, se, df);
+				return new TTestResults(mean2 - mean1, prob, 0, HA, alpha, se, df);
 			}
 			public static TTestResults TwoSampleTTest(InequalityType HA,
 				double mean1, double mean2, double sd1, double sd2, 

@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Calculus.cs" />
     <Compile Include="Fraction.cs" />
-    <Compile Include="MathPlusExtensions.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Numerics.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Stats\DataFactory.cs" />

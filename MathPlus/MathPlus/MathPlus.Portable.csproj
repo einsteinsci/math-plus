@@ -43,10 +43,10 @@
   <ItemGroup>
     <Compile Include="Calculus.cs" />
     <Compile Include="Complex.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="IMathable.cs" />
     <Compile Include="MathPlus.cs" />
-    <Compile Include="MathPlusExtensions.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Numerics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
