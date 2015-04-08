@@ -83,6 +83,12 @@ namespace MathPlusLib.Stats
 			}
 		}
 
+		private static double erf(double z, bool invert)
+		{
+			double derf = 0;
+			return derf;
+		}
+
 		private static double phi(double x)
 		{
 			// constants
