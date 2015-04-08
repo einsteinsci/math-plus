@@ -15,62 +15,6 @@ namespace MathPlusLib
 		GreaterThan = 1
 	}
 
-	public class ZTestResults
-	{
-		public ZTestResults(double tested, double prob, double alpha, double se)
-		{
-			TestedValue = tested;
-			RejectNullHypothesis = prob < alpha;
-			Probability = prob;
-			StandardError = se;
-		}
-
-		public double TestedValue
-		{ get; private set; }
-
-		public bool RejectNullHypothesis
-		{ get; private set; }
-
-		public double Probability
-		{ get; private set; }
-
-		public double StandardError
-		{ get; private set; }
-	}
-
-	public class TTestResults
-	{
-		public TTestResults(double tested, double prob, double alpha, double se, double df)
-		{
-			TestedValue = tested;
-			RejectNullHypothesis = prob < alpha;
-			Probability = prob;
-			StandardError = se;
-			DegreesOfFreedom = df;
-		}
-
-		public double TestedValue
-		{ get; private set; }
-
-		public bool RejectNullHypothesis
-		{ get; private set; }
-
-		public double Probability
-		{ get; private set; }
-
-		public double StandardError
-		{ get; private set; }
-
-		public double DegreesOfFreedom
-		{ get; private set; }
-
-		public override string ToString()
-		{
-			string res = "";
-			if ()
-		}
-	}
-
 	public static partial class MathPlus
 	{
 		public static class Stats

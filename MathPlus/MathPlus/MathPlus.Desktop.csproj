@@ -47,10 +47,13 @@
     <Compile Include="Stats\DataFactory.cs" />
     <Compile Include="Stats\Interval.cs" />
     <Compile Include="Stats\IModel.cs" />
+    <Compile Include="Stats\ITestResults.cs" />
     <Compile Include="Stats\NormalModel.cs" />
     <Compile Include="Stats\StatisticInappropriateException.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="Stats\TModel.cs" />
+    <Compile Include="Stats\TTestResults.cs" />
+    <Compile Include="Stats\ZTestResults.cs" />
     <Compile Include="Trig.cs" />
     <Compile Include="Complex.cs" />
     <Compile Include="IMathable.cs" />

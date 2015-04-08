@@ -51,12 +51,16 @@
     <Compile Include="Numerics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stats.cs" />
+    <Compile Include="Stats\DataFactory.cs" />
     <Compile Include="Stats\IModel.cs" />
     <Compile Include="Stats\Interval.cs" />
+    <Compile Include="Stats\ITestResults.cs" />
     <Compile Include="Stats\NormalModel.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Stats\StatisticInappropriateException.cs" />
     <Compile Include="Stats\TModel.cs" />
+    <Compile Include="Stats\TTestResults.cs" />
+    <Compile Include="Stats\ZTestResults.cs" />
     <Compile Include="Trig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
