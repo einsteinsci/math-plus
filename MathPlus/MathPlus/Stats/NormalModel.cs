@@ -25,9 +25,9 @@ namespace MathPlusLib.Stats
 			return (value - Mean) / SD;
 		}
 
-		public double Probability(double bottom, double top)
+		public double ScaledCDF(double bottom, double top)
 		{
-			return ProbabilityUnscaled(ZScore(bottom), ZScore(top));
+			return CDF(ZScore(bottom), ZScore(top));
 		}
 
 		public override string ToString()
@@ -35,12 +35,12 @@ namespace MathPlusLib.Stats
 			return "N(" + Mean.ToString() + ", " + SD.ToString() + ")";
 		}
 
-		public static double ProbabilityUnscaled(double zBot, double zTop)
+		public static double CDF(double zBot, double zTop)
 		{
 			return phi(zTop) - phi(zBot);
 		}
 
-		public static double Inverse(double p)
+		public static double InverseCDF(double p)
 		{
 			Function2D rationalApproximation = (t) =>
 			{

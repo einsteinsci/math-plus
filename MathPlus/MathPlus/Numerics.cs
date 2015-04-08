@@ -80,6 +80,33 @@ namespace MathPlusLib
 				}
 				return res;
 			}
+
+			public static bool AlmostEqualToNorm(double a, double b, double diff, double maxError)
+			{
+				double doublePrecision = MathPlus.Pow(2, -53);
+
+				if (double.IsInfinity(a) || double.IsInfinity(b))
+				{
+					return a == b;
+				}
+
+				if (double.IsNaN(a) || double.IsNaN(b))
+				{
+					return false;
+				}
+
+				if (MathPlus.Abs(a) < doublePrecision || MathPlus.Abs(b) < doublePrecision)
+				{
+					return MathPlus.Abs(diff) < maxError;
+				}
+
+				if ((a == 0 && MathPlus.Abs(b) < maxError) || (b == 0 && MathPlus.Abs(a) < maxError))
+				{
+					return true;
+				}
+
+				return MathPlus.Abs(diff) < maxError * MathPlus.Max(MathPlus.Abs(a), MathPlus.Abs(b));
+			}
 		}
 	}
 }

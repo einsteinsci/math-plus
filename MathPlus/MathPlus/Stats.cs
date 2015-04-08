@@ -138,15 +138,15 @@ namespace MathPlusLib
 
 				if (HA == InequalityType.LessThan)
 				{
-					prob = NormalModel.ProbabilityUnscaled(-99.0, z);
+					prob = NormalModel.CDF(-99.0, z);
 				}
 				else if (HA == InequalityType.GreaterThan)
 				{
-					prob = NormalModel.ProbabilityUnscaled(z, 99.0);
+					prob = NormalModel.CDF(z, 99.0);
 				}
 				else if (HA == InequalityType.NotEqual)
 				{
-					prob = NormalModel.ProbabilityUnscaled(Abs(z), 99.0) * 2.0;
+					prob = NormalModel.CDF(Abs(z), 99.0) * 2.0;
 				}
 
 				if (prob == -1)
@@ -210,15 +210,15 @@ namespace MathPlusLib
 
 				if (HA == InequalityType.LessThan)
 				{
-					prob = NormalModel.ProbabilityUnscaled(-99.0, z);
+					prob = NormalModel.CDF(-99.0, z);
 				}
 				else if (HA == InequalityType.GreaterThan)
 				{
-					prob = NormalModel.ProbabilityUnscaled(z, 99.0);
+					prob = NormalModel.CDF(z, 99.0);
 				}
 				else if (HA == InequalityType.NotEqual)
 				{
-					prob = NormalModel.ProbabilityUnscaled(Abs(z), 99.0) * 2.0;
+					prob = NormalModel.CDF(Abs(z), 99.0) * 2.0;
 				}
 
 				if (prob == -1)
@@ -324,7 +324,7 @@ namespace MathPlusLib
 				double q = 1.0 - proportion;
 				
 				double se = Sqrt((proportion * q) / (double)n);
-				double zCrit = NormalModel.Inverse(1.0 - ((1.0 - confidence) / 2.0));
+				double zCrit = NormalModel.InverseCDF(1.0 - ((1.0 - confidence) / 2.0));
 
 				return Interval.FromCenter(proportion, se * zCrit);
 			}
@@ -340,7 +340,7 @@ namespace MathPlusLib
 				double q2 = 1.0 - p2;
 
 				double se = Sqrt(((p1 * q1) / (double)n1) + ((p2 * q2) / (double)n2));
-				double zCrit = NormalModel.Inverse(1.0 - ((1.0 - confidence) / 2.0));
+				double zCrit = NormalModel.InverseCDF(1.0 - ((1.0 - confidence) / 2.0));
 
 				return Interval.FromCenter(p2 - p1, se * zCrit);
 			}
@@ -354,7 +354,7 @@ namespace MathPlusLib
 				}
 
 				double se = sd / Sqrt(n);
-				double tCrit = TModel.Inverse(1.0 - ((1.0 - confidence) / 2.0), n - 1);
+				double tCrit = TModel.InverseCDF(1.0 - ((1.0 - confidence) / 2.0), n - 1);
 
 				return Interval.FromCenter(mean, se * tCrit);
 			}
@@ -380,7 +380,7 @@ namespace MathPlusLib
 				}
 
 				double se = Sqrt((sd1 * sd1 / (double)n1) + (sd2 * sd2 / (double)n2));
-				double tCrit = TModel.Inverse(1.0 - ((1.0 - confidence) / 2.0),
+				double tCrit = TModel.InverseCDF(1.0 - ((1.0 - confidence) / 2.0),
 					DegreesOfFreedom(sd1, sd2, n1, n2));
 
 				return Interval.FromCenter(deltaMean, se * tCrit);

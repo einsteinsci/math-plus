@@ -31,11 +31,14 @@ namespace MathPlusLib.Stats
 			return (value - Mean) / SD;
 		}
 
-		public double Probability(double low, double high)
+		public double ScaledCDF(double low, double high)
 		{
 			return ProbabilityUnscaled(TScore(low), TScore(high), DF);
 		}
-
+		public static double CDF(double tHigh, double df)
+		{
+			return cdf(tHigh, df);
+		}
 		public static double ProbabilityUnscaled(double tLow, double tHigh, double df)
 		{
 			return cdf(tHigh, df) - cdf(tLow, df);
@@ -43,26 +46,19 @@ namespace MathPlusLib.Stats
 
 		private static double cdf(double t, double v)
 		{
-			if (t <= MAX_LOWER)
+			if (v <= 0.0)
 			{
-				return 0;
+				throw new ArgumentException("df must be positive and non-zero.");
 			}
 
-			Function2D gamma = (n) =>
+			if (double.IsPositiveInfinity(v))
 			{
-				return MathPlus.Calculus.Integrate((x) =>
-				{
-					return MathPlus.Pow(x, n - 1.0) * MathPlus.Pow(MathPlus.E, -x);
-				}, 0, 100000, 1000, IntegrationType.Simpson);
-			};
+				return NormalModel.CDF(-999, t);
+			}
 
-			double part1 = gamma((v + 1.0) / 2.0) / gamma(v / 2.0);
-			double part2 = 1.0 / MathPlus.Sqrt(v * MathPlus.PI);
-			double part3 = MathPlus.Calculus.Integrate(
-				(_t) => 1.0 / ((1.0 + (_t * _t) / v) * ((v + 1.0) / 2.0)), 
-				-10000, t, 100, IntegrationType.Simpson);
-
-			return part1 * part2 * part3;
+			double h = v / (v + (t * t));
+			double ib = 0.5 * betaReg(v / 2.0, 0.5, h);
+			return t <= 0.0 ? ib : 1.0 - ib;
 		}
 
 		private static double betaReg(double a, double b, double x)
@@ -190,40 +186,29 @@ namespace MathPlusLib.Stats
 			}
 		}
 
-		public static double Inverse(double prob, double df)
+		public static double InverseCDF(double prob, double df)
 		{
-			// reference
-
-			//if (scale <= 0.0 || freedom <= 0.0)
-			//{
-			//	throw new ArgumentException(Resources.InvalidDistributionParameters);
-			//}
-			//
-			//// TODO JVG we can probably do a better job for Cauchy special case
-			//if (double.IsPositiveInfinity(freedom))
-			//{
-			//	return Normal.InvCDF(location, scale, p);
-			//}
-			//
-			//if (p == 0.5d)
-			//{
-			//	return location;
-			//}
-			//
-			//// TODO PERF: We must implement this explicitly instead of solving for CDF^-1
-			//return Brent.FindRoot(x =>
-			//{
-			//	var k = (x - location) / scale;
-			//	var h = freedom / (freedom + (k * k));
-			//	var ib = 0.5 * SpecialFunctions.BetaRegularized(freedom / 2.0, 0.5, h);
-			//	return x <= location ? ib - p : 1.0 - ib - p;
-			//}, -800, 800, accuracy: 1e-12);
-
 			if (df <= 0)
 			{
 				throw new ArgumentOutOfRangeException("df",
 					"Degrees of freedom must be above zero.");
 			}
+			if (double.IsPositiveInfinity(df))
+			{
+				return NormalModel.InverseCDF(prob);
+			}
+
+			if (prob == 0.5)
+			{
+				return 0;
+			}
+
+			return MathPlus.Solver.SolveBrentDekker((x) =>
+			{
+				double h = df / (df + (x * x));
+				double ib = 0.5 * betaReg(df / 2.0, 0.5, h);
+				return x <= 0.0 ? ib - prob : 1.0 - ib - prob;
+			}, -800, 800, precision: 1e-12);
 		}
 	}
 }

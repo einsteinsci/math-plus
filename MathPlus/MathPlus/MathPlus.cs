@@ -57,6 +57,11 @@ namespace MathPlusLib
 			return value < 0 ? (-1.0 * value) : value;
 		}
 
+		public static int Sign(double value)
+		{
+			return Math.Sign(value);
+		}
+
 		public static double Fractional(double value)
 		{
 			double ipart = (int)value;

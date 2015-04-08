@@ -8,6 +8,6 @@ namespace MathPlusLib.Stats
 {
 	public interface IModel
 	{
-		double Probability(double bottom, double top);
+		double ScaledCDF(double bottom, double top);
 	}
 }
