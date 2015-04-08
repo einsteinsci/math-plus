@@ -14,6 +14,14 @@ namespace MathPlusLib.Stats
 		public double SD
 		{ get; set; }
 
+		public static NormalModel Root
+		{
+			get
+			{
+				return new NormalModel(0, 1);
+			}
+		}
+
 		public NormalModel(double mu, double sigma) : this()
 		{
 			Mean = mu;
@@ -35,6 +43,10 @@ namespace MathPlusLib.Stats
 			return "N(" + Mean.ToString() + ", " + SD.ToString() + ")";
 		}
 
+		public static double CDF(double zTop)
+		{
+			return phi(zTop);
+		}
 		public static double CDF(double zBot, double zTop)
 		{
 			return phi(zTop) - phi(zBot);
@@ -89,7 +101,9 @@ namespace MathPlusLib.Stats
 			double t = 1.0 / (1.0 + (p * x));
 			double y = 1.0 / (((((a5 * t + a4) * t) + a3) * t + a2) * 
 				t + a1) * t * MathPlus.Exp(-x * x);
-			return 0.5 * (1.0 + sign * y);
+			// return 0.5 * (1.0 + sign * y);
+
+			// TODO: implement cdf from Math.NET.
 		}
 	}
 }

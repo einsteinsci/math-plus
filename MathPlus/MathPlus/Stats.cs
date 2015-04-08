@@ -248,15 +248,15 @@ namespace MathPlusLib
 
 				if (HA == InequalityType.LessThan)
 				{
-					prob = TModel.ProbabilityUnscaled(-99.0, t, df);
+					prob = TModel.CDF(-99.0, t, df);
 				}
 				else if (HA == InequalityType.GreaterThan)
 				{
-					prob = TModel.ProbabilityUnscaled(t, 99.0, df);
+					prob = TModel.CDF(t, 99.0, df);
 				}
 				else if (HA == InequalityType.NotEqual)
 				{
-					prob = TModel.ProbabilityUnscaled(Abs(t), 99.0, df) * 2.0;
+					prob = TModel.CDF(Abs(t), 99.0, df) * 2.0;
 				}
 
 				if (prob == -1)
@@ -286,15 +286,15 @@ namespace MathPlusLib
 
 				if (HA == InequalityType.LessThan)
 				{
-					prob = TModel.ProbabilityUnscaled(-99.0, t, df);
+					prob = TModel.CDF(-99.0, t, df);
 				}
 				else if (HA == InequalityType.GreaterThan)
 				{
-					prob = TModel.ProbabilityUnscaled(t, 99.0, df);
+					prob = TModel.CDF(t, 99.0, df);
 				}
 				else if (HA == InequalityType.NotEqual)
 				{
-					prob = TModel.ProbabilityUnscaled(Abs(t), 99.0, df) * 2.0;
+					prob = TModel.CDF(Abs(t), 99.0, df) * 2.0;
 				}
 
 				if (prob == -1)

@@ -33,13 +33,13 @@ namespace MathPlusLib.Stats
 
 		public double ScaledCDF(double low, double high)
 		{
-			return ProbabilityUnscaled(TScore(low), TScore(high), DF);
+			return CDF(TScore(low), TScore(high), DF);
 		}
 		public static double CDF(double tHigh, double df)
 		{
 			return cdf(tHigh, df);
 		}
-		public static double ProbabilityUnscaled(double tLow, double tHigh, double df)
+		public static double CDF(double tLow, double tHigh, double df)
 		{
 			return cdf(tHigh, df) - cdf(tLow, df);
 		}
