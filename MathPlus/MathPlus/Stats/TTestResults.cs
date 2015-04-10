@@ -19,6 +19,8 @@ namespace MathPlusLib.Stats
 			NullHypothesis = hNull;
 			AltHypothesis = alt;
 			AlphaLevel = alpha;
+
+			Model = new TModel(NullHypothesis, StandardError, DegreesOfFreedom);
 		}
 
 		public double TestedValue
@@ -34,6 +36,9 @@ namespace MathPlusLib.Stats
 		{ get; private set; }
 
 		public double StandardError
+		{ get; private set; }
+
+		public TModel Model
 		{ get; private set; }
 
 		public double DegreesOfFreedom
@@ -70,7 +75,7 @@ namespace MathPlusLib.Stats
 			{
 				res += "!=";
 			}
-			res += " " + MathPlus.Numerics.Round(TestedValue, 4).ToString() + " ) = ";
+			res += " " + MathPlus.Numerics.Round(Model.TScore(TestedValue), 4).ToString() + " ) = ";
 			res += Probability.ToString() + "\n";
 			res += "\u03B1 = " + AlphaLevel.ToString() + "\n";
 			res += "SE = " + StandardError.ToString() + "\n";

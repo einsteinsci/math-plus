@@ -12,21 +12,12 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			NormalModel root = NormalModel.Root;
+			Function2D squared = (x) => x * x;
+			double deriv = MathPlus.Numerics.Round(MathPlus.Calculus.Derivative(squared, 2), 5);
+			double area = MathPlus.Calculus.Integrate(squared, -1.0, 1.0, 2, IntegrationType.Simpson);
 
-			//Console.WriteLine("67% ?= " + root.ScaledCDF(-2, 2).ToString());
-			Console.WriteLine("95% confidence: " + NormalModel.InverseCDF(.975).ToString());
-
-			//List<double> data = DataFactory.MakeData<double>(
-			//	12, 13, 14, 14, 15, 15, 15, 16, 16, 16, 16, 16,
-			//	17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 20, 21);
-			//double mean = MathPlus.Stats.Mean(data);
-			//double sd = MathPlus.Stats.StandardDev(data, mean);
-			//
-			//TTestResults results = MathPlus.Stats.OneSampleTTest(15.0, 
-			//	InequalityType.GreaterThan, mean, sd, data.Count);
-			//
-			//Console.WriteLine(results.ToString());
+			//Console.WriteLine("d/dx|2 x^2 = " + deriv.ToString());
+			Console.WriteLine("Area: " + area.ToString());
 
 			// End of Line
 			Console.ReadKey();

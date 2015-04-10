@@ -210,5 +210,10 @@ namespace MathPlusLib.Stats
 				return x <= 0.0 ? ib - prob : 1.0 - ib - prob;
 			}, -800, 800, precision: 1e-12);
 		}
+
+		public override string ToString()
+		{
+			return "T[" + DF.ToString() + "](" + Mean.ToString() + ", " + SD.ToString() + ")";
+		}
 	}
 }
