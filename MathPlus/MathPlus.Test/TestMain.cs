@@ -12,12 +12,9 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			Function2D func = (x) => Math.Exp(-x / 5) * (2 + Math.Sin(2 * x));
+			Fraction half = new Fraction(.5);
 
-			double area = MathPlus.Calculus.IntegrateSimpson(func, 0, 10, 1000);
-
-			//Console.WriteLine("d/dx|2 x^2 = " + deriv.ToString());
-			Console.WriteLine("Area: " + area.ToString());
+			//Console.WriteLine(half.ToString());
 
 			// End of Line
 			Console.ReadKey();

@@ -42,24 +42,26 @@ namespace MathPlusLib
 
 			public static double Round(double value, int digits = 0)
 			{
-				double mult = Pow(10.0, digits);
-				double bigger = value * mult;
-				int lowerInt = (int)bigger;
-				int upperInt = lowerInt + 1;
-				double lower = lowerInt;
-				double upper = upperInt;
+				return (double)Math.Round((decimal)value, digits, MidpointRounding.AwayFromZero);
 
-				double result;
-				if (upper - bigger >= bigger - lower)
-				{
-					result = lower;
-				}
-				else
-				{
-					result = upper;
-				}
-
-				return result / mult;
+				//double mult = Pow(10.0, digits);
+				//double bigger = value * mult;
+				//int lowerInt = (int)bigger;
+				//int upperInt = lowerInt + 1;
+				//double lower = lowerInt;
+				//double upper = upperInt;
+				//
+				//double result;
+				//if (upper - bigger >= bigger - lower)
+				//{
+				//	result = lower;
+				//}
+				//else
+				//{
+				//	result = upper;
+				//}
+				//
+				//return result / mult;
 			}
 
 			public static int Floor(double value)

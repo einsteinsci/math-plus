@@ -50,11 +50,11 @@ namespace MathPlusLib
 			Numerator = numerator;
 			Denominator = denominator;
 		}
-		public Fraction(double value, int digitPrecision = 10) : this()
+		public Fraction(double value, int digitPrecision) : this()
 		{
-			for (int den = 2; den < MaxDenominator; den++)
+			for (int den = 1; den < MaxDenominator; den++)
 			{
-				double numer = value * den;
+				double numer = value * (double)den;
 				if (numer.IsInteger(digitPrecision))
 				{
 					Numerator = (int)numer;
@@ -63,6 +63,8 @@ namespace MathPlusLib
 				}
 			}
 		}
+		public Fraction(double value) : this(value, 10)
+		{ }
 
 		public double ToDouble()
 		{
