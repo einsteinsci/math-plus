@@ -77,7 +77,7 @@ namespace MathPlusLib
 			}
 
 			public static double Derivative(Function2D function, 
-				double point, double deltaX)
+				double point, double deltaX = 1.0e-8)
 			{
 				double yMinus = function(point - deltaX);
 				double yPlus = function(point + deltaX);
@@ -85,8 +85,8 @@ namespace MathPlusLib
 				return (yPlus - yMinus) / (deltaX * 2.0);
 			}
 
-			private static double IntegrateLow(Function2D function, double lower,
-				double upper, int divisions)
+			public static double IntegrateLow(Function2D function, double lower,
+				double upper, int divisions = 1)
 			{
 				double increment = (upper - lower) / divisions;
 				double area = 0;
@@ -97,8 +97,8 @@ namespace MathPlusLib
 
 				return area;
 			}
-			private static double IntegrateHigh(Function2D function, double lower,
-				double upper, int divisions)
+			public static double IntegrateHigh(Function2D function, double lower,
+				double upper, int divisions = 1)
 			{
 				double increment = (upper - lower) / divisions;
 				double area = 0;
@@ -109,8 +109,8 @@ namespace MathPlusLib
 
 				return area;
 			}
-			private static double IntegrateMidpoint(Function2D function, 
-				double lower, double upper, int divisions)
+			public static double IntegrateMidpoint(Function2D function, 
+				double lower, double upper, int divisions = 1)
 			{
 				double increment = (upper - lower) / divisions;
 				double area = 0;
@@ -122,7 +122,7 @@ namespace MathPlusLib
 
 				return area;
 			}
-			private static double IntegrateTrapezoidal(Function2D function,
+			public static double IntegrateTrapezoidal(Function2D function,
 				double lower, double upper, int divisions = 2)
 			{
 				double increment = (upper - lower) / divisions;
@@ -136,31 +136,32 @@ namespace MathPlusLib
 
 				return increment * sum;
 			}
-			private static double IntegrateSimpson(Function2D function,
-				double lower, double upper, int divisions = 3)
+			public static double IntegrateSimpson(Function2D f,
+				double intervalBegin, double intervalEnd, int numberOfPartitions = 3)
 			{
-				if (divisions.IsOdd())
+				if (numberOfPartitions.IsOdd())
 				{
 					throw new ArgumentException("Division count must be even.", "divisions");
 				}
 
-				double step = (lower - upper) / (double)divisions;
-				double factor = step / 3.0;
+				double step = (intervalEnd - intervalBegin) / (double)numberOfPartitions;
+				double factor = step / 3;
 
 				double offset = step;
 				int m = 4;
-				double sum = function(lower) + function(upper);
-				for (int i = 0; i < divisions - 1; i++)
+				double sum = f(intervalBegin) + f(intervalEnd);
+				for (int i = 0; i < numberOfPartitions - 1; i++)
 				{
-					sum += m * function(lower + offset);
-					m = 6 - m; // alternate 4 and 2
+					// NOTE (cdrnet, 2009-01-07): Do not combine intervalBegin and offset (numerical stability)
+					sum += m * f(intervalBegin + offset);
+					m = 6 - m;
 					offset += step;
 				}
 
 				return factor * sum;
 			}
 			public static double Integrate(Function2D function, double lower,
-				double upper, int divisions, IntegrationType type)
+				double upper, int divisions = 100, IntegrationType type = IntegrationType.Trapezoidal)
 			{
 				if (function == null)
 				{
