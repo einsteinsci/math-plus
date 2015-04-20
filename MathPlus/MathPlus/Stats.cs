@@ -19,6 +19,14 @@ namespace MathPlusLib
 	{
 		public static class Stats
 		{
+			public static bool ThrowInappropriateException
+			{ get; set; }
+
+			static Stats()
+			{
+				ThrowInappropriateException = true;
+			}
+
 			public static List<double> MakeNumbers(IEnumerable<IComparable> input)
 			{
 				List<double> result = new List<double>();
@@ -112,12 +120,12 @@ namespace MathPlusLib
 				return Proportion(results);
 			}
 
+			#region Normal
 			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
 				double proportion, int n, double alpha)
 			{
 				double q = 1.0 - proportion;
 
-				#region checking
 				if (proportion > 1.0 || proportion < 0.0)
 				{
 					throw new ArgumentOutOfRangeException("proportion", 
@@ -132,10 +140,12 @@ namespace MathPlusLib
 
 				if (proportion * (double)n < 10.0 || q * (double)n < 10.0)
 				{
-					throw new StatisticInappropriateException(
-						"Did not pass 10-successes 10-failures condition.");
+					if (ThrowInappropriateException)
+					{
+						throw new StatisticInappropriateException(
+							"Did not pass 10-successes 10-failures condition.");
+					}
 				}
-				#endregion checking
 
 				double se = Sqrt((proportion * q) / (double)n);
 
@@ -177,7 +187,6 @@ namespace MathPlusLib
 				double q1 = 1.0 - p1;
 				double q2 = 1.0 - p2;
 
-				#region checking
 				if (p1 > 1.0 || p1 < 0.0)
 				{
 					throw new ArgumentOutOfRangeException("p1",
@@ -188,18 +197,19 @@ namespace MathPlusLib
 					throw new ArgumentOutOfRangeException("p2",
 						"Proportion 2 cannot be outside of range (0, 1).");
 				}
-
-				if (p1 * (double)n1 < 10.0 || q1 * (double)n1 < 10.0)
+				if (ThrowInappropriateException)
 				{
-					throw new StatisticInappropriateException(
-						"Proportion 1 did not pass 10-successes 10-failures condition.");
+					if (p1 * (double)n1 < 10.0 || q1 * (double)n1 < 10.0)
+					{
+						throw new StatisticInappropriateException(
+							"Proportion 1 did not pass 10-successes 10-failures condition.");
+					}
+					if (p2 * (double)n2 < 10.0 || q2 * (double)n2 < 10.0)
+					{
+						throw new StatisticInappropriateException(
+							"Proportion 2 did not pass 10-successes 10-failures condition.");
+					}
 				}
-				if (p2 * (double)n2 < 10.0 || q2 * (double)n2 < 10.0)
-				{
-					throw new StatisticInappropriateException(
-						"Proportion 2 did not pass 10-successes 10-failures condition.");
-				}
-				#endregion checking
 
 				int total1 = (int)(p1 * n1);
 				int total2 = (int)(p2 * n2);
@@ -243,10 +253,23 @@ namespace MathPlusLib
 			{
 				return TwoPropZTest(HA, p1, p2, n1, n2, 0.05);
 			}
+			#endregion
 
+			#region StudentT
 			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
 				double mean, double sd, int n, double alpha)
 			{
+				if (alpha <= 0 || alpha > 1)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Alpha level must be within range (0, 1].");
+				}
+
+				if (n <= 0)
+				{
+					throw new ArgumentOutOfRangeException("n", "n must be positive.");
+				}
+
 				double se = sd / Sqrt(n);
 				double df = n - 1;
 
@@ -285,8 +308,25 @@ namespace MathPlusLib
 				double mean1, double mean2, double sd1, double sd2, 
 				int n1, int n2, double alpha)
 			{
+				if (alpha <= 0 || alpha > 1)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Alpha level must be within range (0, 1]");
+				}
+
+				if (n1 <= 0)
+				{
+					throw new ArgumentOutOfRangeException("n1",
+						"n must be positive.");
+				}
+				if (n2 <= 0)
+				{
+					throw new ArgumentOutOfRangeException("n2",
+						"n must be positive.");
+				}
+
 				double se = Sqrt(((sd1 * sd1) / (double)n1) + ((sd2 * sd2) / (double)n2));
-				double df = DegreesOfFreedom(sd1, sd2, n1, n2);
+				double df = TDegreesOfFreedom(sd1, sd2, n1, n2);
 
 				TModel model = new TModel(0, se, df);
 				double prob = -1;
@@ -320,10 +360,18 @@ namespace MathPlusLib
 			{
 				return TwoSampleTTest(HA, mean1, mean2, sd1, sd2, n1, n2, 0.05);
 			}
+			#endregion
 
+			#region ChiSquare
 			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
 				Dictionary<string, int> counts, Dictionary<string, double> expected)
 			{
+				if (alpha <= 0 || alpha > 1)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Alpha level must be inside of range (0, 1].");
+				}
+
 				if (counts == null)
 				{
 					throw new ArgumentNullException("counts", "Counts cannot be null.");
@@ -332,6 +380,21 @@ namespace MathPlusLib
 				if (counts.Count == 0)
 				{
 					throw new ArgumentException("counts", "Counts cannot be empty.");
+				}
+
+				foreach (int n in counts.Values)
+				{
+					if (n < 0)
+					{
+						throw new ArgumentOutOfRangeException("counts",
+							"No count can be below zero.");
+					}
+
+					if (n < 5 && ThrowInappropriateException)
+					{
+						throw new StatisticInappropriateException(
+							"Counts should all be above 5.");
+					}
 				}
 
 				if (expected == null)
@@ -402,7 +465,9 @@ namespace MathPlusLib
 
 				return ChiSquareGOFTest(alpha, dCounts, null);
 			}
+			#endregion
 
+			#region Intervals
 			public static Interval OnePropZInterval(double proportion, int n, double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
@@ -418,7 +483,8 @@ namespace MathPlusLib
 
 				return Interval.FromCenter(proportion, se * zCrit);
 			}
-			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, double confidence)
+			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, 
+				double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -435,7 +501,8 @@ namespace MathPlusLib
 				return Interval.FromCenter(p2 - p1, se * zCrit);
 			}
 
-			public static Interval OneSampleTInterval(double mean, double sd, int n, double confidence)
+			public static Interval OneSampleTInterval(double mean, double sd, int n, 
+				double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -471,12 +538,13 @@ namespace MathPlusLib
 
 				double se = Sqrt((sd1 * sd1 / (double)n1) + (sd2 * sd2 / (double)n2));
 				double tCrit = TModel.InverseCDF(1.0 - ((1.0 - confidence) / 2.0),
-					DegreesOfFreedom(sd1, sd2, n1, n2));
+					TDegreesOfFreedom(sd1, sd2, n1, n2));
 
 				return Interval.FromCenter(deltaMean, se * tCrit);
 			}
+			#endregion
 
-			public static double DegreesOfFreedom(double s1, double s2, int n1, int n2)
+			public static double TDegreesOfFreedom(double s1, double s2, int n1, int n2)
 			{
 				double upperInnerA = (s1 * s1) / (double)n1;
 				double upperInnerB = (s2 * s2) / (double)n2;

@@ -56,6 +56,10 @@ namespace MathPlusLib
 			_height = height;
 
 			arrays = new T[width][];
+			foreach (T[] a in arrays)
+			{
+				a = new T[height];
+			}
 		}
 
 		private void resize(int width, int height)

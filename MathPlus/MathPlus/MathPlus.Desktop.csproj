@@ -42,6 +42,7 @@
     <Compile Include="Calculus.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="InternalExtensions.cs" />
+    <Compile Include="MathMatrix.cs" />
     <Compile Include="Numerics.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Solver.cs" />

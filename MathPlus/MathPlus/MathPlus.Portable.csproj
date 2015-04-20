@@ -46,6 +46,7 @@
     <Compile Include="InternalExtensions.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="IMathable.cs" />
+    <Compile Include="MathMatrix.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Numerics.cs" />
