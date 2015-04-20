@@ -109,6 +109,11 @@ namespace MathPlusLib
 
 				return MathPlus.Abs(diff) < maxError * MathPlus.Max(MathPlus.Abs(a), MathPlus.Abs(b));
 			}
+
+			public static bool AlmostEqualTo(double a, double b, double err = 1e-10)
+			{
+				return AlmostEqualToNorm(a, b, Abs(a - b), err);
+			}
 		}
 	}
 }

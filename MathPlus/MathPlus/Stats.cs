@@ -42,11 +42,19 @@ namespace MathPlusLib
 			{
 				return values.Aggregate((n, total) => total + n);
 			}
+			public static double Sum(IEnumerable<int> values)
+			{
+				return values.Aggregate((n, total) => total + n);
+			}
 
 			public static double Mean(IEnumerable<double> values)
 			{
 				double sigma = Sum(values);
-
+				return sigma / (double)(values.Count());
+			}
+			public static double Mean(IEnumerable<int> values)
+			{
+				double sigma = Sum(values);
 				return sigma / (double)(values.Count());
 			}
 
@@ -311,6 +319,88 @@ namespace MathPlusLib
 				int n1, int n2)
 			{
 				return TwoSampleTTest(HA, mean1, mean2, sd1, sd2, n1, n2, 0.05);
+			}
+
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
+				Dictionary<string, int> counts, Dictionary<string, double> expected)
+			{
+				if (counts == null)
+				{
+					throw new ArgumentNullException("counts", "Counts cannot be null.");
+				}
+
+				if (counts.Count == 0)
+				{
+					throw new ArgumentException("counts", "Counts cannot be empty.");
+				}
+
+				if (expected == null)
+				{
+					expected = new Dictionary<string, double>();
+					double mean = MathPlus.Stats.Mean(counts.Values.ToList());
+					foreach (string category in counts.Keys)
+					{
+						expected.Add(category, mean);
+					}
+				}
+
+				Dictionary<string, double> resids = new Dictionary<string, double>();
+				foreach (string cat in counts.Keys)
+				{
+					resids.Add(cat, counts[cat] - expected[cat]);
+				}
+
+				Dictionary<string, double> components = new Dictionary<string, double>();
+				foreach (string cat in counts.Keys)
+				{
+					double resid = resids[cat];
+					components.Add(cat, (resid * resid) / expected[cat]);
+				}
+
+				double chiSquareValue = 0;
+				foreach (double val in components.Values)
+				{
+					chiSquareValue += val;
+				}
+
+				ChiSquareModel model = new ChiSquareModel(counts.Count - 1);
+				double prob = model.CDF(chiSquareValue);
+
+				return new ChiSquareTestResults(chiSquareValue, prob, counts.Count - 1, alpha);
+			}
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
+				Dictionary<string, double> counts, Dictionary<string, double> expected)
+			{
+				Dictionary<string, int> ints = new Dictionary<string, int>();
+				foreach (KeyValuePair<string, double> kvp in counts)
+				{
+					ints.Add(kvp.Key, (int)kvp.Value);
+				}
+
+				return ChiSquareGOFTest(alpha, ints, expected);
+			}
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
+				List<int> counts, List<int> expected)
+			{
+				Dictionary<string, int> dCounts = new Dictionary<string, int>();
+				Dictionary<string, double> dExp = new Dictionary<string, double>();
+				for (int i = 1; i <= counts.Count; i++)
+				{
+					dCounts.Add(i.ToString(), counts[i - 1]);
+					dExp.Add(i.ToString(), expected[i - 1]);
+				}
+
+				return ChiSquareGOFTest(alpha, dCounts, dExp);
+			}
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha, List<int> counts)
+			{
+				Dictionary<string, int> dCounts = new Dictionary<string, int>();
+				for (int i = 1; i <= counts.Count; i++)
+				{
+					dCounts.Add(i.ToString(), counts[i - 1]);
+				}
+
+				return ChiSquareGOFTest(alpha, dCounts, null);
 			}
 
 			public static Interval OnePropZInterval(double proportion, int n, double confidence)

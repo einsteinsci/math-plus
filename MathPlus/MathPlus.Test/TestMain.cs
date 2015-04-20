@@ -12,9 +12,7 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			Fraction half = new Fraction(.5);
-
-			//Console.WriteLine(half.ToString());
+			
 
 			// End of Line
 			Console.ReadKey();

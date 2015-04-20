@@ -9,10 +9,10 @@ namespace MathPlusLib.Stats
 	public struct NormalModel : IModel
 	{
 		public double Mean
-		{ get; set; }
+		{ get; private set; }
 
 		public double SD
-		{ get; set; }
+		{ get; private set; }
 
 		public static NormalModel Root
 		{

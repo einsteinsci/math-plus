@@ -8,21 +8,6 @@ namespace MathPlusLib.Stats
 {
 	public class TTestResults : ITestResults
 	{
-		public TTestResults(double tested, double prob, double hNull,
-			InequalityType alt, double alpha, double se, double df)
-		{
-			TestedValue = tested;
-			RejectNullHypothesis = prob < alpha;
-			Probability = prob;
-			StandardError = se;
-			DegreesOfFreedom = df;
-			NullHypothesis = hNull;
-			AltHypothesis = alt;
-			AlphaLevel = alpha;
-
-			Model = new TModel(NullHypothesis, StandardError, DegreesOfFreedom);
-		}
-
 		public double TestedValue
 		{ get; private set; }
 
@@ -49,6 +34,21 @@ namespace MathPlusLib.Stats
 
 		public InequalityType AltHypothesis
 		{ get; private set; }
+
+		public TTestResults(double tested, double prob, double hNull,
+			InequalityType alt, double alpha, double se, double df)
+		{
+			TestedValue = tested;
+			RejectNullHypothesis = prob < alpha;
+			Probability = prob;
+			StandardError = se;
+			DegreesOfFreedom = df;
+			NullHypothesis = hNull;
+			AltHypothesis = alt;
+			AlphaLevel = alpha;
+
+			Model = new TModel(NullHypothesis, StandardError, DegreesOfFreedom);
+		}
 
 		public override string ToString()
 		{

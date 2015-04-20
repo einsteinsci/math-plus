@@ -41,10 +41,12 @@
   <ItemGroup>
     <Compile Include="Calculus.cs" />
     <Compile Include="Fraction.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="InternalExtensions.cs" />
     <Compile Include="Numerics.cs" />
     <Compile Include="Probability.cs" />
     <Compile Include="Solver.cs" />
+    <Compile Include="Stats\ChiSquareModel.cs" />
+    <Compile Include="Stats\ChiSquareTestResults.cs" />
     <Compile Include="Stats\DataFactory.cs" />
     <Compile Include="Stats\Interval.cs" />
     <Compile Include="Stats\IModel.cs" />

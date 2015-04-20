@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib
 {
-	internal static class Extensions
+	internal static class InternalExtensions
 	{
 		internal static bool IsOdd(this int n)
 		{
