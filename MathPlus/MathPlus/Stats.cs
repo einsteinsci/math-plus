@@ -465,6 +465,55 @@ namespace MathPlusLib
 
 				return ChiSquareGOFTest(alpha, dCounts, null);
 			}
+
+			public static ChiSquareTestResults ChiSquareHomogeneityTest(double alpha, 
+				MathMatrix counts)
+			{
+				MathMatrix expected = new MathMatrix(counts.Width, counts.Height);
+				double fullSum = counts.SumAll();
+
+				for (int r = 0; r < counts.Height; r++)
+				{
+					double rowSum = counts.SumRow(r);
+					
+					for (int c = 0; c < counts.Width; c++) // actually C#
+					{
+						double colSum = counts.SumColumn(c);
+						double exp = (rowSum / fullSum) * colSum;
+						if (ThrowInappropriateException && exp < 5.0)
+						{
+							throw new StatisticInappropriateException(
+								"Expected value should be above 5 for each cell.");
+						}
+
+						expected[r, c] = exp;
+					}
+				}
+
+				MathMatrix residuals = new MathMatrix(counts.Width, counts.Height);
+				for (int r = 0; r < counts.Height; r++)
+				{
+					for (int c = 0; c < counts.Width; c++) // actually C#
+					{
+						residuals[r, c] = counts[r, c] - expected[r, c];
+					}
+				}
+
+				double sigma = 0;
+				for (int r = 0; r < counts.Height; r++)
+				{
+					for (int c = 0; c < counts.Width; c++) // actually C#
+					{
+						sigma += (residuals[r, c] * residuals[r, c]) / expected[r, c];
+					}
+				}
+				double df = (counts.Width - 1) * (counts.Height - 1);
+
+				ChiSquareModel model = new ChiSquareModel(df);
+				double pval = model.CDF(sigma);
+
+				return new ChiSquareTestResults(sigma, pval, df, alpha);
+			}
 			#endregion
 
 			#region Intervals

@@ -11,32 +11,24 @@ namespace MathPlusLib
 		public MathMatrix(int width, int height) : 
 			base(width, height) { }
 
-		public MathMatrix GetExcludedSubMatrix(int row, int col)
+		public MathMatrix(Matrix<double> copied) : 
+			base(copied.Width, copied.Height)
 		{
-			MathMatrix res = new MathMatrix(Width - 1, Height - 1);
 
-			for (int r1 = 0, r2 = 0; r1 < Height; r1++)
+
+			arrays = new double[_width][];
+			for (int i = 0; i < arrays.Length; i++)
 			{
-				if (r1 == row)
+				arrays[i] = new double[_height];
+				for (int j = 0; j < arrays[i].Length; j++)
 				{
-					continue;
+					arrays[i][j] = copied[j, i];
 				}
-
-				for (int c1 = 0, c2 = 0; c1 < Width; c1++)
-				{
-					if (c1 == col)
-					{
-						continue;
-					}
-
-					res[r2, c2] = this[r1, c1];
-					c2++;
-				}
-				r2++;
 			}
-
-			return res;
 		}
+
+		public MathMatrix(double[][] array) :
+			base(array) { }
 
 		public double Determinant()
 		{
@@ -46,7 +38,58 @@ namespace MathPlusLib
 					"Cannot find determinant of a non-square matrix.");
 			}
 
-			throw new NotImplementedException();
+			if (Width == 2)
+			{
+				double forward =  this[0, 0] * this[1, 1];
+				double backward = this[1, 0] * this[0, 1];
+				return forward - backward;
+			}
+
+			int sign = 1;
+			double sigma = 0;
+			for (int c = 0; c < Width; c++) // actually C#
+			{
+				MathMatrix inner = new MathMatrix(GetExcludedSubMatrix(0, c));
+				sigma += sign * this[0, c] * inner.Determinant();
+				sign = -sign;
+			}
+			return sigma;
+		}
+
+		public double SumRow(int row)
+		{
+			double sigma = 0;
+			for (int i = 0; i < Width; i++)
+			{
+				sigma += this[row, i];
+			}
+
+			return sigma;
+		}
+
+		public double SumColumn(int col)
+		{
+			double sigma = 0;
+			for (int i = 0; i < Height; i++)
+			{
+				sigma += this[i, col];
+			}
+
+			return sigma;
+		}
+
+		public double SumAll()
+		{
+			double sigma = 0;
+			for (int i = 0; i < Height; i++)
+			{
+				for (int j = 0; j < Width; j++)
+				{
+					sigma += this[i, j];
+				}
+			}
+
+			return sigma;
 		}
 	}
 }

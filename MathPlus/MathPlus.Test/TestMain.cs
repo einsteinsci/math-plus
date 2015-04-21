@@ -12,16 +12,14 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			MathMatrix test = new MathMatrix(4, 4);
-			for (int r = 0; r < 4; r++)
-			{
-				for (int c = 0; c < 4; c++) // actually c#
-				{
-					test[r, c] = r * 4 + c;
-				}
-			}
-
+			MathMatrix test = new MathMatrix(new double[][] {
+				new double[] {10, 9, 6, 8},
+				new double[] {8, 7, 6, 9},
+				new double[] {10, 9, 6, 7}
+			});
 			Console.WriteLine(test.ToString());
+
+			Console.WriteLine("Results:\n" + MathPlus.Stats.ChiSquareHomogeneityTest(.05, test).ToString());
 
 			// End of Line
 			Console.ReadKey();

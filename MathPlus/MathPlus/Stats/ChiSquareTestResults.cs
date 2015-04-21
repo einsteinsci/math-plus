@@ -52,5 +52,38 @@ namespace MathPlusLib.Stats
 			Model = new ChiSquareModel(df);
 			RejectNullHypothesis = (prob < alpha);
 		}
+
+		public override string ToString()
+		{
+			string res = "";
+			if (RejectNullHypothesis)
+			{
+				res += "Rejected Null Hypothesis\n";
+			}
+			else
+			{
+				res += "Failed to Reject Null Hypothesis\n";
+			}
+
+			res += "P( \u03a7\u00b2 ";
+			if (AltHypothesis == InequalityType.GreaterThan)
+			{
+				res += ">";
+			}
+			else if (AltHypothesis == InequalityType.LessThan)
+			{
+				res += "<";
+			}
+			else
+			{
+				res += "!=";
+			}
+			res += " " + MathPlus.Numerics.Round(TestedValue, 4).ToString() + " ) = ";
+			res += Probability.ToString() + "\n";
+			res += "\u03B1 = " + AlphaLevel.ToString() + "\n";
+			res += "SE = " + StandardError.ToString() + "\n";
+
+			return res;
+		}
 	}
 }

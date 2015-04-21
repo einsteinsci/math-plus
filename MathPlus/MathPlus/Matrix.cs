@@ -8,7 +8,7 @@ namespace MathPlusLib
 {
 	public class Matrix<T>
 	{
-		bool isIterating = false;
+		protected bool isIterating = false;
 
 		public int Width
 		{
@@ -21,7 +21,7 @@ namespace MathPlusLib
 				resize(value, Height);
 			}
 		}
-		int _width;
+		protected int _width;
 
 		public int Height
 		{
@@ -34,9 +34,9 @@ namespace MathPlusLib
 				resize(Width, value);
 			}
 		}
-		int _height;
+		protected int _height;
 
-		T[][] arrays;
+		protected T[][] arrays;
 
 		public T this[int row, int col]
 		{
@@ -56,13 +56,28 @@ namespace MathPlusLib
 			_height = height;
 
 			arrays = new T[width][];
-			foreach (T[] a in arrays)
+			for (int i = 0; i < arrays.Length; i++)
 			{
-				a = new T[height];
+				arrays[i] = new T[height];
+			}
+		}
+		public Matrix(T[][] array)
+		{
+			_height = array.Length;
+			_width = array[0].Length;
+
+			arrays = new T[_width][];
+			for (int i = 0; i < array[0].Length; i++)
+			{
+				arrays[i] = new T[_height];
+				for (int j = 0; j < array.Length; j++)
+				{
+					arrays[i][j] = array[j][i];
+				}
 			}
 		}
 
-		private void resize(int width, int height)
+		protected void resize(int width, int height)
 		{
 			T[][] buf = new T[Width][];
 			
@@ -114,9 +129,9 @@ namespace MathPlusLib
 			return res;
 		}
 
-		public static Matrix<double> Identity(int dim)
+		public static MathMatrix Identity(int dim)
 		{
-			Matrix<double> mat = new Matrix<double>(dim, dim);
+			MathMatrix mat = new MathMatrix(dim, dim);
 
 			for (int i = 0; i < dim; i++)
 			{
@@ -329,6 +344,33 @@ namespace MathPlusLib
 			});
 
 			return result;
+		}
+
+		public Matrix<T> GetExcludedSubMatrix(int row, int col)
+		{
+			Matrix<T> res = new Matrix<T>(Width - 1, Height - 1);
+
+			for (int r1 = 0, r2 = 0; r1 < Height; r1++)
+			{
+				if (r1 == row)
+				{
+					continue;
+				}
+
+				for (int c1 = 0, c2 = 0; c1 < Width; c1++)
+				{
+					if (c1 == col)
+					{
+						continue;
+					}
+
+					res[r2, c2] = this[r1, c1];
+					c2++;
+				}
+				r2++;
+			}
+
+			return res;
 		}
 	}
 }
