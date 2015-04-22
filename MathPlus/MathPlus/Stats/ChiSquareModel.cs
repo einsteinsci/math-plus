@@ -33,7 +33,7 @@ namespace MathPlusLib.Stats
 
 		public override string ToString()
 		{
-			return "\u03a7\u00b2(" + DegreesOfFreedom.ToString() + ")";
+			return "X\u00b2(" + DegreesOfFreedom.ToString() + ")";
 		}
 
 		private static double _cdf(double x, double df)

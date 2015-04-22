@@ -36,17 +36,20 @@ namespace MathPlusLib
 		}
 		protected int _height;
 
-		protected T[][] arrays;
+		/// <summary>
+		/// All data in matrix. Each subarray represents a column.
+		/// </summary>
+		protected T[][] data;
 
 		public T this[int row, int col]
 		{
 			get
 			{
-				return arrays[col][row];
+				return data[col][row];
 			}
 			set
 			{
-				arrays[col][row] = value;
+				data[col][row] = value;
 			}
 		}
 
@@ -55,10 +58,10 @@ namespace MathPlusLib
 			_width = width;
 			_height = height;
 
-			arrays = new T[width][];
-			for (int i = 0; i < arrays.Length; i++)
+			data = new T[width][];
+			for (int i = 0; i < data.Length; i++)
 			{
-				arrays[i] = new T[height];
+				data[i] = new T[height];
 			}
 		}
 		public Matrix(T[][] array)
@@ -66,13 +69,13 @@ namespace MathPlusLib
 			_height = array.Length;
 			_width = array[0].Length;
 
-			arrays = new T[_width][];
+			data = new T[_width][];
 			for (int i = 0; i < array[0].Length; i++)
 			{
-				arrays[i] = new T[_height];
+				data[i] = new T[_height];
 				for (int j = 0; j < array.Length; j++)
 				{
-					arrays[i][j] = array[j][i];
+					data[i][j] = array[j][i];
 				}
 			}
 		}
@@ -81,16 +84,16 @@ namespace MathPlusLib
 		{
 			T[][] buf = new T[Width][];
 			
-			for (int x = 0; x < arrays.Length && x < width; x++)
+			for (int x = 0; x < data.Length && x < width; x++)
 			{
-				bool biggerX = x >= arrays.Length;
+				bool biggerX = x >= data.Length;
 
 				buf[x] = new T[height];
 
 				// if code hits here it is sure to have a row zero
-				for (int y = 0; y < arrays[0].Length && y < height; y++)
+				for (int y = 0; y < data[0].Length && y < height; y++)
 				{
-					bool biggerY = x >= arrays[0].Length;
+					bool biggerY = x >= data[0].Length;
 
 					if (biggerX || biggerY)
 					{
@@ -98,12 +101,12 @@ namespace MathPlusLib
 					}
 					else
 					{
-						buf[x][y] = arrays[x][y];
+						buf[x][y] = data[x][y];
 					}
 				}
 			}
 
-			arrays = buf;
+			data = buf;
 		}
 
 		public T[] GetRow(int row)

@@ -12,11 +12,9 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			MathMatrix test = new MathMatrix(new double[][] {
-				new double[] {10, 9, 6, 8},
-				new double[] {8, 7, 6, 9},
-				new double[] {10, 9, 6, 7}
-			});
+			MathMatrix test = MathMatrix.Parse(
+				@" [[18, 15, 5,  8, 4 ],
+					[10,  5, 7, 18, 10]]");
 			Console.WriteLine(test.ToString());
 
 			Console.WriteLine("Results:\n" + MathPlus.Stats.ChiSquareHomogeneityTest(.05, test).ToString());

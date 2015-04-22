@@ -407,16 +407,16 @@ namespace MathPlusLib
 					}
 				}
 
-				Dictionary<string, double> resids = new Dictionary<string, double>();
+				Dictionary<string, double> deviations = new Dictionary<string, double>();
 				foreach (string cat in counts.Keys)
 				{
-					resids.Add(cat, counts[cat] - expected[cat]);
+					deviations.Add(cat, counts[cat] - expected[cat]);
 				}
 
 				Dictionary<string, double> components = new Dictionary<string, double>();
 				foreach (string cat in counts.Keys)
 				{
-					double resid = resids[cat];
+					double resid = deviations[cat];
 					components.Add(cat, (resid * resid) / expected[cat]);
 				}
 
@@ -490,12 +490,12 @@ namespace MathPlusLib
 					}
 				}
 
-				MathMatrix residuals = new MathMatrix(counts.Width, counts.Height);
+				MathMatrix deviations = new MathMatrix(counts.Width, counts.Height);
 				for (int r = 0; r < counts.Height; r++)
 				{
 					for (int c = 0; c < counts.Width; c++) // actually C#
 					{
-						residuals[r, c] = counts[r, c] - expected[r, c];
+						deviations[r, c] = counts[r, c] - expected[r, c];
 					}
 				}
 
@@ -504,7 +504,7 @@ namespace MathPlusLib
 				{
 					for (int c = 0; c < counts.Width; c++) // actually C#
 					{
-						sigma += (residuals[r, c] * residuals[r, c]) / expected[r, c];
+						sigma += (deviations[r, c] * deviations[r, c]) / expected[r, c];
 					}
 				}
 				double df = (counts.Width - 1) * (counts.Height - 1);
