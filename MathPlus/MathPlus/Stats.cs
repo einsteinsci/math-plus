@@ -514,6 +514,10 @@ namespace MathPlusLib
 
 				return new ChiSquareTestResults(sigma, pval, df, alpha);
 			}
+			public static ChiSquareTestResults ChiSquareHomogeneityTest(MathMatrix counts)
+			{
+				return ChiSquareHomogeneityTest(.05, counts);
+			}
 			#endregion
 
 			#region Intervals
