@@ -300,6 +300,22 @@ namespace MathPlusLib
 
 			isIterating = false;
 		}
+		public void Foreach(Action<int, int, T> action)
+		{
+			isIterating = true;
+			for (int r = 0; r < Height; r++)
+			{
+				for (int c = 0; c < Width; c++) // And still C#
+				{
+					if (!isIterating)
+					{
+						return;
+					}
+
+					action(r, c, this[r, c]);
+				}
+			}
+		}
 		public void Break()
 		{
 			isIterating = false;

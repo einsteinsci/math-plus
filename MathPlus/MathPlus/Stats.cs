@@ -466,19 +466,46 @@ namespace MathPlusLib
 				return ChiSquareGOFTest(alpha, dCounts, null);
 			}
 
-			public static ChiSquareTestResults ChiSquareHomogeneityTest(double alpha, 
-				MathMatrix counts)
+			public static ChiSquareTestResults ChiSquareTest(double alpha, 
+				MathMatrix observed, MathMatrix expected)
 			{
-				MathMatrix expected = new MathMatrix(counts.Width, counts.Height);
-				double fullSum = counts.SumAll();
-
-				for (int r = 0; r < counts.Height; r++)
+				MathMatrix deviations = new MathMatrix(observed.Width, observed.Height);
+				for (int r = 0; r < observed.Height; r++)
 				{
-					double rowSum = counts.SumRow(r);
-					
-					for (int c = 0; c < counts.Width; c++) // actually C#
+					for (int c = 0; c < observed.Width; c++) // actually C#
 					{
-						double colSum = counts.SumColumn(c);
+						deviations[r, c] = observed[r, c] - expected[r, c];
+					}
+				}
+
+				double sigma = 0;
+				for (int r = 0; r < observed.Height; r++)
+				{
+					for (int c = 0; c < observed.Width; c++) // actually C#
+					{
+						sigma += (deviations[r, c] * deviations[r, c]) / expected[r, c];
+					}
+				}
+				double df = (observed.Width - 1) * (observed.Height - 1);
+
+				ChiSquareModel model = new ChiSquareModel(df);
+				double pval = model.CDF(sigma);
+
+				return new ChiSquareTestResults(sigma, pval, df, alpha);
+			}
+			public static ChiSquareTestResults ChiSquareTest(double alpha, 
+				MathMatrix observed)
+			{
+				MathMatrix expected = new MathMatrix(observed.Width, observed.Height);
+				double fullSum = observed.SumAll();
+
+				for (int r = 0; r < observed.Height; r++)
+				{
+					double rowSum = observed.SumRow(r);
+					
+					for (int c = 0; c < observed.Width; c++) // actually C#
+					{
+						double colSum = observed.SumColumn(c);
 						double exp = (rowSum / fullSum) * colSum;
 						if (ThrowInappropriateException && exp < 5.0)
 						{
@@ -490,33 +517,11 @@ namespace MathPlusLib
 					}
 				}
 
-				MathMatrix deviations = new MathMatrix(counts.Width, counts.Height);
-				for (int r = 0; r < counts.Height; r++)
-				{
-					for (int c = 0; c < counts.Width; c++) // actually C#
-					{
-						deviations[r, c] = counts[r, c] - expected[r, c];
-					}
-				}
-
-				double sigma = 0;
-				for (int r = 0; r < counts.Height; r++)
-				{
-					for (int c = 0; c < counts.Width; c++) // actually C#
-					{
-						sigma += (deviations[r, c] * deviations[r, c]) / expected[r, c];
-					}
-				}
-				double df = (counts.Width - 1) * (counts.Height - 1);
-
-				ChiSquareModel model = new ChiSquareModel(df);
-				double pval = model.CDF(sigma);
-
-				return new ChiSquareTestResults(sigma, pval, df, alpha);
+				return ChiSquareTest(alpha, observed, expected);
 			}
-			public static ChiSquareTestResults ChiSquareHomogeneityTest(MathMatrix counts)
+			public static ChiSquareTestResults ChiSquareTest(MathMatrix observed)
 			{
-				return ChiSquareHomogeneityTest(.05, counts);
+				return ChiSquareTest(.05, observed);
 			}
 			#endregion
 

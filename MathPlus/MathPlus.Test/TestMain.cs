@@ -17,7 +17,7 @@ namespace MathPlusLib.Test
 					[10,  5, 7, 18, 10]]");
 			Console.WriteLine(test.ToString());
 
-			Console.WriteLine("Results:\n" + MathPlus.Stats.ChiSquareHomogeneityTest(.05, test).ToString());
+			Console.WriteLine("Results:\n" + MathPlus.Stats.ChiSquareTest(.05, test).ToString());
 
 			// End of Line
 			Console.ReadKey();
