@@ -76,9 +76,89 @@ namespace MathPlusLib
 		{
 			return a <= b ? a : b;
 		}
+		public static double Min(IEnumerable<double> values)
+		{
+			if (values.Count() < 1)
+			{
+				throw new ArgumentException("Collection cannot be empty");
+			}
+
+			double low = values.First();
+			foreach (double d in values)
+			{
+				if (d < low)
+				{
+					low = d;
+				}
+			}
+
+			return low;
+		}
+		public static double Min(params double[] values)
+		{
+			return Min(values.ToList());
+		}
+		public static int Min(IEnumerable<int> values)
+		{
+			if (values.Count() < 1)
+			{
+				throw new ArgumentException("Collection cannot be empty");
+			}
+
+			int low = values.First();
+			foreach (int n in values)
+			{
+				if (n < low)
+				{
+					low = n;
+				}
+			}
+
+			return low;
+		}
 		public static double Max(double a, double b)
 		{
 			return a >= b ? a : b;
+		}
+		public static double Max(IEnumerable<double> values)
+		{
+			if (values.Count() < 1)
+			{
+				throw new ArgumentException("Collection cannot be empty");
+			}
+
+			double high = values.First();
+			foreach (double d in values)
+			{
+				if (d > high)
+				{
+					high = d;
+				}
+			}
+
+			return low;
+		}
+		public static double Max(params double[] values)
+		{
+			return Max(values.ToList());
+		}
+		public static int Max(IEnumerable<int> values)
+		{
+			if (values.Count() < 1)
+			{
+				throw new ArgumentException("Collection cannot be empty");
+			}
+
+			int high = values.First();
+			foreach (int n in values)
+			{
+				if (n > high)
+				{
+					high = n;
+				}
+			}
+
+			return low;
 		}
 		public static double Constrain(double value, double min, double max)
 		{

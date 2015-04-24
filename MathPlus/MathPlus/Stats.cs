@@ -27,25 +27,6 @@ namespace MathPlusLib
 				ThrowInappropriateException = true;
 			}
 
-			public static List<double> MakeNumbers(IEnumerable<IComparable> input)
-			{
-				List<double> result = new List<double>();
-				foreach (IComparable n in input)
-				{
-					try
-					{
-						result.Add((double)n);
-					}
-					catch (InvalidCastException)
-					{
-						throw new ArgumentException("Type cannot be converted to double: "
-							+ n.GetType().ToString());
-					}
-				}
-
-				return result;
-			}
-
 			public static double Sum(IEnumerable<double> values)
 			{
 				return values.Aggregate((n, total) => total + n);

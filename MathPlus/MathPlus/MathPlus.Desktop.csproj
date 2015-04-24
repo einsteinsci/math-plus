@@ -40,6 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculus.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="Extensions\NumericsExtensions.cs" />
+    <Compile Include="Extensions\StatExtensions.cs" />
+    <Compile Include="Extensions\TrigExtensions.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="InternalExtensions.cs" />
     <Compile Include="MathMatrix.cs" />
