@@ -14,7 +14,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the sine of a value
 		/// </summary>
-		/// <param name="theta">angle to take the sine of, in radians</param>
+		/// <param name="theta">Angle to take the sine of, in radians</param>
 		/// <returns>Sine of theta</returns>
 		public static double Sin(this double theta)
 		{
@@ -23,7 +23,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the sine of a value
 		/// </summary>
-		/// <param name="theta">angle to take the sine of, in radians</param>
+		/// <param name="theta">Angle to take the sine of, in radians</param>
 		/// <returns>Sine of theta</returns>
 		public static double Sin(this int theta)
 		{
@@ -32,7 +32,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the cosine of a value
 		/// </summary>
-		/// <param name="theta">angle to take the cosine of, in radians</param>
+		/// <param name="theta">Angle to take the cosine of, in radians</param>
 		/// <returns>Cosine of theta</returns>
 		public static double Cos(this double theta)
 		{
@@ -41,7 +41,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the cosine of a value
 		/// </summary>
-		/// <param name="theta">angle to take the cosine of, in radians</param>
+		/// <param name="theta">Angle to take the cosine of, in radians</param>
 		/// <returns>Cosine of theta</returns>
 		public static double Cos(this int theta)
 		{
@@ -50,7 +50,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the tangent of a value
 		/// </summary>
-		/// <param name="theta">angle to take the tangent of, in radians</param>
+		/// <param name="theta">Angle to take the tangent of, in radians</param>
 		/// <returns>Tangent of theta</returns>
 		public static double Tan(this double theta)
 		{
@@ -59,7 +59,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the tangent of a value
 		/// </summary>
-		/// <param name="theta">angle to take the tangent of, in radians</param>
+		/// <param name="theta">Angle to take the tangent of, in radians</param>
 		/// <returns>Tangent of theta</returns>
 		public static double Tan(this int theta)
 		{
@@ -69,7 +69,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the cosecant of a value
 		/// </summary>
-		/// <param name="theta">angle to take the cosecant of, in radians</param>
+		/// <param name="theta">Angle to take the cosecant of, in radians</param>
 		/// <returns>Cosecant of theta</returns>
 		public static double Csc(this double theta)
 		{
@@ -78,7 +78,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the cosecant of a value
 		/// </summary>
-		/// <param name="theta">angle to take the cosecant of, in radians</param>
+		/// <param name="theta">Angle to take the cosecant of, in radians</param>
 		/// <returns>Cosecant of theta</returns>
 		public static double Csc(this int theta)
 		{
@@ -87,7 +87,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the secant of a value
 		/// </summary>
-		/// <param name="theta">angle to take the secant of, in radians</param>
+		/// <param name="theta">Angle to take the secant of, in radians</param>
 		/// <returns>Secant of theta</returns>
 		public static double Sec(this double theta)
 		{
@@ -96,7 +96,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the secant of a value
 		/// </summary>
-		/// <param name="theta">angle to take the secant of, in radians</param>
+		/// <param name="theta">Angle to take the secant of, in radians</param>
 		/// <returns>Secant of theta</returns>
 		public static double Sec(this int theta)
 		{
@@ -105,7 +105,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the cotangent of a value
 		/// </summary>
-		/// <param name="theta">angle to take the cotangent of, in radians</param>
+		/// <param name="theta">Angle to take the cotangent of, in radians</param>
 		/// <returns>Cotangent of theta</returns>
 		public static double Cot(this double theta)
 		{
@@ -114,7 +114,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the cotangent of a value
 		/// </summary>
-		/// <param name="theta">angle to take the cotangent of, in radians</param>
+		/// <param name="theta">Angle to take the cotangent of, in radians</param>
 		/// <returns>Cotangent of theta</returns>
 		public static double Cot(this int theta)
 		{
@@ -179,7 +179,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Converts degrees to radians for easier use with <see cref="MathPlus.Trig"/>
 		/// </summary>
-		/// <param name="degrees">degrees units to convert</param>
+		/// <param name="degrees">Degrees units to convert</param>
 		/// <returns>Angle in radians</returns>
 		public static double ToRadians(this double degrees)
 		{
@@ -188,7 +188,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Converts degrees to radians for easier use with <see cref="MathPlus.Trig"/>
 		/// </summary>
-		/// <param name="degrees">degrees units to convert</param>
+		/// <param name="degrees">Degrees units to convert</param>
 		/// <returns>Angle in radians</returns>
 		public static double ToRadians(this int degrees)
 		{
@@ -197,7 +197,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Converts radians to degrees for after use with <see cref="MathPlus.Trig"/>
 		/// </summary>
-		/// <param name="degrees">radians units to convert</param>
+		/// <param name="degrees">Radians units to convert</param>
 		/// <returns>Angle in degrees</returns>
 		public static double ToDegrees(this double radians)
 		{
@@ -206,7 +206,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Converts radians to degrees for after use with <see cref="MathPlus.Trig"/>
 		/// </summary>
-		/// <param name="degrees">radians units to convert</param>
+		/// <param name="degrees">Radians units to convert</param>
 		/// <returns>Angle in degrees</returns>
 		public static double ToDegrees(this int radians)
 		{

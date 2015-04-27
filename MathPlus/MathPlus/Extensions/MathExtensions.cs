@@ -34,7 +34,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the square root of a number
 		/// </summary>
-		/// <param name="radicand">value to take the square root of</param>
+		/// <param name="radicand">Value to take the square root of</param>
 		/// <returns>The square root of radicand</returns>
 		public static double Sqrt(this double radicand)
 		{
@@ -43,7 +43,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the square root of a number
 		/// </summary>
-		/// <param name="radicand">value to take the square root of</param>
+		/// <param name="radicand">Value to take the square root of</param>
 		/// <returns>The square root of radicand</returns>
 		public static double Sqrt(this int radicand)
 		{
@@ -52,8 +52,8 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the nth root of a number
 		/// </summary>
-		/// <param name="radicand">value to take the nth root</param>
-		/// <param name="radical">index of radical n</param>
+		/// <param name="radicand">Value to take the nth root</param>
+		/// <param name="radical">Index of radical n</param>
 		/// <returns>The nth root of radicand</returns>
 		public static double Root(this double radicand, double radical)
 		{
@@ -62,8 +62,8 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the nth root of a number
 		/// </summary>
-		/// <param name="radicand">value to take the nth root</param>
-		/// <param name="radical">index of radical n</param>
+		/// <param name="radicand">Value to take the nth root</param>
+		/// <param name="radical">Index of radical n</param>
 		/// <returns>The nth root of radicand</returns>
 		public static double Root(this int radicand, double radical)
 		{
@@ -73,7 +73,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the base-10 logarithm of a number
 		/// </summary>
-		/// <param name="value">number to take the base-10 logarithm of</param>
+		/// <param name="value">Number to take the base-10 logarithm of</param>
 		/// <returns>The base-10 logarithm of value</returns>
 		public static double Log10(this double value)
 		{
@@ -82,7 +82,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the base-10 logarithm of a number
 		/// </summary>
-		/// <param name="value">number to take the base-10 logarithm of</param>
+		/// <param name="value">Number to take the base-10 logarithm of</param>
 		/// <returns>The base-10 logarithm of value</returns>
 		public static double Log10(this int value)
 		{
@@ -91,8 +91,8 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the base-n logarithm of a number
 		/// </summary>
-		/// <param name="value">number to take the base-n logarithm of</param>
-		/// <param name="baseNum">base of the logarithm n</param>
+		/// <param name="value">Number to take the base-n logarithm of</param>
+		/// <param name="baseNum">Base of the logarithm n</param>
 		/// <returns>The base-n logarithm of value</returns>
 		public static double Log(this double value, double baseNum)
 		{
@@ -101,8 +101,8 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the base-n logarithm of a number
 		/// </summary>
-		/// <param name="value">number to take the base-n logarithm of</param>
-		/// <param name="baseNum">base of the logarithm n</param>
+		/// <param name="value">Number to take the base-n logarithm of</param>
+		/// <param name="baseNum">Base of the logarithm n</param>
 		/// <returns>The base-n logarithm of value</returns>
 		public static double Log(this int value, double baseNum)
 		{
@@ -120,7 +120,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the natural logarithm (base e) of a number
 		/// </summary>
-		/// <param name="value">number to take the natural logarithm of</param>
+		/// <param name="value">Number to take the natural logarithm of</param>
 		/// <returns>The natural logarithm of value</returns>
 		public static double Ln(this int value)
 		{
@@ -130,7 +130,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the absolute value of a number |value|
 		/// </summary>
-		/// <param name="value">number to take the absolute value of</param>
+		/// <param name="value">Number to take the absolute value of</param>
 		/// <returns>|value|</returns>
 		public static double Abs(this double value)
 		{
@@ -139,7 +139,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the absolute value of a number |value|
 		/// </summary>
-		/// <param name="value">number to take the absolute value of</param>
+		/// <param name="value">Number to take the absolute value of</param>
 		/// <returns>|value|</returns>
 		public static double Abs(this int value)
 		{

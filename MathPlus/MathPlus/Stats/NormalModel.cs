@@ -6,14 +6,26 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib.Stats
 {
+	/// <summary>
+	/// Normal (Guassian) statistical model
+	/// </summary>
 	public struct NormalModel : IModel
 	{
+		/// <summary>
+		/// Mean (center) of model
+		/// </summary>
 		public double Mean
 		{ get; private set; }
 
+		/// <summary>
+		/// Standard Deviation (spread) of model
+		/// </summary>
 		public double SD
 		{ get; private set; }
 
+		/// <summary>
+		/// Normal model with center zero and spread one
+		/// </summary>
 		public static NormalModel Root
 		{
 			get
@@ -22,27 +34,52 @@ namespace MathPlusLib.Stats
 			}
 		}
 
+		/// <summary>
+		/// Instantiates a new instance of NormalModel
+		/// </summary>
+		/// <param name="mu">Mean of model</param>
+		/// <param name="sigma">Standard Deviation/Error of model</param>
 		public NormalModel(double mu, double sigma) : this()
 		{
 			Mean = mu;
 			SD = sigma;
 		}
 
+		/// <summary>
+		/// Returns Z-score of a particular value within the model
+		/// </summary>
+		/// <param name="value">Value for which to get the Z-score</param>
+		/// <returns>Z-score of value</returns>
 		public double ZScore(double value)
 		{
 			return (value - Mean) / SD;
 		}
 
+		/// <summary>
+		/// Scaled CDF of specific model
+		/// </summary>
+		/// <param name="bottom">Lower bound value of CDF</param>
+		/// <param name="top">Upper bound value of CDF</param>
+		/// <returns>Proportion of model within the boundaries</returns>
 		public double ScaledCDF(double bottom, double top)
 		{
 			return CDF(ZScore(bottom), ZScore(top));
 		}
 
+		/// <summary>
+		/// Serializes the model to the format N(mean, sd) as per mathematical standard.
+		/// </summary>
+		/// <returns>Normal model as string</returns>
 		public override string ToString()
 		{
 			return "N(" + Mean.ToString() + ", " + SD.ToString() + ")";
 		}
 
+		/// <summary>
+		/// Unscaled CDF function  -----------------------------------  TODO
+		/// </summary>
+		/// <param name="zTop"></param>
+		/// <returns></returns>
 		public static double CDF(double zTop)
 		{
 			return phi(zTop);

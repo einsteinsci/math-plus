@@ -29,8 +29,8 @@ namespace MathPlusLib.Stats
 		/// <summary>
 		/// Calculates the CDF of a section of the ChiSquareModel
 		/// </summary>
-		/// <param name="bottom">lower bound of CDF</param>
-		/// <param name="top">upper bound of CDF</param>
+		/// <param name="bottom">Lower bound of CDF</param>
+		/// <param name="top">Upper bound of CDF</param>
 		/// <returns>CDF of a section of the ChiSquareModel</returns>
 		public double ScaledCDF(double bottom, double top)
 		{
@@ -40,7 +40,7 @@ namespace MathPlusLib.Stats
 		/// <summary>
 		/// Calculates the CDF of the upper side of a ChiSquareModel
 		/// </summary>
-		/// <param name="value">lower bound of CDF</param>
+		/// <param name="value">Lower bound of CDF</param>
 		/// <returns>CDF of the ChiSquareModel from value to infinity</returns>
 		public double CDF(double value)
 		{
@@ -50,7 +50,7 @@ namespace MathPlusLib.Stats
 		/// <summary>
 		/// Calculates the CDF of the upper side of a ChiSquareModel
 		/// </summary>
-		/// <param name="chiSquareValue">lower bound of CDF</param>
+		/// <param name="chiSquareValue">Lower bound of CDF</param>
 		/// <param name="df">Degrees of freedom used for CDF</param>
 		/// <returns>CDF of the ChiSquareModel from value to infinity</returns>
 		public static double CDF(double chiSquareValue, double df)
@@ -61,7 +61,7 @@ namespace MathPlusLib.Stats
 		/// <summary>
 		/// Serializes the model to a simple readable string in the format X^2(df).
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>String form of the model</returns>
 		public override string ToString()
 		{
 			return "X\u00b2(" + DegreesOfFreedom.ToString() + ")";

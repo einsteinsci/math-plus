@@ -14,7 +14,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the sum of all the values in a collection
 		/// </summary>
-		/// <param name="values">collection to sum</param>
+		/// <param name="values">Collection to sum</param>
 		/// <returns>Sum of all numbers in values</returns>
 		public static double Sum(this IEnumerable<double> values)
 		{
@@ -23,7 +23,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the sum of all the values in a collection
 		/// </summary>
-		/// <param name="values">collection to sum</param>
+		/// <param name="values">Collection to sum</param>
 		/// <returns>Sum of all the numbers in values</returns>
 		public static double Sum(this IEnumerable<int> values)
 		{
@@ -32,7 +32,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the mean of all the values in a collection
 		/// </summary>
-		/// <param name="values">collection to find the mean of</param>
+		/// <param name="values">Collection to find the mean of</param>
 		/// <returns>The mean of all the numbers in values</returns>
 		public static double Mean(this IEnumerable<double> values)
 		{
@@ -41,7 +41,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the mean of all the values in a collection
 		/// </summary>
-		/// <param name="values">collection to find the mean of</param>
+		/// <param name="values">Collection to find the mean of</param>
 		/// <returns>The mean of all the numbers in values</returns>
 		public static double Mean(this IEnumerable<int> values)
 		{
@@ -50,7 +50,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the standard deviation of all the values in a collection
 		/// </summary>
-		/// <param name="values">collection to find the SD of</param>
+		/// <param name="values">Collection to find the SD of</param>
 		/// <returns>The standard deviation S(x) of all the numbers in values</returns>
 		public static double StandardDev(this IEnumerable<double> values)
 		{
@@ -59,7 +59,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the standard deviation of all the values in a collection
 		/// </summary>
-		/// <param name="values">collection to find the SD of</param>
+		/// <param name="values">Collection to find the SD of</param>
 		/// <returns>The standard deviation S(x) of all the numbers in values</returns>
 		public static double StandardDev(this IEnumerable<double> values, double mean)
 		{
@@ -68,7 +68,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the Root-Mean-Square (RMS) of all the values in a collection
 		/// </summary>
-		/// <param name="data">collection to find the RMS of</param>
+		/// <param name="data">Collection to find the RMS of</param>
 		/// <returns>The RMS of all the numbers in data/returns>
 		public static double RootMeanSquare(this IEnumerable<double> data)
 		{
@@ -77,7 +77,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Calculates the Root-Mean-Square (RMS) of all the values in a collection
 		/// </summary>
-		/// <param name="data">collection to find the RMS of</param>
+		/// <param name="data">Collection to find the RMS of</param>
 		/// <returns>The RMS of all the numbers in data/returns>
 		public static double RootMeanSquare(this IEnumerable<int> data)
 		{
@@ -87,7 +87,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the proportion of values that are true, ranging from 0 to 1
 		/// </summary>
-		/// <param name="sample">values to count</param>
+		/// <param name="sample">Values to count</param>
 		/// <returns>Proportion of values that are true</returns>
 		public static double Proportion(this IEnumerable<bool> sample)
 		{
@@ -98,9 +98,9 @@ namespace MathPlusLib.Extensions
 		/// ranging from 0 to 1
 		/// </summary>
 		/// <typeparam name="T">Type within the data</typeparam>
-		/// <param name="sample">values to count</param>
+		/// <param name="sample">Values to count</param>
 		/// <param name="evaluator">
-		/// predicate to determine if the value should contribute to
+		/// Predicate to determine if the value should contribute to
 		/// the proportion, or against it
 		/// </param>
 		/// <returns>Proportion of values that returned true when put through the evaluator</returns>
