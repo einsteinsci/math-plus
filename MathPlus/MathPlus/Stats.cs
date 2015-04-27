@@ -78,6 +78,17 @@ namespace MathPlusLib
 				double meanSquare = sigmaSquare / data.Count();
 				return Sqrt(meanSquare);
 			}
+			public static double RootMeanSquare(IEnumerable<int> data)
+			{
+				double sigmaSquare = 0;
+				foreach (int n in data)
+				{
+					sigmaSquare += (n * n);
+				}
+
+				double meanSquare = sigmaSquare / data.Count();
+				return Sqrt(meanSquare);
+			}
 
 			public static double Proportion(IEnumerable<bool> sample)
 			{

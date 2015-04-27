@@ -136,7 +136,7 @@ namespace MathPlusLib
 				}
 			}
 
-			return low;
+			return high;
 		}
 		public static double Max(params double[] values)
 		{
@@ -158,7 +158,7 @@ namespace MathPlusLib
 				}
 			}
 
-			return low;
+			return high;
 		}
 		public static double Constrain(double value, double min, double max)
 		{

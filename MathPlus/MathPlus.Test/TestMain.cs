@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MathPlusLib;
 using MathPlusLib.Stats;
+using MathPlusLib.Extensions;
 
 namespace MathPlusLib.Test
 {
@@ -12,12 +13,7 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			MathMatrix test = MathMatrix.Parse(
-				@" [[18, 15, 5,  8, 4 ],
-					[10,  5, 7, 18, 10]]");
-			Console.WriteLine(test.ToString());
-
-			Console.WriteLine("Results:\n" + MathPlus.Stats.ChiSquareTest(.05, test).ToString());
+			Console.WriteLine("Sign of 0 = " + (0.0).Sign());
 
 			// End of Line
 			Console.ReadKey();
