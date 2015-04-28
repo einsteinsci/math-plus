@@ -76,19 +76,30 @@ namespace MathPlusLib.Stats
 		}
 
 		/// <summary>
-		/// Unscaled CDF function  -----------------------------------  TODO
+		/// Unscaled CDF function of the Normal Model
 		/// </summary>
-		/// <param name="zTop"></param>
-		/// <returns></returns>
+		/// <param name="zTop">Upper bound Z-Score of CDF</param>
+		/// <returns>Proportion of Normal Model below specified Z-Score</returns>
 		public static double CDF(double zTop)
 		{
 			return phi(zTop);
 		}
+		/// <summary>
+		/// Unscaled CDF function of the Normal Model
+		/// </summary>
+		/// <param name="zBot">Lower bound Z-Score of CDF</param>
+		/// <param name="zTop">Upper bound Z-Score of CDF</param>
+		/// <returns>Proportion of Normal Model between speciied Z-scores</returns>
 		public static double CDF(double zBot, double zTop)
 		{
 			return phi(zTop) - phi(zBot);
 		}
 
+		/// <summary>
+		/// Calculates inverse CDF of Normal Model
+		/// </summary>
+		/// <param name="p">Proportion of Normal Model starting at -inf.</param>
+		/// <returns>Upper bound of CDF of given proportion</returns>
 		public static double InverseCDF(double p)
 		{
 			Function2D rationalApproximation = (t) =>
@@ -125,7 +136,6 @@ namespace MathPlusLib.Stats
 			return 0.5 * (1.0 + erf(z / MathPlus.SQRT2));
 		}
 
-		// this function is huge...
 		private static double erf(double x)
 		{
 			if (x == 0)
@@ -163,6 +173,7 @@ namespace MathPlusLib.Stats
 			return sum;
 		}
 
+		// this function is huge...
 		private static double erfImp(double z, bool invert)
 		{
 			if (z < 0)

@@ -6,19 +6,35 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib.Stats
 {
+	/// <summary>
+	/// Student's T statistical model 
+	/// </summary>
 	public struct TModel : IModel
 	{
-		public static readonly double MAX_LOWER = -1.0 * MathPlus.Pow(10.0, 10.0);
-
+		/// <summary>
+		/// Mean (center) of model
+		/// </summary>
 		public double Mean
 		{ get; set; }
 
+		/// <summary>
+		/// Standard Deviation (spread) of model
+		/// </summary>
 		public double SD
 		{ get; set; }
 
+		/// <summary>
+		/// Degrees of Freedom for model
+		/// </summary>
 		public double DF
 		{ get; set; }
 
+		/// <summary>
+		/// Instantiates a new Instance of TModel
+		/// </summary>
+		/// <param name="mean">Mean of model</param>
+		/// <param name="sd">Standard Deviation of model</param>
+		/// <param name="df">Degrees of Freedom</param>
 		public TModel(double mean, double sd, double df) : this()
 		{
 			Mean = mean;
@@ -26,19 +42,43 @@ namespace MathPlusLib.Stats
 			DF = df;
 		}
 
+		/// <summary>
+		/// Calculates the T-Score of a given value
+		/// </summary>
+		/// <param name="value">Value to calculate T-Score from</param>
+		/// <returns>T-Score of specified value relative to this model</returns>
 		public double TScore(double value)
 		{
 			return (value - Mean) / SD;
 		}
 
+		/// <summary>
+		/// Calculates Scaled CDF within a range
+		/// </summary>
+		/// <param name="low">Lower bound value</param>
+		/// <param name="high">Upper bound value</param>
+		/// <returns>Proportion of area between the given bounds</returns>
 		public double ScaledCDF(double low, double high)
 		{
 			return CDF(TScore(low), TScore(high), DF);
 		}
+		/// <summary>
+		/// Calculates Unscaled CDF below a T-Score
+		/// </summary>
+		/// <param name="tHigh">Upper bound T-Score</param>
+		/// <param name="df">Degrees of Freedom for model</param>
+		/// <returns>Proportion of area below given T-Score</returns>
 		public static double CDF(double tHigh, double df)
 		{
 			return cdf(tHigh, df);
 		}
+		/// <summary>
+		/// Calculates Unscaled CDF between two T-Scores
+		/// </summary>
+		/// <param name="tLow">Lower bound T-Score</param>
+		/// <param name="tHigh">Upper bound T-Score</param>
+		/// <param name="df">Degrees of Freedom for model</param>
+		/// <returns>Proportion of area between given T-Scores</returns>
 		public static double CDF(double tLow, double tHigh, double df)
 		{
 			return cdf(tHigh, df) - cdf(tLow, df);
@@ -186,6 +226,12 @@ namespace MathPlusLib.Stats
 			}
 		}
 
+		/// <summary>
+		/// Calculates (unscaled) inverse cdf of a given P-value
+		/// </summary>
+		/// <param name="prob">P-value for cdf starting at -inf.</param>
+		/// <param name="df">Degrees of freedom for model</param>
+		/// <returns>T-Score for upper bound of CDF area</returns>
 		public static double InverseCDF(double prob, double df)
 		{
 			if (df <= 0)
@@ -211,6 +257,10 @@ namespace MathPlusLib.Stats
 			}, -800, 800, precision: 1e-12);
 		}
 
+		/// <summary>
+		/// Serializes model to a mathematically friendly string
+		/// </summary>
+		/// <returns>String in the format T[df](mean, sd)</returns>
 		public override string ToString()
 		{
 			return "T[" + DF.ToString() + "](" + Mean.ToString() + ", " + SD.ToString() + ")";
