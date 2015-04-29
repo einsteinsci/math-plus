@@ -6,10 +6,21 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib
 {
+	/// <summary>
+	/// Matrix of objects oriented in a grid
+	/// </summary>
+	/// <typeparam name="T">Type of objects stored in matrix</typeparam>
 	public class Matrix<T>
 	{
+		/// <summary>
+		/// True while <see cref="Foreach(Action<T>)"/> is running.
+		/// Prevents concurrent modification.
+		/// </summary>
 		protected bool isIterating = false;
 
+		/// <summary>
+		/// Width of matrix
+		/// </summary>
 		public int Width
 		{
 			get
@@ -23,6 +34,9 @@ namespace MathPlusLib
 		}
 		protected int _width;
 
+		/// <summary>
+		/// Height of matrix
+		/// </summary>
 		public int Height
 		{
 			get
@@ -41,6 +55,14 @@ namespace MathPlusLib
 		/// </summary>
 		protected T[][] data;
 
+		/// <summary>
+		/// Accessor for data within matrix
+		/// </summary>
+		/// <param name="row">Row index of datum</param>
+		/// <param name="col">Column index of datum</param>
+		/// <returns>
+		/// Datum referenced by [<paramref name="row"/>, <paramref name="col"/>]
+		/// </returns>
 		public T this[int row, int col]
 		{
 			get
@@ -53,6 +75,11 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Instantiates a new <c>Matrix</c> from a given width and height
+		/// </summary>
+		/// <param name="width">Width of new <c>Matrix</c></param>
+		/// <param name="height">Height of new <c>Matrix</c></param>
 		public Matrix(int width, int height)
 		{
 			_width = width;
@@ -64,6 +91,11 @@ namespace MathPlusLib
 				data[i] = new T[height];
 			}
 		}
+		/// <summary>
+		/// Instantiates a new <c>Matrix</c> from a given array of arrays,
+		/// copying all data inside
+		/// </summary>
+		/// <param name="array">Array of arrays to copy</param>
 		public Matrix(T[][] array)
 		{
 			_height = array.Length;
@@ -80,6 +112,34 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Instantiates a new <c>Matrix</c> from a given multidimensional 
+		/// array, copying all data inside
+		/// </summary>
+		/// <param name="array">Multidimensional array to copy</param>
+		public Matrix(T[,] array)
+		{
+			_height = array.GetLength(0);
+			_width = array.GetLength(1);
+
+			data = new T[_width][];
+			for (int i = 0; i < _width; i++)
+			{
+				data[i] = new T[_height];
+				for (int j = 0; j < array.Length; j++)
+				{
+					data[i][j] = array[j, i];
+				}
+			}
+		}
+
+		/// <summary>
+		/// Resizes the matrix when the width or height is changed.
+		/// Shrinking the matrix will delete data from the highest-ranked 
+		/// rows and/or columns permanently.
+		/// </summary>
+		/// <param name="width">New width of matrix</param>
+		/// <param name="height">New height of matrix</param>
 		protected void resize(int width, int height)
 		{
 			T[][] buf = new T[Width][];
@@ -109,6 +169,11 @@ namespace MathPlusLib
 			data = buf;
 		}
 
+		/// <summary>
+		/// Returns array of objects in a specified row
+		/// </summary>
+		/// <param name="row">Index of row to obtain</param>
+		/// <returns>An array consisting of all data in the specified row</returns>
 		public T[] GetRow(int row)
 		{
 			T[] res = new T[Width];
@@ -120,6 +185,11 @@ namespace MathPlusLib
 
 			return res;
 		}
+		/// <summary>
+		/// Returns array of objects in a specified column
+		/// </summary>
+		/// <param name="col">Index of column to obtain</param>
+		/// <returns>An array consisting of all data in the specified column</returns>
 		public T[] GetColumn(int col)
 		{
 			T[] res = new T[Height];
@@ -132,6 +202,11 @@ namespace MathPlusLib
 			return res;
 		}
 
+		/// <summary>
+		/// Returns an identity matrix of specified size
+		/// </summary>
+		/// <param name="dim">Size of identity matrix</param>
+		/// <returns>An identity matrix of size <paramref name="dim"/>.</returns>
 		public static MathMatrix Identity(int dim)
 		{
 			MathMatrix mat = new MathMatrix(dim, dim);
@@ -143,6 +218,11 @@ namespace MathPlusLib
 
 			return mat;
 		}
+		/// <summary>
+		/// Returns an identity matrix of specified size
+		/// </summary>
+		/// <param name="dim">Size of identity Matrix</param>
+		/// <returns>An identity matrix of size <paramref name="dim"/>.</returns>
 		public static Matrix<int> IdentityInt(int dim)
 		{
 			Matrix<int> mat = new Matrix<int>(dim, dim);
@@ -155,6 +235,10 @@ namespace MathPlusLib
 			return mat;
 		}
 
+		/// <summary>
+		/// Returns a list of all data in matrix
+		/// </summary>
+		/// <returns>A list of all data in matrix</returns>
 		public List<T> ToList()
 		{
 			List<T> res = new List<T>();
@@ -169,6 +253,13 @@ namespace MathPlusLib
 			return res;
 		}
 
+		/// <summary>
+		/// Compares matrix to another <c>object</c>
+		/// </summary>
+		/// <param name="obj"><see cref="Object"/> to compare to</param>
+		/// <returns>
+		/// True if both objects are equal-sized matrices of equal content, false otherwise.
+		/// </returns>
 		public override bool Equals(object obj)
 		{
 			Matrix<T> other = obj as Matrix<T>;
@@ -205,6 +296,10 @@ namespace MathPlusLib
 			return true;
 		}
 
+		/// <summary>
+		/// Adds the hashcodes of all contents to produce a hashcode of the matrix.
+		/// </summary>
+		/// <returns>A compiled hashcode of the matrix</returns>
 		public override int GetHashCode()
 		{
 			int sum = 0;
@@ -222,10 +317,20 @@ namespace MathPlusLib
 			return sum;
 		}
 
+		/// <summary>
+		/// Serializes the matrix to a readable string.
+		/// </summary>
+		/// <returns>A readable grid of the data, each row separated by newlines</returns>
+		/// <remarks>Calls <see cref="ToString(int)"/>, with <c>maxItemLength</c> of 16</remarks>
 		public override string ToString()
 		{
 			return ToString(16);
 		}
+		/// <summary>
+		/// Serializes the matrix to a readable string.
+		/// </summary>
+		/// <param name="maxItemLength">Maximum length of each item before truncating.</param>
+		/// <returns>A readable grid of the dat, each row separated by newlines</returns>
 		public string ToString(int maxItemLength)
 		{
 			int maxLen = 0;
@@ -282,6 +387,12 @@ namespace MathPlusLib
 			return res;
 		}
 
+		/// <summary>
+		/// Iterates over each item, applying an action to it
+		/// </summary>
+		/// <param name="todo">
+		/// Action taking only one parameter of type <typeparamref name="T"/>.
+		/// </param>
 		public void Foreach(Action<T> todo)
 		{
 			isIterating = true;
@@ -300,6 +411,13 @@ namespace MathPlusLib
 
 			isIterating = false;
 		}
+		/// <summary>
+		/// Iterates over each item, applying an action to it
+		/// </summary>
+		/// <param name="action">
+		/// Action taking two <c>int</c> parameters for row and column (respectively),
+		/// followed by a parameter of type <typeparamref name="T"/>.
+		/// </param>
 		public void Foreach(Action<int, int, T> action)
 		{
 			isIterating = true;
@@ -316,11 +434,23 @@ namespace MathPlusLib
 				}
 			}
 		}
+		/// <summary>
+		/// Breaks out of a running <see cref="Foreach(Action<T>)"/> operation.
+		/// Has no effect outside of it.
+		/// </summary>
 		public void Break()
 		{
 			isIterating = false;
 		}
 
+		/// <summary>
+		/// Checks if any element matches a specified <see cref="Predicate"/>.
+		/// </summary>
+		/// <param name="matches">Predicate testing each item</param>
+		/// <returns>
+		/// True if <paramref name="matches"/> returns true for any element,
+		/// false otherwise.
+		/// </returns>
 		public bool Exists(Predicate<T> matches)
 		{
 			bool result = false;
@@ -336,6 +466,11 @@ namespace MathPlusLib
 			return result;
 		}
 
+		/// <summary>
+		/// Finds the first element that matches a specified <see cref="Predicate"/>.
+		/// </summary>
+		/// <param name="matches">Predicate testing each item</param>
+		/// <returns>First item <paramref name="matches"/> returns true on, default if none match.</returns>
 		public T FirstOrDefault(Predicate<T> matches)
 		{
 			T res = default(T);

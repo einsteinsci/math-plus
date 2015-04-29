@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib
 {
+	/// <summary>
+	/// Matrix of <see cref="Double"/> values.
+	/// </summary>
 	public class MathMatrix : Matrix<double>
 	{
+		/// <summary>
+		/// Instantiates a new <c>MathMatrix</c> object, filled with zeroes
+		/// </summary>
+		/// <param name="width">Width of matrix</param>
+		/// <param name="height">Height of matrix</param>
 		public MathMatrix(int width, int height) : 
 			base(width, height) { }
 
+		/// <summary>
+		/// Copies a <see cref="Matrix"/> of <see cref="Double"/> values to
+		/// a new <c>MathMatrix</c>.
+		/// </summary>
+		/// <param name="copied">Matrix to copy</param>
 		public MathMatrix(Matrix<double> copied) : 
 			base(copied.Width, copied.Height)
 		{
@@ -25,9 +38,25 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Copies an array of <see cref="Double"/> arrays.
+		/// </summary>
+		/// <param name="array">Array to copy</param>
 		public MathMatrix(double[][] array) :
 			base(array) { }
 
+		/// <summary>
+		/// Copies a multidimensional <see cref="Double"/> array.
+		/// </summary>
+		/// <param name="array">Array to copy</param>
+		public MathMatrix(double[,] array) :
+			base(array) { }
+
+		/// <summary>
+		/// Calculates the determinant of <c>this</c>.
+		/// </summary>
+		/// <returns>Determinant of square matrix</returns>
+		/// <exception cref="InvalidOperationException">Thrown if matrix is not square.</exception>
 		public double Determinant()
 		{
 			if (Width != Height)
@@ -54,6 +83,11 @@ namespace MathPlusLib
 			return sigma;
 		}
 
+		/// <summary>
+		/// Calculates the sum of all values in a specified row
+		/// </summary>
+		/// <param name="row">Row index to sum</param>
+		/// <returns>Sum of all data in the specified row</returns>
 		public double SumRow(int row)
 		{
 			double sigma = 0;
@@ -65,6 +99,11 @@ namespace MathPlusLib
 			return sigma;
 		}
 
+		/// <summary>
+		/// Calculates the sum of all values in a specified column
+		/// </summary>
+		/// <param name="col">Column index to sum</param>
+		/// <returns>Sum of all data in the specified column</returns>
 		public double SumColumn(int col)
 		{
 			double sigma = 0;
@@ -76,6 +115,10 @@ namespace MathPlusLib
 			return sigma;
 		}
 
+		/// <summary>
+		/// Calculates the sum of all values in the matrix
+		/// </summary>
+		/// <returns>Sum of all data in the matrix</returns>
 		public double SumAll()
 		{
 			double sigma = 0;

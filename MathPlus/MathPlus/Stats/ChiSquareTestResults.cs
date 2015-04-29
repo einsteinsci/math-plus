@@ -90,7 +90,7 @@ namespace MathPlusLib.Stats
 		}
 
 		/// <summary>
-		/// Serializes a ChiSquareTestResults object to a list of result pieces
+		/// Serializes a ChiSquareTestResults object to a list of result values
 		/// </summary>
 		/// <returns>String result</returns>
 		public override string ToString()

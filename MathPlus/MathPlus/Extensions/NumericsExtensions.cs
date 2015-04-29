@@ -53,5 +53,54 @@ namespace MathPlusLib.Extensions
 		{
 			return MathPlus.Numerics.AlmostEqualTo(value, other, err);
 		}
+
+		/// <summary>
+		/// Determines if an integer is odd.
+		/// </summary>
+		/// <param name="n">Number to test</param>
+		/// <returns>True if the number is odd, false if even</returns>
+		public static bool IsOdd(this int n)
+		{
+			return !n.IsEven();
+		}
+		/// <summary>
+		/// Determines if an integer is even.
+		/// </summary>
+		/// <param name="n">Number to test</param>
+		/// <returns>True if the number is even, false if odd</returns>
+		public static bool IsEven(this int n)
+		{
+			return n.IsDivisibleBy(2);
+		}
+
+		/// <summary>
+		/// Determines if an integer is divisible by another integer.
+		/// </summary>
+		/// <param name="n">Number to test</param>
+		/// <param name="divisor">Integer <paramref name="n"/> is tested to be divisible by</param>
+		/// <returns>
+		/// True if <paramref name="n"/> is divisible by <paramref name="divisor"/>,
+		/// false otherwise.
+		/// </returns>
+		public static bool IsDivisibleBy(this int n, int divisor)
+		{
+			return n % divisor == 0;
+		}
+
+		/// <summary>
+		/// Deterimines if a number is approximately an integer
+		/// </summary>
+		/// <param name="value">Number to test</param>
+		/// <param name="precision">Number of decimal places to round to before test</param>
+		/// <returns>
+		/// True if <paramref name="value"/> is an integer to <paramref name="precision"/>
+		/// decimal places, false otherwise.
+		/// </returns>
+		public static bool IsInteger(this double value, int precision)
+		{
+			double rounded = MathPlus.Numerics.Round(value, precision);
+			int trunc = (int)rounded;
+			return rounded == (double)trunc;
+		}
 	}
 }

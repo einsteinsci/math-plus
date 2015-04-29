@@ -111,7 +111,7 @@ namespace MathPlusLib.Extensions
 		/// <summary>
 		/// Returns the natural logarithm (base e) of a number
 		/// </summary>
-		/// <param name="value">number to take the natural logarithm of</param>
+		/// <param name="value">Number to take the natural logarithm of</param>
 		/// <returns>The natural logarithm of value</returns>
 		public static double Ln(this double value)
 		{
@@ -146,7 +146,7 @@ namespace MathPlusLib.Extensions
 			return MathPlus.Abs(value);
 		}
 		/// <summary>
-		/// Returns the sign in the form of an integer
+		/// Returns the sign of a number in the form of an integer
 		/// </summary>
 		/// <param name="value">Value to check the sign of</param>
 		/// <returns>-1 if value is negative, 0 if zero, and 1 if positive</returns>
@@ -217,6 +217,17 @@ namespace MathPlusLib.Extensions
 		/// <param name="max">Upper bound, inclusive</param>
 		/// <returns>Constrained value within [min, max]</returns>
 		public static double Constrain(this double value, double min, double max)
+		{
+			return MathPlus.Constrain(value, min, max);
+		}
+		/// <summary>
+		/// Constrains a value to within a minumum and maximum.
+		/// </summary>
+		/// <param name="value">Value to constrain</param>
+		/// <param name="min">Lower bound, inclusive</param>
+		/// <param name="max">Upper bound, inclusive</param>
+		/// <returns>Constrained value within [min, max]</returns>
+		public static double Constrain(this int value, double min, double max)
 		{
 			return MathPlus.Constrain(value, min, max);
 		}

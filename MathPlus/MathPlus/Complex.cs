@@ -6,14 +6,25 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib
 {
+	/// <summary>
+	/// Structure representing a complex number
+	/// </summary>
 	public struct Complex : IEquatable<Complex>, IEquatable<double>
 	{
+		/// <summary>
+		/// Real part of complex number
+		/// </summary>
 		public double Real
 		{ get; set; }
+		/// <summary>
+		/// Imaginary part of complex number
+		/// </summary>
 		public double Imag
 		{ get; set; }
 
-		// Polar
+		/// <summary>
+		/// Argument (angle part) of complex number in radians. Used in polar form.
+		/// </summary>
 		public double Argument
 		{
 			get
@@ -21,6 +32,9 @@ namespace MathPlusLib
 				return MathPlus.Trig.ATan(Imag / Real);
 			}
 		}
+		/// <summary>
+		/// Absolute value (radius part) of complex number. Used in polar form.
+		/// </summary>
 		public double AbsoluteValue
 		{
 			get
@@ -29,25 +43,50 @@ namespace MathPlusLib
 			}
 		}
 		
+		/// <summary>
+		/// Instantiates a new instance of Complex from polar form
+		/// </summary>
+		/// <param name="arg">Argument, in radians</param>
+		/// <param name="abs">Absolute Value</param>
+		/// <returns>A new Complex from polar form</returns>
 		public static Complex FromPolar(double arg, double abs)
 		{
 			return new Complex(MathPlus.Trig.Cos(arg) * abs,
 				MathPlus.Trig.Sin(arg) * abs);
 		}
 
+		/// <summary>
+		/// Instantiates a new instance of Complex from a given real
+		/// and imaginary values
+		/// </summary>
+		/// <param name="real">Real number part</param>
+		/// <param name="imag">Imaginary number part.</param>
 		public Complex(double real, double imag) : this()
 		{
 			Real = real;
 			Imag = imag;
 		}
+		/// <summary>
+		/// Instantiates a new instance of Complex from a given real value.
+		/// </summary>
+		/// <param name="real">Real number part</param>
 		public Complex(double real) : this(real, 0)
 		{ }
 
+		/// <summary>
+		/// Returns the conjugate of the complex number
+		/// </summary>
+		/// <returns>The conjugate of the complex number</returns>
 		public Complex Conjugate()
 		{
 			return new Complex(Real, -Imag);
 		}
 
+		/// <summary>
+		/// Compares this with another object to see if they are equal
+		/// </summary>
+		/// <param name="obj">Object to compare to</param>
+		/// <returns>True if the objects are equal and numeric types, false if otherwise</returns>
 		public override bool Equals(object obj)
 		{
 			if (obj is Complex)
@@ -67,11 +106,22 @@ namespace MathPlusLib
 				return false;
 			}
 		}
+		/// <summary>
+		/// Calculates the hash code of the Complex
+		/// </summary>
+		/// <returns>A hash code from the real and imaginary values</returns>
 		public override int GetHashCode()
 		{
-			return Real.GetHashCode() << 16 + Imag.GetHashCode();
+			return (short)Real.GetHashCode() << 16 + Imag.GetHashCode();
 		}
 
+		/// <summary>
+		/// Serializes the Complex to the mathematically-correct form
+		/// </summary>
+		/// <returns>
+		/// A string in the format of [real] [+] [{imag}i], 
+		/// excluding unnecessary parts.
+		/// </returns>
 		public override string ToString()
 		{
 			if (Imag == 0)

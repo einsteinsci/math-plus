@@ -13,7 +13,7 @@ namespace MathPlusLib.Test
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Sign of 0 = " + (0.0).Sign());
+			
 
 			// End of Line
 			Console.ReadKey();
