@@ -12,6 +12,20 @@ namespace MathPlusLib.Extensions
 	public static class NumericsExtensions
 	{
 		/// <summary>
+		/// Rounds a number to the specified number of digits.
+		/// </summary>
+		/// <param name="value">Value to round</param>
+		/// <param name="digits">Number of digits to round to</param>
+		/// <returns>
+		/// The number with the specified number of digits which is closest to
+		/// <paramref name="value"/>.
+		/// </returns>
+		public static double Round(this double value, int digits = 0)
+		{
+			return MathPlus.Numerics.Round(value, digits);
+		}
+
+		/// <summary>
 		/// Rounds a number to the integer closest to zero
 		/// </summary>
 		/// <param name="value">Value to round</param>

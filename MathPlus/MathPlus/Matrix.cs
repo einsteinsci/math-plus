@@ -470,7 +470,7 @@ namespace MathPlusLib
 		/// Finds the first element that matches a specified <see cref="Predicate"/>.
 		/// </summary>
 		/// <param name="matches">Predicate testing each item</param>
-		/// <returns>First item <paramref name="matches"/> returns true on, default if none match.</returns>
+		/// <returns>First item <paramref name="matches"/> returns true on, <c>default</c> if none match.</returns>
 		public T FirstOrDefault(Predicate<T> matches)
 		{
 			T res = default(T);
@@ -486,6 +486,11 @@ namespace MathPlusLib
 			return res;
 		}
 
+		/// <summary>
+		/// Finds all elements that match a specified <see cref="Predicate"/>.
+		/// </summary>
+		/// <param name="matches">Predicate testing each item</param>
+		/// <returns>A list containing all items that <paramref name="matches"/> returned true on</returns>
 		public List<T> FindAll(Predicate<T> matches)
 		{
 			List<T> result = new List<T>();
@@ -500,6 +505,48 @@ namespace MathPlusLib
 			return result;
 		}
 
+		/// <summary>
+		/// Returns a grid region of this matrix, from a given set of rows and columns
+		/// </summary>
+		/// <param name="startRow">Inclusive lower bound of rows</param>
+		/// <param name="startCol">Inclusive lower bound of columns</param>
+		/// <param name="endRow">Inclusive upper bound of rows</param>
+		/// <param name="endCol">Inclusive upper bound of columns</param>
+		/// <returns>A matrix consisting of the cells within the bounds</returns>
+		public Matrix<T> GetSubMatrix(int startRow, int startCol, int endRow, int endCol)
+		{
+			if (startRow > endRow)
+			{
+				throw new ArgumentOutOfRangeException("startRow cannot exceed endRow.");
+			}
+			else if (startCol > endCol)
+			{
+				throw new ArgumentOutOfRangeException("startCol cannot exceed endCol.");
+			}
+
+			Matrix<T> res = new Matrix<T>(endCol - startCol + 1, endRow - startRow + 1);
+
+			Foreach((r, c, t) =>
+			{
+				if (r >= startRow && r <= endRow &&
+					c >= startCol && c <= endCol)
+				{
+					res[r - startRow, c - startCol] = t;
+				}
+			});
+
+			return res;
+		}
+		/// <summary>
+		/// Gets a matrix that excludes a given row and column. Used in
+		/// calculating determinant.
+		/// </summary>
+		/// <param name="row">Row to exclude</param>
+		/// <param name="col">Column to exclude</param>
+		/// <returns>
+		/// A matrix that contains all the cells that do not occur on 
+		/// the given row or column.
+		/// </returns>
 		public Matrix<T> GetExcludedSubMatrix(int row, int col)
 		{
 			Matrix<T> res = new Matrix<T>(Width - 1, Height - 1);
