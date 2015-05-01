@@ -8,8 +8,21 @@ namespace MathPlusLib
 {
 	public static partial class MathPlus
 	{
+		/// <summary>
+		/// Solves functions for their roots. Currently only has the BrentDekker method.
+		/// </summary>
 		public static class Solver
 		{
+			/// <summary>
+			/// Solves an equation using the BrentDekker method
+			/// </summary>
+			/// <param name="func">Function to solve</param>
+			/// <param name="lowBound">Lower bound of result</param>
+			/// <param name="highBound">Upper bound of result</param>
+			/// <param name="precision">Precision value used when solving</param>
+			/// <param name="maxDepth">Max depth of interative function.</param>
+			/// <returns>Solution to <paramref name="func"/>() == 0</returns>
+			/// <exception cref="DivideByZeroException">Thrown if solver fails.</exception>
 			public static double SolveBrentDekker(Function2D func, double lowBound, double highBound,
 				double precision = 1e-8, int maxDepth = 100)
 			{
@@ -22,6 +35,16 @@ namespace MathPlusLib
 				throw new DivideByZeroException("Solver failed.");
 			}
 
+			/// <summary>
+			/// Attempts to solve an equation using the BrentDekker method.
+			/// </summary>
+			/// <param name="func">Function to solve</param>
+			/// <param name="low">Lower bound of result</param>
+			/// <param name="high">Upper bound of result</param>
+			/// <param name="precision">Precision value used when solving</param>
+			/// <param name="maxDepth">Max depth of iterative function</param>
+			/// <param name="result">Solution to <paramref name="func"/>() == 0</param>
+			/// <returns>True if solver succeeds, false if it fails.</returns>
 			public static bool TryBrentDekker(Function2D func, double low, double high,
 				double precision, int maxDepth, out double result)
 			{

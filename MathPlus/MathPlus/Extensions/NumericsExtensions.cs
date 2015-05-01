@@ -26,19 +26,19 @@ namespace MathPlusLib.Extensions
 		}
 
 		/// <summary>
-		/// Rounds a number to the integer closest to zero
+		/// Rounds a number down
 		/// </summary>
 		/// <param name="value">Value to round</param>
-		/// <returns>Value within 1.0 away closest to zero</returns>
+		/// <returns>Lowest integer value within 1.0</returns>
 		public static int Floor(this double value)
 		{
 			return MathPlus.Numerics.Floor(value);
 		}
 		/// <summary>
-		/// Rounds a number to the integer farthest from zero
+		/// Rounds a number up
 		/// </summary>
 		/// <param name="value">Value to round</param>
-		/// <returns>Value within 1.0 away farthest from zero</returns>
+		/// <returns>Highest integer value within 1.0</returns>
 		public static int Ceiling(this double value)
 		{
 			return MathPlus.Numerics.Ceiling(value);
@@ -61,7 +61,7 @@ namespace MathPlusLib.Extensions
 		/// </summary>
 		/// <param name="value">Value to compare</param>
 		/// <param name="other">Other value to compare to</param>
-		/// <param name="err">Maximum error in the approximation; accuracy. Defaults to 1e-10.</param>
+		/// <param name="err">Maximum error in the approximation; accuracy.</param>
 		/// <returns>True if approximately equal, false if not</returns>
 		public static bool AlmostEqualTo(this double value, double other, double err = 1e-10)
 		{

@@ -84,6 +84,11 @@ namespace MathPlusLib
 				return (double)Math.Round((decimal)value, digits, MidpointRounding.AwayFromZero);
 			}
 
+			/// <summary>
+			/// Rounds a number down
+			/// </summary>
+			/// <param name="value">Value to round</param>
+			/// <returns>Lowest integer value within 1.0</returns>
 			public static int Floor(double value)
 			{
 				int res = (int)value;
@@ -93,6 +98,11 @@ namespace MathPlusLib
 				}
 				return res;
 			}
+			/// <summary>
+			/// Rounds a number up
+			/// </summary>
+			/// <param name="value">Value to round</param>
+			/// <returns>Highest integer value within 1.0</returns>
 			public static int Ceiling(double value)
 			{
 				int res = (int)value;
@@ -103,6 +113,17 @@ namespace MathPlusLib
 				return res;
 			}
 
+			/// <summary>
+			/// Normalized approximate comparison function
+			/// </summary>
+			/// <param name="a">First value to compare</param>
+			/// <param name="b">Second value to compare</param>
+			/// <param name="diff">
+			/// Approximated difference between <paramref name="a"/> and 
+			/// <paramref name="b"/>.
+			/// </param>
+			/// <param name="maxError">Maximum error in the approximation, accuracy</param>
+			/// <returns>True if approximately equal, false if not</returns>
 			public static bool AlmostEqualToNorm(double a, double b, double diff, double maxError)
 			{
 				double doublePrecision = MathPlus.Pow(2, -53);
@@ -130,6 +151,13 @@ namespace MathPlusLib
 				return MathPlus.Abs(diff) < maxError * MathPlus.Max(MathPlus.Abs(a), MathPlus.Abs(b));
 			}
 
+			/// <summary>
+			/// Approximate comparison function
+			/// </summary>
+			/// <param name="a">First value to compare</param>
+			/// <param name="b">Second value to compare</param>
+			/// <param name="err">Maximum error in the approximation; inaccuracy.</param>
+			/// <returns></returns>
 			public static bool AlmostEqualTo(double a, double b, double err = 1e-10)
 			{
 				return AlmostEqualToNorm(a, b, Abs(a - b), err);

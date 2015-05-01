@@ -8,17 +8,38 @@ using MathPlusLib.Stats;
 
 namespace MathPlusLib
 {
+	/// <summary>
+	/// Comparison direction when comparing unequal values.
+	/// Used in Statistical Tests
+	/// </summary>
 	public enum InequalityType
 	{
+		/// <summary>
+		/// Value is less than expected
+		/// </summary>
 		LessThan = -1,
+		/// <summary>
+		/// Value is not equal to expected (two-sided)
+		/// </summary>
 		NotEqual = 0,
+		/// <summary>
+		/// Value is greater than expected
+		/// </summary>
 		GreaterThan = 1
 	}
 
 	public static partial class MathPlus
 	{
+		/// <summary>
+		/// Statistical Functions
+		/// </summary>
 		public static class Stats
 		{
+			/// <summary>
+			/// True if exceptions should be thrown if data is not
+			/// suited for test or interval. Setting this to false
+			/// disables the exceptions.
+			/// </summary>
 			public static bool ThrowInappropriateException
 			{ get; set; }
 
@@ -27,30 +48,62 @@ namespace MathPlusLib
 				ThrowInappropriateException = true;
 			}
 
+			/// <summary>
+			/// Returns the sum of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to sum</param>
+			/// <returns>Sum of all items in <paramref name="values"/>.</returns>
 			public static double Sum(IEnumerable<double> values)
 			{
 				return values.Aggregate((n, total) => total + n);
 			}
+			/// <summary>
+			/// Returns the sum of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to sum</param>
+			/// <returns>Sum of all items in <paramref name="values"/>.</returns>
 			public static double Sum(IEnumerable<int> values)
 			{
 				return values.Aggregate((n, total) => total + n);
 			}
 
+			/// <summary>
+			/// Returns the mean of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to find the mean of</param>
+			/// <returns>Mean of all items in <paramref name="values"/>.</returns>
 			public static double Mean(IEnumerable<double> values)
 			{
 				double sigma = Sum(values);
 				return sigma / (double)(values.Count());
 			}
+			/// <summary>
+			/// Returns the mean of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to find the mean of</param>
+			/// <returns>Mean of all items in <paramref name="values"/>.</returns>
 			public static double Mean(IEnumerable<int> values)
 			{
 				double sigma = Sum(values);
 				return sigma / (double)(values.Count());
 			}
 
+			/// <summary>
+			/// Returns the Standard Deviation of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to find the SD of</param>
+			/// <returns>SD of all items in <paramref name="values"/>.</returns>
 			public static double StandardDev(IEnumerable<double> values)
 			{
 				return StandardDev(values, Mean(values));
 			}
+			/// <summary>
+			/// Returns the Standard Deviation of all values in the <see cref="IEnumerable"/>
+			/// with a precalculated mean for speed.
+			/// </summary>
+			/// <param name="values">Values to find the SD of</param>
+			/// <param name="mean">Precalculated mean of <paramref name="values"/>.</param>
+			/// <returns>SD of all items in <paramref name="values"/>.</returns>
 			public static double StandardDev(IEnumerable<double> values, double mean)
 			{
 				double res = 0;
@@ -67,6 +120,11 @@ namespace MathPlusLib
 				return res;
 			}
 
+			/// <summary>
+			/// Calculates the Root-Mean-Square (RMS) of data
+			/// </summary>
+			/// <param name="data">Data to find the RMS of</param>
+			/// <returns>RMS of <paramref name="data"/>.</returns>
 			public static double RootMeanSquare(IEnumerable<double> data)
 			{
 				double sigmaSquare = 0;
@@ -78,6 +136,11 @@ namespace MathPlusLib
 				double meanSquare = sigmaSquare / data.Count();
 				return Sqrt(meanSquare);
 			}
+			/// <summary>
+			/// Calculates the Root-Mean-Square (RMS) of data
+			/// </summary>
+			/// <param name="data">Data to find the RMS of</param>
+			/// <returns>RMS of <paramref name="data"/>.</returns>
 			public static double RootMeanSquare(IEnumerable<int> data)
 			{
 				double sigmaSquare = 0;
@@ -90,6 +153,11 @@ namespace MathPlusLib
 				return Sqrt(meanSquare);
 			}
 
+			/// <summary>
+			/// Calculates what proportion of a dataset is <c>true</c>.
+			/// </summary>
+			/// <param name="sample">Sample data to evaluate</param>
+			/// <returns>Proportion of <paramref name="sample"/> which equals <c>true</c>.</returns>
 			public static double Proportion(IEnumerable<bool> sample)
 			{
 				int on = 0;
@@ -101,6 +169,17 @@ namespace MathPlusLib
 
 				return (double)on / (double)total;
 			}
+			/// <summary>
+			/// Calculates what proportion of a data set evaluates to <c>true</c>
+			/// when evaluated in a <see cref="Predicate"/>.
+			/// </summary>
+			/// <typeparam name="T">Type of data sampled</typeparam>
+			/// <param name="sample">Sample of data to evaluate</param>
+			/// <param name="evaluator">Predicate to evaluate data with</param>
+			/// <returns>
+			/// Proportion of <paramref name="sample"/> which evaluates to <c>true</c>
+			/// when evaluated with <paramref name="evaluator"/>().
+			/// </returns>
 			public static double Proportion<T>(IEnumerable<T> sample, Predicate<T> evaluator)
 			{
 				List<bool> results = new List<bool>();
