@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using MathPlusLib.Stats;
+using MathPlusLib.Extensions;
 
 namespace MathPlusLib
 {
@@ -192,8 +193,27 @@ namespace MathPlusLib
 			}
 
 			#region Normal
+			/// <summary>
+			/// Performs a One-Proportion Z Test
+			/// </summary>
+			/// <param name="p0">Null hypothesis proportion</param>
+			/// <param name="HA">Direction for alternative hypothesis</param>
+			/// <param name="proportion">Observed value proportion</param>
+			/// <param name="n">Number of data points</param>
+			/// <param name="alpha">Alpha level in test</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="proportion"/>, <paramref name="p0"/>,
+			/// or <paramref name="alpha"/> is outside of range (0, 1), or if 
+			/// <paramref name="HA"/> is an invalid <see cref="InequalityType"/>.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if p * n &lt; 10 or if q * n &lt; 10, where 
+			/// <c>p = <paramref name="proportion"/></c> and 
+			/// <c>q = 1 - <paramref name="proportion"/></c>.
+			/// </exception>
 			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
-				double proportion, int n, double alpha)
+				double proportion, int n, double alpha = .05)
 			{
 				double q = 1.0 - proportion;
 
@@ -205,7 +225,13 @@ namespace MathPlusLib
 
 				if (p0 > 1.0 || p0 < 0.0)
 				{
-					throw new ArgumentOutOfRangeException("H0",
+					throw new ArgumentOutOfRangeException("p0",
+						"Null Hypothesis cannot be outside of range (0, 1).");
+				}
+
+				if (alpha > 1.0 || alpha < 0.0)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
 						"Null Hypothesis cannot be outside of range (0, 1).");
 				}
 
@@ -247,13 +273,58 @@ namespace MathPlusLib
 
 				return new ZTestResults(proportion, prob, p0, HA, alpha, se);
 			}
-			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
-				double proportion, int n)
+			/// <summary>
+			/// Performs a One-Proportion Z Test
+			/// </summary>
+			/// <param name="p0">Null hypothesis proportion</param>
+			/// <param name="HA">Direction for alternative hypothesis</param>
+			/// <param name="data">Data set</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="proportion"/>, <paramref name="p0"/>,
+			/// or <paramref name="alpha"/> is outside of range (0, 1), or if 
+			/// <paramref name="HA"/> is an invalid <see cref="InequalityType"/>.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if p * n &lt; 10 or if q * n &lt; 10, where 
+			/// <c>p = <paramref name="proportion"/></c> and 
+			/// <c>q = 1 - <paramref name="proportion"/></c>.
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="OnePropZTest(double, InequalityType, double, int, double)"/>.
+			/// </remarks>
+			public static ZTestResults OnePropZTest(double p0, InequalityType HA,
+				IEnumerable<bool> data, double alpha = 0.05)
 			{
-				return OnePropZTest(p0, HA, proportion, n, 0.05);
+				return OnePropZTest(p0, HA, data.Proportion(), data.Count(), alpha);
 			}
+
+			/// <summary>
+			/// Performs a Two-Proportion Z-Test
+			/// </summary>
+			/// <param name="HA">
+			/// Alternative Hypothesis direction: 
+			/// <paramref name="p2"/> ? <paramref name="p1"/></param>
+			/// <param name="p1">Proportion in first data set</param>
+			/// <param name="p2">Proportion in second data set</param>
+			/// <param name="n1">Number of data points in first set</param>
+			/// <param name="n2">Number of data points in second set</param>
+			/// <param name="alpha">Alpha level in test</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="p1"/>, <paramref name="p2"/>, or
+			/// <paramref name="alpha"/> is outside of range (0, 1), or if 
+			/// <paramref name="HA"/> is an invalid <see cref="InequalityType"/>.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if <paramref name="p1"/> or <paramref name="p2"/> does not
+			/// pass the 10-successes 10-failures condition. See 
+			/// <see cref="OnePropZTest(double, InequalityType, double, int, double)"/>
+			/// for details.
+			/// </exception>
 			public static ZTestResults TwoPropZTest(InequalityType HA,
-				double p1, double p2, int n1, int n2, double alpha)
+				double p1, double p2, int n1, int n2, double alpha = .05)
 			{
 				double q1 = 1.0 - p1;
 				double q2 = 1.0 - p2;
@@ -267,6 +338,12 @@ namespace MathPlusLib
 				{
 					throw new ArgumentOutOfRangeException("p2",
 						"Proportion 2 cannot be outside of range (0, 1).");
+				}
+
+				if (alpha > 1.0 || alpha < 0.0)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Null Hypothesis cannot be outside of range (0, 1).");
 				}
 				if (ThrowInappropriateException)
 				{
@@ -319,21 +396,59 @@ namespace MathPlusLib
 
 				return new ZTestResults(pDelta, prob, 0, HA, alpha, sePooled);
 			}
+			/// <summary>
+			/// Performs a Two-Proportion Z-Test
+			/// </summary>
+			/// <param name="HA">Alternative Hypothesis direction: p2 ? p1</param>
+			/// <param name="data1">First data set</param>
+			/// <param name="data2">Second data set</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of range (0, 1), or if 
+			/// <paramref name="HA"/> is an invalid <see cref="InequalityType"/>.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if <see cref="ThrowInappropriateException"/> is set to <c>true</c>
+			/// and either p1 or p2 does not pass the 10-successes 10-failures condition. See 
+			/// <see cref="OnePropZTest(double, InequalityType, double, int, double)"/>
+			/// for details.
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="TwoPropZTest(InequalityType, double, double, int, int, double)"/>.
+			/// </remarks>
 			public static ZTestResults TwoPropZTest(InequalityType HA,
-				double p1, double p2, int n1, int n2)
+				IEnumerable<bool> data1, IEnumerable<bool> data2, 
+				double alpha = 0.05)
 			{
-				return TwoPropZTest(HA, p1, p2, n1, n2, 0.05);
+				return TwoPropZTest(HA, data1.Proportion(), data2.Proportion(),
+					data1.Count(), data2.Count(), alpha);
 			}
 			#endregion
 
 			#region StudentT
+			/// <summary>
+			/// Performs a One-Sample T-Test
+			/// </summary>
+			/// <param name="mu0">Expected mean in Null Hypothesis</param>
+			/// <param name="HA">Direction of Alternative Hypothesis</param>
+			/// <param name="mean">Observed mean in data</param>
+			/// <param name="sd">Observed SD in data</param>
+			/// <param name="n">Number of data points</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if <paramref name="n"/> is zero or negative, or if
+			/// <paramref name="HA"/> is an invalid <see cref="InequalityType"/>.
+			/// </exception>
 			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
-				double mean, double sd, int n, double alpha)
+				double mean, double sd, int n, double alpha = .05)
 			{
-				if (alpha <= 0 || alpha > 1)
+				if (alpha <= 0 || alpha >= 1)
 				{
 					throw new ArgumentOutOfRangeException("alpha",
-						"Alpha level must be within range (0, 1].");
+						"Alpha level must be within range (0, 1).");
 				}
 
 				if (n <= 0)
@@ -370,19 +485,61 @@ namespace MathPlusLib
 
 				return new TTestResults(mean, prob, mu0, HA, alpha, se, df);
 			}
+			/// <summary>
+			/// Performs a One-Sample T-Test
+			/// </summary>
+			/// <param name="mu0">Expected mean in null hypothesis</param>
+			/// <param name="HA">Direction of alternative hypothesis</param>
+			/// <param name="sample">Sample data</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if <paramref name="n"/> is zero or negative, or if
+			/// <paramref name="HA"/> is an invalid <see cref="InequalityType"/>.
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="OneSampleTTest(double, InequalityType, double, 
+			/// double, int, double)"/>.
+			/// </remarks>
 			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
-				double mean, double sd, int n)
+				IEnumerable<double> sample, double alpha = 0.05)
 			{
-				return OneSampleTTest(mu0, HA, mean, sd, n, 0.05);
+				double mean = sample.Mean();
+
+				return OneSampleTTest(mu0, HA, mean, sample.StandardDev(mean), 
+					sample.Count(), alpha);
 			}
+
+			/// <summary>
+			/// Performs a two-sample T-Test
+			/// </summary>
+			/// <param name="HA">
+			/// Alternate Hypothesis Direction:
+			/// <paramref name="mean2"/> ? <paramref name="mean1"/>
+			/// </param>
+			/// <param name="mean1">Mean of first sample</param>
+			/// <param name="mean2">Mean of second sample</param>
+			/// <param name="sd1">SD of first sample</param>
+			/// <param name="sd2">SD of second sample</param>
+			/// <param name="n1">Number of data points in first sample</param>
+			/// <param name="n2">Number of data points in second sample</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if <paramref name="n1"/> or <paramref name="n2"/> is zero or
+			/// negative, or if <paramref name="HA"/> is an invalid
+			/// <see cref="InequalityType"/>.
+			/// </exception>
 			public static TTestResults TwoSampleTTest(InequalityType HA,
 				double mean1, double mean2, double sd1, double sd2, 
-				int n1, int n2, double alpha)
+				int n1, int n2, double alpha = .05)
 			{
-				if (alpha <= 0 || alpha > 1)
+				if (alpha <= 0 || alpha >= 1)
 				{
 					throw new ArgumentOutOfRangeException("alpha",
-						"Alpha level must be within range (0, 1]");
+						"Alpha level must be within range (0, 1)");
 				}
 
 				if (n1 <= 0)
@@ -425,22 +582,69 @@ namespace MathPlusLib
 
 				return new TTestResults(mean2 - mean1, prob, 0, HA, alpha, se, df);
 			}
+			/// <summary>
+			/// Performs a two-sample T-Test
+			/// </summary>
+			/// <param name="HA">
+			/// Alternate Hypothesis Direction: mean2 ? mean1
+			/// </param>
+			/// <param name="sample1">First sample</param>
+			/// <param name="sample2">Second sample</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if <paramref name="n1"/> or <paramref name="n2"/> is zero or
+			/// negative, or if <paramref name="HA"/> is an invalid
+			/// <see cref="InequalityType"/>.
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="TwoSampleTTest(InequalityType, double, double, 
+			/// double, double, int, int, double)"/>.
+			/// </remarks>
 			public static TTestResults TwoSampleTTest(InequalityType HA,
-				double mean1, double mean2, double sd1, double sd2, 
-				int n1, int n2)
+				IEnumerable<double> sample1, IEnumerable<double> sample2, 
+				double alpha = 0.05)
 			{
-				return TwoSampleTTest(HA, mean1, mean2, sd1, sd2, n1, n2, 0.05);
+				double mean1 = sample1.Mean();
+				double mean2 = sample2.Mean();
+
+				return TwoSampleTTest(HA, mean1, mean2, sample1.StandardDev(mean1),
+					sample2.StandardDev(mean2), sample1.Count(), sample2.Count(), alpha);
 			}
 			#endregion
 
 			#region ChiSquare
-			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
-				Dictionary<string, int> counts, Dictionary<string, double> expected)
+			/// <summary>
+			/// Performs a Chi-Square Goodness-of-Fit test. If
+			/// <paramref name="expected"/> is <c>null</c>, then values will be
+			/// filled in from the mean of <paramref name="counts"/>.
+			/// </summary>
+			/// <param name="counts">Counted values for each category</param>
+			/// <param name="expected">Expected values for each category</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if any value in <paramref name="counts"/> is negative.
+			/// </exception>
+			/// <exception cref="ArgumentNullException">
+			/// Thrown if <paramref name="counts"/> is null.
+			/// </exception>
+			/// <exception cref="ArgumentException">
+			/// Thronw if <paramref name="counts"/> is empty.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if any value in <paramref name="expected"/> is below 5 
+			/// and <see cref="ThrowInappropriateException"/> is set to <c>true</c>.
+			/// </exception>
+			public static ChiSquareTestResults ChiSquareGOFTest(Dictionary<string, int> counts,
+				Dictionary<string, double> expected, double alpha = 0.05)
 			{
-				if (alpha <= 0 || alpha > 1)
+				if (alpha <= 0 || alpha >= 1)
 				{
 					throw new ArgumentOutOfRangeException("alpha",
-						"Alpha level must be inside of range (0, 1].");
+						"Alpha level must be inside of range (0, 1).");
 				}
 
 				if (counts == null)
@@ -460,11 +664,14 @@ namespace MathPlusLib
 						throw new ArgumentOutOfRangeException("counts",
 							"No count can be below zero.");
 					}
+				}
 
-					if (n < 5 && ThrowInappropriateException)
+				foreach (double d in expected.Values)
+				{
+					if (d < 5 && ThrowInappropriateException)
 					{
 						throw new StatisticInappropriateException(
-							"Counts should all be above 5.");
+							"Expected values should all be above 5.");
 					}
 				}
 
@@ -502,8 +709,36 @@ namespace MathPlusLib
 
 				return new ChiSquareTestResults(chiSquareValue, prob, counts.Count - 1, alpha);
 			}
-			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
-				Dictionary<string, double> counts, Dictionary<string, double> expected)
+			/// <summary>
+			/// Performs a Chi-Square Goodness-of-Fit test. Truncates values in
+			/// <paramref name="counts"/> to <see cref="int"/> values. If
+			/// <paramref name="expected"/> is <c>null</c>, then values will be
+			/// filled in from the mean of <paramref name="counts"/>.
+			/// </summary>
+			/// <param name="counts">Counted values for each category</param>
+			/// <param name="expected">Expected values for each category</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if any value in <paramref name="counts"/> is negative.
+			/// </exception>
+			/// <exception cref="ArgumentNullException">
+			/// Thrown if <paramref name="counts"/> is null.
+			/// </exception>
+			/// <exception cref="ArgumentException">
+			/// Thronw if <paramref name="counts"/> is empty.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if any value in <paramref name="expected"/> is below 5 
+			/// and <see cref="ThrowInappropriateException"/> is set to <c>true</c>.
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="ChiSquareGOFTest(Dictionary{string, double}, 
+			/// Dictionary{string, int}, double)"/>
+			/// </remarks>
+			public static ChiSquareTestResults ChiSquareGOFTest(Dictionary<string, double> counts,
+				Dictionary<string, double> expected, double alpha = 0.05)
 			{
 				Dictionary<string, int> ints = new Dictionary<string, int>();
 				foreach (KeyValuePair<string, double> kvp in counts)
@@ -511,10 +746,35 @@ namespace MathPlusLib
 					ints.Add(kvp.Key, (int)kvp.Value);
 				}
 
-				return ChiSquareGOFTest(alpha, ints, expected);
+				return ChiSquareGOFTest(ints, expected, alpha);
 			}
-			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
-				List<int> counts, List<int> expected)
+			/// <summary>
+			/// Performs a Chi-Square Goodness-of-Fit test
+			/// </summary>
+			/// <param name="counts">Counted values for implied categories</param>
+			/// <param name="expected">Expected values for implied categories</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if any value in <paramref name="counts"/> is negative.
+			/// </exception>
+			/// <exception cref="ArgumentNullException">
+			/// Thrown if <paramref name="counts"/> is null.
+			/// </exception>
+			/// <exception cref="ArgumentException">
+			/// Thronw if <paramref name="counts"/> is empty.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if any value in <paramref name="expected"/> is below 5 
+			/// and <see cref="ThrowInappropriateException"/> is set to <c>true</c>.
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="ChiSquareGOFTest(Dictionary{string, int}, 
+			/// Dictionary{string, double}, double)"/>
+			/// </remarks>
+			public static ChiSquareTestResults ChiSquareGOFTest(List<int> counts,
+				List<int> expected, double alpha = 0.05)
 			{
 				Dictionary<string, int> dCounts = new Dictionary<string, int>();
 				Dictionary<string, double> dExp = new Dictionary<string, double>();
@@ -524,9 +784,35 @@ namespace MathPlusLib
 					dExp.Add(i.ToString(), expected[i - 1]);
 				}
 
-				return ChiSquareGOFTest(alpha, dCounts, dExp);
+				return ChiSquareGOFTest(dCounts, dExp, alpha);
 			}
-			public static ChiSquareTestResults ChiSquareGOFTest(double alpha, List<int> counts)
+			/// <summary>
+			/// Performs a Chi-Square Goodness-of-Fit test, calculating expected values
+			/// from the mean of <paramref name="counts"/>.
+			/// </summary>
+			/// <param name="counts">Counted values for implied categories</param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="alpha"/> is outside of (0, 1), or
+			/// if any value in <paramref name="counts"/> is negative.
+			/// </exception>
+			/// <exception cref="ArgumentNullException">
+			/// Thrown if <paramref name="counts"/> is null.
+			/// </exception>
+			/// <exception cref="ArgumentException">
+			/// Thronw if <paramref name="counts"/> is empty.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if any expected value is below 5 and <see cref="ThrowInappropriateException"/>
+			/// is set to <c>true</c>
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="ChiSquareGOFTest(Dictionary{string, int}, 
+			/// Dictionary{string, double}, double)"/>.
+			/// </remarks>
+			public static ChiSquareTestResults ChiSquareGOFTest(List<int> counts, 
+				double alpha = 0.05)
 			{
 				Dictionary<string, int> dCounts = new Dictionary<string, int>();
 				for (int i = 1; i <= counts.Count; i++)
@@ -534,12 +820,65 @@ namespace MathPlusLib
 					dCounts.Add(i.ToString(), counts[i - 1]);
 				}
 
-				return ChiSquareGOFTest(alpha, dCounts, null);
+				return ChiSquareGOFTest(dCounts, null, alpha);
 			}
 
-			public static ChiSquareTestResults ChiSquareTest(double alpha, 
-				MathMatrix observed, MathMatrix expected)
+			/// <summary>
+			/// Performs a Chi-Square test of Independence or Homogeneity
+			/// </summary>
+			/// <param name="observed">Observed counted values.</param>
+			/// <param name="expected">
+			/// Expected values. If this is <c>null</c>, this will be calculated
+			/// from <paramref name="observed"/> with the methods of a Chi-Square 
+			/// test of Homogeneity.
+			/// </param>
+			/// <param name="alpha">Alpha level</param>
+			/// <returns>Test results</returns>
+			/// <exception cref="ArgumentNullException">
+			/// Thrown if <paramref name="observed"/> is <c>null</c>.
+			/// </exception>
+			/// <exception cref="StatisticInappropriateException">
+			/// Thrown if any value in <paramref name="expected"/> is
+			/// less than 5 and <see cref="ThrowInappropriateException"/>
+			/// is set to <c>true</c>. This occurs even when values for
+			/// <paramref name="expected"/> are generated in this method.
+			/// </exception>
+			public static ChiSquareTestResults ChiSquareTest(MathMatrix observed,
+				MathMatrix expected = null, double alpha = 0.05)
 			{
+				if (observed == null)
+				{
+					throw new ArgumentNullException("observed",
+						"Observed values cannot be null.");
+				}
+				if (expected == null)
+				{
+					expected = new MathMatrix(observed.Width, observed.Height);
+					double fullSum = observed.SumAll();
+
+					for (int r = 0; r < observed.Height; r++)
+					{
+						double rowSum = observed.SumRow(r);
+
+						for (int c = 0; c < observed.Width; c++) // actually C#
+						{
+							double colSum = observed.SumColumn(c);
+							double exp = (rowSum / fullSum) * colSum;
+
+							expected[r, c] = exp;
+						}
+					}
+				}
+
+				expected.Foreach((d) =>
+				{
+					if (d < 5 && ThrowInappropriateException)
+					{
+						throw new StatisticInappropriateException(
+							"Expected values should all be above 5.");
+					}
+				});
+
 				MathMatrix deviations = new MathMatrix(observed.Width, observed.Height);
 				for (int r = 0; r < observed.Height; r++)
 				{
@@ -564,41 +903,29 @@ namespace MathPlusLib
 
 				return new ChiSquareTestResults(sigma, pval, df, alpha);
 			}
-			public static ChiSquareTestResults ChiSquareTest(double alpha, 
-				MathMatrix observed)
-			{
-				MathMatrix expected = new MathMatrix(observed.Width, observed.Height);
-				double fullSum = observed.SumAll();
-
-				for (int r = 0; r < observed.Height; r++)
-				{
-					double rowSum = observed.SumRow(r);
-					
-					for (int c = 0; c < observed.Width; c++) // actually C#
-					{
-						double colSum = observed.SumColumn(c);
-						double exp = (rowSum / fullSum) * colSum;
-						if (ThrowInappropriateException && exp < 5.0)
-						{
-							throw new StatisticInappropriateException(
-								"Expected value should be above 5 for each cell.");
-						}
-
-						expected[r, c] = exp;
-					}
-				}
-
-				return ChiSquareTest(alpha, observed, expected);
-			}
-			public static ChiSquareTestResults ChiSquareTest(MathMatrix observed)
-			{
-				return ChiSquareTest(.05, observed);
-			}
 			#endregion
 
 			#region Intervals
-			public static Interval OnePropZInterval(double proportion, int n, double confidence)
+			/// <summary>
+			/// Creates a confidence interval for a single proportion data set.
+			/// </summary>
+			/// <param name="proportion">Proportion of data</param>
+			/// <param name="n">Number of data points</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> or 
+			/// <paramref name="proportion"/> is outside of range (0, 1).
+			/// </exception>
+			public static Interval OnePropZInterval(double proportion, int n, 
+				double confidence = 0.95)
 			{
+				if (proportion <= 0.0 || proportion >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("proportion",
+						"Proportion must be between 0 and 1, exclusively.");
+				}
+
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
 					throw new ArgumentOutOfRangeException("confidence", 
@@ -612,9 +939,49 @@ namespace MathPlusLib
 
 				return Interval.FromCenter(proportion, se * zCrit);
 			}
-			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, 
-				double confidence)
+			/// <summary>
+			/// Creates a confidence interval for a single proportion data set.
+			/// </summary>
+			/// <param name="data">Data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> or 
+			/// <paramref name="proportion"/> is outside of range (0, 1).
+			/// </exception>
+			public static Interval OnePropZInterval(IEnumerable<bool> data,
+				double confidence = 0.95)
 			{
+				return OnePropZInterval(data.Proportion(), data.Count(), confidence);
+			}
+
+			/// <summary>
+			/// Creates a confidence interval for two proportion data sets.
+			/// </summary>
+			/// <param name="p1">Proportion for first data set</param>
+			/// <param name="p2">Proportion for second data set</param>
+			/// <param name="n1">Number of data points in first data set</param>
+			/// <param name="n2">Number of data points in second data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/>, <paramref name="p1"/>,
+			/// or <paramref name="p2"/> is outside of range (0, 1).
+			/// </exception>
+			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, 
+				double confidence = 0.95)
+			{
+				if (p1 <= 0.0 || p1 >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("p1",
+						"p1 must be between 0 and 1, exclusively.");
+				}
+				if (p2 <= 0.0 || p2 >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("p2",
+						"p2 must be between 0 and 1, exclusively.");
+				}
+
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
 					throw new ArgumentOutOfRangeException("confidence",
@@ -630,8 +997,40 @@ namespace MathPlusLib
 				return Interval.FromCenter(p2 - p1, se * zCrit);
 			}
 
+			/// <summary>
+			/// Constructs a confidence interval for two proportion data sets.
+			/// </summary>
+			/// <param name="data1">First data set</param>
+			/// <param name="data2">Second data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/>, <paramref name="p1"/>,
+			/// or <paramref name="p2"/> is outside of range (0, 1).
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="TwoPropZInterval(double, double, int, int, double)"/>.
+			/// </remarks>
+			public static Interval TwoPropZInterval(IEnumerable<bool> data1,
+				IEnumerable<bool> data2, double confidence = 0.95)
+			{
+				return TwoPropZInterval(data1.Proportion(), data2.Proportion(),
+					data1.Count(), data2.Count(), confidence);
+			}
+
+			/// <summary>
+			/// Constructs a confidence interval from one quantitative data set.
+			/// </summary>
+			/// <param name="mean">Mean of data</param>
+			/// <param name="sd">SD of data</param>
+			/// <param name="n">Number of data points</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> is outside of range (0, 1).
+			/// </exception>
 			public static Interval OneSampleTInterval(double mean, double sd, int n, 
-				double confidence)
+				double confidence = 0.95)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -644,8 +1043,49 @@ namespace MathPlusLib
 
 				return Interval.FromCenter(mean, se * tCrit);
 			}
+
+			/// <summary>
+			/// Constructs a confidence interval from one quantitative data set.
+			/// </summary>
+			/// <param name="data">Data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> is outside of range (0, 1).
+			/// </exception>
+			/// <remarks>Calls <see cref="OneSampleTInterval(double, double, int, double)"/>.</remarks>
+			public static Interval OneSampleTInterval(IEnumerable<double> data, 
+				double confidence = 0.95)
+			{
+				if (confidence <= 0.0 || confidence >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("confidence",
+						"Confidence must be between 0 and 1, exclusively.");
+				}
+
+				double mean = data.Mean();
+				return OneSampleTInterval(mean, data.StandardDev(mean), data.Count(), confidence);
+			}
+
+			/// <summary>
+			/// Constructs a confidence interval from two quantitative data sets.
+			/// </summary>
+			/// <param name="mean1">Mean of first data set</param>
+			/// <param name="mean2">Mean of second data set</param>
+			/// <param name="sd1">SD of first data set</param>
+			/// <param name="sd2">SD of second data set</param>
+			/// <param name="n1">Number of data points in first data set</param>
+			/// <param name="n2">Number of data points in second data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> is outside of range (0, 1).
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="TwoSampleTInterval(double, double, double, int, int, double)"/>.
+			/// </remarks>
 			public static Interval TwoSampleTInterval(double mean1, double mean2, 
-				double sd1, double sd2, int n1, int n2, double confidence)
+				double sd1, double sd2, int n1, int n2, double confidence = 0.95)
 			{
 				try
 				{
@@ -656,8 +1096,21 @@ namespace MathPlusLib
 					throw e; // rethrow
 				}
 			}
+			/// <summary>
+			/// Constructs a confidence interval from two quantitative data sets.
+			/// </summary>
+			/// <param name="deltaMean">Difference of means: mu2 - mu1</param>
+			/// <param name="sd1">SD of first data set</param>
+			/// <param name="sd2">SD of second data set</param>
+			/// <param name="n1">Number of data points in first data set</param>
+			/// <param name="n2">Number of data points in second data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> is outside of range (0, 1).
+			/// </exception>
 			public static Interval TwoSampleTInterval(double deltaMean, double sd1, double sd2, 
-				int n1, int n2, double confidence)
+				int n1, int n2, double confidence = 0.95)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -671,8 +1124,46 @@ namespace MathPlusLib
 
 				return Interval.FromCenter(deltaMean, se * tCrit);
 			}
+
+			/// <summary>
+			/// Constructs a confidence interval from two quantitative data sets
+			/// </summary>
+			/// <param name="data1">First data set</param>
+			/// <param name="data2">Second data set</param>
+			/// <param name="confidence">Confidence level</param>
+			/// <returns>Confidence Interval</returns>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="confidence"/> is outside of range (0, 1).
+			/// </exception>
+			/// <remarks>
+			/// Calls <see cref="TwoSampleTInterval(double, double, double, double, int, int, double)"/>.
+			/// </remarks>
+			public static Interval TwoSampleTInterval(IEnumerable<double> data1,
+				IEnumerable<double> data2, double confidence = 0.95)
+			{
+				if (confidence <= 0.0 || confidence >= 1.0)
+				{
+					throw new ArgumentOutOfRangeException("confidence",
+						"Confidence must be between 0 and 1, exclusively.");
+				}
+				
+				double mean1 = data1.Mean();
+				double mean2 = data2.Mean();
+
+				return TwoSampleTInterval(mean1, mean2, data1.StandardDev(mean1), 
+					data2.StandardDev(mean2), data1.Count(), data2.Count(), confidence);
+			}
 			#endregion
 
+			/// <summary>
+			/// Calculates degrees of freedom to use in a Two-sample T-Test or
+			/// T Interval.
+			/// </summary>
+			/// <param name="s1">SD of first data set</param>
+			/// <param name="s2">SD of second data set</param>
+			/// <param name="n1">Number of data points in first data set</param>
+			/// <param name="n2">Number of data points in second data set</param>
+			/// <returns>Degrees of freedom to use in T model.</returns>
 			public static double TDegreesOfFreedom(double s1, double s2, int n1, int n2)
 			{
 				double upperInnerA = (s1 * s1) / (double)n1;
