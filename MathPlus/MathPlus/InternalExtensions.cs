@@ -6,29 +6,8 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib
 {
-	internal static class Extensions
+	internal static class InternalExtensions
 	{
-		internal static bool IsOdd(this int n)
-		{
-			return !n.IsEven();
-		}
-		internal static bool IsEven(this int n)
-		{
-			return n.IsDivisibleBy(2);
-		}
-
-		internal static bool IsDivisibleBy(this int n, int divisor)
-		{
-			return n % divisor == 0;
-		}
-
-		internal static bool IsInteger(this double value, int precision)
-		{
-			double rounded = MathPlus.Numerics.Round(value, precision);
-			int trunc = (int)rounded;
-			return rounded == (double)trunc;
-		}
-
 		internal static double RoundUp(this double value, int count = 1)
 		{
 			if (double.IsInfinity(value) || double.IsNaN(value) || count == 0)

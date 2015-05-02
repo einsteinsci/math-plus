@@ -43,15 +43,22 @@
   <ItemGroup>
     <Compile Include="Calculus.cs" />
     <Compile Include="Complex.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="Extensions\NumericsExtensions.cs" />
+    <Compile Include="Extensions\StatExtensions.cs" />
+    <Compile Include="Extensions\TrigExtensions.cs" />
+    <Compile Include="InternalExtensions.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="IMathable.cs" />
+    <Compile Include="MathMatrix.cs" />
     <Compile Include="MathPlus.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="Numerics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Solver.cs" />
     <Compile Include="Stats.cs" />
+    <Compile Include="Stats\ChiSquareModel.cs" />
+    <Compile Include="Stats\ChiSquareTestResults.cs" />
     <Compile Include="Stats\DataFactory.cs" />
     <Compile Include="Stats\IModel.cs" />
     <Compile Include="Stats\Interval.cs" />

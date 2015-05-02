@@ -6,15 +6,27 @@ using System.Threading.Tasks;
 
 namespace MathPlusLib
 {
+	/// <summary>
+	/// A quantity represented by one integer divided by another.
+	/// </summary>
 	public struct Fraction : IComparable, IMathable<Fraction>, IMathable<double>, 
 		IEquatable<Fraction>, IEquatable<double>
 	{
+		/// <summary>
+		/// Upper part of the fraction
+		/// </summary>
 		public int Numerator
 		{ get; private set; }
 
+		/// <summary>
+		/// Lower part of the fraction
+		/// </summary>
 		public int Denominator
 		{ get; private set; }
 
+		/// <summary>
+		/// Converts the fraction to its <see cref="Double"/> equivalent
+		/// </summary>
 		public double FloatingPoint
 		{
 			get
@@ -23,6 +35,9 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Returns the inverse, 1 / <c>this</c>.
+		/// </summary>
 		public Fraction Inverse
 		{
 			get
@@ -31,14 +46,26 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Static value for the maximum denominator to use when creating 
+		/// <c>Fraction</c> from a <see cref="Double"/>.
+		/// </summary>
 		public static int MaxDenominator
 		{ get; set; }
 
+		/// <summary>
+		/// Initializes <see cref="MaxDenominator"/> to 1 000 000.
+		/// </summary>
 		static Fraction()
 		{
-			MaxDenominator = 100000;
+			MaxDenominator = 1000000;
 		}
 
+		/// <summary>
+		/// Instantiates a <c>Fraction</c> from a given numerator and denominator
+		/// </summary>
+		/// <param name="numerator">Numerator of fraction</param>
+		/// <param name="denominator">Denominator of fraction</param>
 		public Fraction(int numerator, int denominator) : this()
 		{
 			if (denominator == 0)
@@ -50,11 +77,22 @@ namespace MathPlusLib
 			Numerator = numerator;
 			Denominator = denominator;
 		}
-		public Fraction(double value, int digitPrecision = 10) : this()
+		/// <summary>
+		/// Instantiates a <c>Fraction</c> from a given <see cref="Double"/> value.
+		/// </summary>
+		/// <param name="value">Value to convert to a fraction</param>
+		/// <param name="digitPrecision">
+		/// Precision to use when testing potential denominators
+		/// </param>
+		/// <remarks>
+		/// This algorithm can be quite slow if decimal values are off by 
+		/// a slight amount.
+		/// </remarks>
+		public Fraction(double value, int digitPrecision = 6) : this()
 		{
-			for (int den = 2; den < MaxDenominator; den++)
+			for (int den = 1; den < MaxDenominator; den++)
 			{
-				double numer = value * den;
+				double numer = value * (double)den;
 				if (numer.IsInteger(digitPrecision))
 				{
 					Numerator = (int)numer;
@@ -64,11 +102,20 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Divides the fraction to a <see cref="Double"/>.
+		/// </summary>
+		/// <returns>A <c>double</c> from 
+		/// <see cref="Numerator"/> / <see cref="Denominator"/></returns>
 		public double ToDouble()
 		{
 			return (double)Numerator / (double)Denominator;
 		}
 
+		/// <summary>
+		/// Simplifies fraction so that the denominator and numerator have no 
+		/// common factors.
+		/// </summary>
 		public void Simplify()
 		{
 			if (Denominator < 0)
@@ -90,6 +137,11 @@ namespace MathPlusLib
 			}
 		}
 
+		/// <summary>
+		/// Compares <c>this</c> to another <c>object</c> to see if they are equal.
+		/// </summary>
+		/// <param name="obj">Object to compare against</param>
+		/// <returns>True if the objects are compatible and equal, false otherwise.</returns>
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
@@ -106,11 +158,26 @@ namespace MathPlusLib
 			return obj.Equals(this);
 		}
 
+		/// <summary>
+		/// Converts fraction to a hashcode <see cref="Int32"/>.
+		/// </summary>
+		/// <returns>
+		/// An <see cref="Int32"/> generated from the 
+		/// <see cref="Numerator"/> and <see cref="Denominator"/>
+		/// </returns>
+		/// <remarks>Both values will be truncated to an <see cref="Int16"/> when generating.</remarks>
 		public override int GetHashCode()
 		{
 			return ((short)Numerator << 16) + (short)Denominator;
 		}
 
+		/// <summary>
+		/// Serializes to a mathematically friendly <see cref="String"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="String"/> in the form of 
+		/// <see cref="Numerator"/> / <see cref="Denominator"/>.
+		/// </returns>
 		public override string ToString()
 		{
 			return Numerator + " / " + Denominator;

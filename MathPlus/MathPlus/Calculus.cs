@@ -26,6 +26,9 @@ namespace MathPlusLib
 	/// <returns>Function output</returns>
 	public delegate Complex FunctionComplex(Complex input);
 
+	/// <summary>
+	/// Type of algorithm used in integration
+	/// </summary>
 	public enum IntegrationType
 	{
 		Low,
@@ -37,8 +40,19 @@ namespace MathPlusLib
 
 	public static partial class MathPlus
 	{
+		/// <summary>
+		/// Methods pertaining to calculus
+		/// </summary>
 		public static class Calculus
 		{
+			/// <summary>
+			/// Returns the minimum value of an expression within a range
+			/// </summary>
+			/// <param name="exp">Expression to find the minimum of</param>
+			/// <param name="lower">Lower bound of input values</param>
+			/// <param name="upper">Upper bound of input values</param>
+			/// <param name="increment">Amount to increment by when finding the minimum</param>
+			/// <returns>Minimum value of exp within the range</returns>
 			public static double FuncMin(Function2D exp, double lower, 
 				double upper, double increment)
 			{
@@ -47,7 +61,16 @@ namespace MathPlusLib
 
 				for (double x = lower; x <= upper; x += increment)
 				{
-					double y = exp(x);
+					double y;
+					try
+					{
+						y = exp(x);
+					}
+					catch (Exception)
+					{
+						continue;
+					}
+
 					if (y < min)
 					{
 						min = y;
@@ -57,6 +80,14 @@ namespace MathPlusLib
 
 				return res;
 			}
+			/// <summary>
+			/// Returns the maximum value of an expression within a range
+			/// </summary>
+			/// <param name="exp">Expression to find the maximum of</param>
+			/// <param name="lower">Lower bound of input values</param>
+			/// <param name="upper">Upper bound of input values</param>
+			/// <param name="increment">Amount to increment by when finding the maximum</param>
+			/// <returns>Maximum value of exp within the range</returns>
 			public static double FuncMax(Function2D exp, double lower,
 				double upper, double increment)
 			{
@@ -65,7 +96,16 @@ namespace MathPlusLib
 
 				for (double x = lower; x <= upper; x += increment)
 				{
-					double y = exp(x);
+					double y;
+					try
+					{
+						y = exp(x);
+					}
+					catch (Exception)
+					{
+						continue;
+					}
+
 					if (y > max)
 					{
 						max = y;
@@ -76,8 +116,18 @@ namespace MathPlusLib
 				return res;
 			}
 
+			/// <summary>
+			/// Returns the single-point derivative of a function
+			/// </summary>
+			/// <param name="function">Function to calculate the derivative from</param>
+			/// <param name="point">Point at which to perform the derivative on</param>
+			/// <param name="deltaX">
+			/// Accuracy level to perform the derivative. This value is how far on either side
+			/// of <paramref name="point"/> to check when determining the derivative.
+			/// </param>
+			/// <returns></returns>
 			public static double Derivative(Function2D function, 
-				double point, double deltaX)
+				double point, double deltaX = 1.0e-8)
 			{
 				double yMinus = function(point - deltaX);
 				double yPlus = function(point + deltaX);
@@ -85,8 +135,16 @@ namespace MathPlusLib
 				return (yPlus - yMinus) / (deltaX * 2.0);
 			}
 
-			private static double IntegrateLow(Function2D function, double lower,
-				double upper, int divisions)
+			/// <summary>
+			/// Integrate using the lower-bound algorithm
+			/// </summary>
+			/// <param name="function">Function used in integration</param>
+			/// <param name="lower">Lower bound of integration</param>
+			/// <param name="upper">Upper bound of integration</param>
+			/// <param name="divisions">Number of divisions to use</param>
+			/// <returns>Total area calculated by integration</returns>
+			public static double IntegrateLow(Function2D function, double lower,
+				double upper, int divisions = 1)
 			{
 				double increment = (upper - lower) / divisions;
 				double area = 0;
@@ -97,8 +155,16 @@ namespace MathPlusLib
 
 				return area;
 			}
-			private static double IntegrateHigh(Function2D function, double lower,
-				double upper, int divisions)
+			/// <summary>
+			/// Integrate using the upper-bound algorithm
+			/// </summary>
+			/// <param name="function">Function used in integration</param>
+			/// <param name="lower">Lower bound of integration</param>
+			/// <param name="upper">Upper bound of integration</param>
+			/// <param name="divisions">Number of divisions to use</param>
+			/// <returns>Total area calculated by integration</returns>
+			public static double IntegrateHigh(Function2D function, double lower,
+				double upper, int divisions = 1)
 			{
 				double increment = (upper - lower) / divisions;
 				double area = 0;
@@ -109,8 +175,16 @@ namespace MathPlusLib
 
 				return area;
 			}
-			private static double IntegrateMidpoint(Function2D function, 
-				double lower, double upper, int divisions)
+			/// <summary>
+			/// Integrate using the midpoint algorithm
+			/// </summary>
+			/// <param name="function">Function used in integration</param>
+			/// <param name="lower">Lower bound of integration</param>
+			/// <param name="upper">Upper bound of integration</param>
+			/// <param name="divisions">Number of divisions to use</param>
+			/// <returns>Total area calculated by integration</returns>
+			public static double IntegrateMidpoint(Function2D function, 
+				double lower, double upper, int divisions = 1)
 			{
 				double increment = (upper - lower) / divisions;
 				double area = 0;
@@ -122,7 +196,15 @@ namespace MathPlusLib
 
 				return area;
 			}
-			private static double IntegrateTrapezoidal(Function2D function,
+			/// <summary>
+			/// Integrate using the trapezoidal algorithm
+			/// </summary>
+			/// <param name="function">Function used in integration</param>
+			/// <param name="lower">Lower bound of integration</param>
+			/// <param name="upper">Upper bound of integration</param>
+			/// <param name="divisions">Number of divisions to use</param>
+			/// <returns>Total area calculated by integration</returns>
+			public static double IntegrateTrapezoidal(Function2D function,
 				double lower, double upper, int divisions = 2)
 			{
 				double increment = (upper - lower) / divisions;
@@ -136,31 +218,63 @@ namespace MathPlusLib
 
 				return increment * sum;
 			}
-			private static double IntegrateSimpson(Function2D function,
-				double lower, double upper, int divisions = 3)
+			/// <summary>
+			/// Integrate using Simpson's algorithm
+			/// </summary>
+			/// <param name="function">Function used in integration</param>
+			/// <param name="lower">Lower bound of integration</param>
+			/// <param name="upper">Upper bound of integration</param>
+			/// <param name="divisions">Number of divisions to use</param>
+			/// <returns>Total area calculated by integration</returns>
+			/// <exception cref="ArgumentException">
+			/// Thrown if <paramref name="divisions"/> is not even.
+			/// </exception>
+			public static double IntegrateSimpson(Function2D f,
+				double intervalBegin, double intervalEnd, int numberOfPartitions = 3)
 			{
-				if (divisions.IsOdd())
+				if (numberOfPartitions.IsOdd())
 				{
 					throw new ArgumentException("Division count must be even.", "divisions");
 				}
 
-				double step = (lower - upper) / (double)divisions;
-				double factor = step / 3.0;
+				double step = (intervalEnd - intervalBegin) / (double)numberOfPartitions;
+				double factor = step / 3;
 
 				double offset = step;
 				int m = 4;
-				double sum = function(lower) + function(upper);
-				for (int i = 0; i < divisions - 1; i++)
+				double sum = f(intervalBegin) + f(intervalEnd);
+				for (int i = 0; i < numberOfPartitions - 1; i++)
 				{
-					sum += m * function(lower + offset);
-					m = 6 - m; // alternate 4 and 2
+					// NOTE (cdrnet, 2009-01-07): Do not combine intervalBegin and offset (numerical stability)
+					sum += m * f(intervalBegin + offset);
+					m = 6 - m;
 					offset += step;
 				}
 
 				return factor * sum;
 			}
+			/// <summary>
+			/// Integrate using a given algorithm
+			/// </summary>
+			/// <param name="function">Function used in integration</param>
+			/// <param name="lower">Lower bound of integration</param>
+			/// <param name="upper">Upper bound of integration</param>
+			/// <param name="divisions">Number of divisions to use</param>
+			/// <param name="type">Type of integration to use</param>
+			/// <returns>Total area calculated by integration</returns>
+			/// <exception cref="ArgumentNullException">
+			/// Thrown if <paramref name="function"/> is null.
+			/// </exception>
+			/// <exception cref="ArgumentException">
+			/// Thrown if <paramref name="type"/> is <see cref="IntegrationType.Simpson"/> and
+			/// <paramref name="divisions"/> is not even.
+			/// </exception>
+			/// <exception cref="ArgumentOutOfRangeException">
+			/// Thrown if <paramref name="divisions"/> is less than or equal to zero, or if
+			/// <paramref name="type"/> is not a valid <see cref="IntegrationType"/>.
+			/// </exception>
 			public static double Integrate(Function2D function, double lower,
-				double upper, int divisions, IntegrationType type)
+				double upper, int divisions = 100, IntegrationType type = IntegrationType.Trapezoidal)
 			{
 				if (function == null)
 				{
@@ -170,7 +284,7 @@ namespace MathPlusLib
 				if (divisions <= 0)
 				{
 					throw new ArgumentOutOfRangeException("divisions",
-						"Division count must be positive and greater than zero.");
+						"Division count must be positive.");
 				}
 
 				if (lower == upper)
@@ -197,10 +311,11 @@ namespace MathPlusLib
 					{
 						throw e;
 					}
-				}
 
-				throw new ArgumentOutOfRangeException("Invalid IntegrationType " +
-					type.ToString());
+				default:
+					throw new ArgumentOutOfRangeException("Invalid IntegrationType " +
+						type.ToString());
+				}
 			}
 		}
 	}

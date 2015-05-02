@@ -8,52 +8,102 @@ using MathPlusLib.Stats;
 
 namespace MathPlusLib
 {
+	/// <summary>
+	/// Comparison direction when comparing unequal values.
+	/// Used in Statistical Tests
+	/// </summary>
 	public enum InequalityType
 	{
+		/// <summary>
+		/// Value is less than expected
+		/// </summary>
 		LessThan = -1,
+		/// <summary>
+		/// Value is not equal to expected (two-sided)
+		/// </summary>
 		NotEqual = 0,
+		/// <summary>
+		/// Value is greater than expected
+		/// </summary>
 		GreaterThan = 1
 	}
 
 	public static partial class MathPlus
 	{
+		/// <summary>
+		/// Statistical Functions
+		/// </summary>
 		public static class Stats
 		{
-			public static List<double> MakeNumbers(IEnumerable<IComparable> input)
-			{
-				List<double> result = new List<double>();
-				foreach (IComparable n in input)
-				{
-					try
-					{
-						result.Add((double)n);
-					}
-					catch (InvalidCastException)
-					{
-						throw new ArgumentException("Type cannot be converted to double: "
-							+ n.GetType().ToString());
-					}
-				}
+			/// <summary>
+			/// True if exceptions should be thrown if data is not
+			/// suited for test or interval. Setting this to false
+			/// disables the exceptions.
+			/// </summary>
+			public static bool ThrowInappropriateException
+			{ get; set; }
 
-				return result;
+			static Stats()
+			{
+				ThrowInappropriateException = true;
 			}
 
+			/// <summary>
+			/// Returns the sum of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to sum</param>
+			/// <returns>Sum of all items in <paramref name="values"/>.</returns>
 			public static double Sum(IEnumerable<double> values)
 			{
 				return values.Aggregate((n, total) => total + n);
 			}
+			/// <summary>
+			/// Returns the sum of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to sum</param>
+			/// <returns>Sum of all items in <paramref name="values"/>.</returns>
+			public static double Sum(IEnumerable<int> values)
+			{
+				return values.Aggregate((n, total) => total + n);
+			}
 
+			/// <summary>
+			/// Returns the mean of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to find the mean of</param>
+			/// <returns>Mean of all items in <paramref name="values"/>.</returns>
 			public static double Mean(IEnumerable<double> values)
 			{
 				double sigma = Sum(values);
-
+				return sigma / (double)(values.Count());
+			}
+			/// <summary>
+			/// Returns the mean of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to find the mean of</param>
+			/// <returns>Mean of all items in <paramref name="values"/>.</returns>
+			public static double Mean(IEnumerable<int> values)
+			{
+				double sigma = Sum(values);
 				return sigma / (double)(values.Count());
 			}
 
+			/// <summary>
+			/// Returns the Standard Deviation of all values in the <see cref="IEnumerable"/>.
+			/// </summary>
+			/// <param name="values">Values to find the SD of</param>
+			/// <returns>SD of all items in <paramref name="values"/>.</returns>
 			public static double StandardDev(IEnumerable<double> values)
 			{
 				return StandardDev(values, Mean(values));
 			}
+			/// <summary>
+			/// Returns the Standard Deviation of all values in the <see cref="IEnumerable"/>
+			/// with a precalculated mean for speed.
+			/// </summary>
+			/// <param name="values">Values to find the SD of</param>
+			/// <param name="mean">Precalculated mean of <paramref name="values"/>.</param>
+			/// <returns>SD of all items in <paramref name="values"/>.</returns>
 			public static double StandardDev(IEnumerable<double> values, double mean)
 			{
 				double res = 0;
@@ -70,6 +120,11 @@ namespace MathPlusLib
 				return res;
 			}
 
+			/// <summary>
+			/// Calculates the Root-Mean-Square (RMS) of data
+			/// </summary>
+			/// <param name="data">Data to find the RMS of</param>
+			/// <returns>RMS of <paramref name="data"/>.</returns>
 			public static double RootMeanSquare(IEnumerable<double> data)
 			{
 				double sigmaSquare = 0;
@@ -81,7 +136,28 @@ namespace MathPlusLib
 				double meanSquare = sigmaSquare / data.Count();
 				return Sqrt(meanSquare);
 			}
+			/// <summary>
+			/// Calculates the Root-Mean-Square (RMS) of data
+			/// </summary>
+			/// <param name="data">Data to find the RMS of</param>
+			/// <returns>RMS of <paramref name="data"/>.</returns>
+			public static double RootMeanSquare(IEnumerable<int> data)
+			{
+				double sigmaSquare = 0;
+				foreach (int n in data)
+				{
+					sigmaSquare += (n * n);
+				}
 
+				double meanSquare = sigmaSquare / data.Count();
+				return Sqrt(meanSquare);
+			}
+
+			/// <summary>
+			/// Calculates what proportion of a dataset is <c>true</c>.
+			/// </summary>
+			/// <param name="sample">Sample data to evaluate</param>
+			/// <returns>Proportion of <paramref name="sample"/> which equals <c>true</c>.</returns>
 			public static double Proportion(IEnumerable<bool> sample)
 			{
 				int on = 0;
@@ -93,6 +169,17 @@ namespace MathPlusLib
 
 				return (double)on / (double)total;
 			}
+			/// <summary>
+			/// Calculates what proportion of a data set evaluates to <c>true</c>
+			/// when evaluated in a <see cref="Predicate"/>.
+			/// </summary>
+			/// <typeparam name="T">Type of data sampled</typeparam>
+			/// <param name="sample">Sample of data to evaluate</param>
+			/// <param name="evaluator">Predicate to evaluate data with</param>
+			/// <returns>
+			/// Proportion of <paramref name="sample"/> which evaluates to <c>true</c>
+			/// when evaluated with <paramref name="evaluator"/>().
+			/// </returns>
 			public static double Proportion<T>(IEnumerable<T> sample, Predicate<T> evaluator)
 			{
 				List<bool> results = new List<bool>();
@@ -104,12 +191,12 @@ namespace MathPlusLib
 				return Proportion(results);
 			}
 
+			#region Normal
 			public static ZTestResults OnePropZTest(double p0, InequalityType HA, 
 				double proportion, int n, double alpha)
 			{
 				double q = 1.0 - proportion;
 
-				#region checking
 				if (proportion > 1.0 || proportion < 0.0)
 				{
 					throw new ArgumentOutOfRangeException("proportion", 
@@ -124,10 +211,12 @@ namespace MathPlusLib
 
 				if (proportion * (double)n < 10.0 || q * (double)n < 10.0)
 				{
-					throw new StatisticInappropriateException(
-						"Did not pass 10-successes 10-failures condition.");
+					if (ThrowInappropriateException)
+					{
+						throw new StatisticInappropriateException(
+							"Did not pass 10-successes 10-failures condition.");
+					}
 				}
-				#endregion checking
 
 				double se = Sqrt((proportion * q) / (double)n);
 
@@ -169,7 +258,6 @@ namespace MathPlusLib
 				double q1 = 1.0 - p1;
 				double q2 = 1.0 - p2;
 
-				#region checking
 				if (p1 > 1.0 || p1 < 0.0)
 				{
 					throw new ArgumentOutOfRangeException("p1",
@@ -180,18 +268,19 @@ namespace MathPlusLib
 					throw new ArgumentOutOfRangeException("p2",
 						"Proportion 2 cannot be outside of range (0, 1).");
 				}
-
-				if (p1 * (double)n1 < 10.0 || q1 * (double)n1 < 10.0)
+				if (ThrowInappropriateException)
 				{
-					throw new StatisticInappropriateException(
-						"Proportion 1 did not pass 10-successes 10-failures condition.");
+					if (p1 * (double)n1 < 10.0 || q1 * (double)n1 < 10.0)
+					{
+						throw new StatisticInappropriateException(
+							"Proportion 1 did not pass 10-successes 10-failures condition.");
+					}
+					if (p2 * (double)n2 < 10.0 || q2 * (double)n2 < 10.0)
+					{
+						throw new StatisticInappropriateException(
+							"Proportion 2 did not pass 10-successes 10-failures condition.");
+					}
 				}
-				if (p2 * (double)n2 < 10.0 || q2 * (double)n2 < 10.0)
-				{
-					throw new StatisticInappropriateException(
-						"Proportion 2 did not pass 10-successes 10-failures condition.");
-				}
-				#endregion checking
 
 				int total1 = (int)(p1 * n1);
 				int total2 = (int)(p2 * n2);
@@ -235,10 +324,23 @@ namespace MathPlusLib
 			{
 				return TwoPropZTest(HA, p1, p2, n1, n2, 0.05);
 			}
+			#endregion
 
+			#region StudentT
 			public static TTestResults OneSampleTTest(double mu0, InequalityType HA,
 				double mean, double sd, int n, double alpha)
 			{
+				if (alpha <= 0 || alpha > 1)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Alpha level must be within range (0, 1].");
+				}
+
+				if (n <= 0)
+				{
+					throw new ArgumentOutOfRangeException("n", "n must be positive.");
+				}
+
 				double se = sd / Sqrt(n);
 				double df = n - 1;
 
@@ -277,8 +379,25 @@ namespace MathPlusLib
 				double mean1, double mean2, double sd1, double sd2, 
 				int n1, int n2, double alpha)
 			{
+				if (alpha <= 0 || alpha > 1)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Alpha level must be within range (0, 1]");
+				}
+
+				if (n1 <= 0)
+				{
+					throw new ArgumentOutOfRangeException("n1",
+						"n must be positive.");
+				}
+				if (n2 <= 0)
+				{
+					throw new ArgumentOutOfRangeException("n2",
+						"n must be positive.");
+				}
+
 				double se = Sqrt(((sd1 * sd1) / (double)n1) + ((sd2 * sd2) / (double)n2));
-				double df = DegreesOfFreedom(sd1, sd2, n1, n2);
+				double df = TDegreesOfFreedom(sd1, sd2, n1, n2);
 
 				TModel model = new TModel(0, se, df);
 				double prob = -1;
@@ -312,7 +431,172 @@ namespace MathPlusLib
 			{
 				return TwoSampleTTest(HA, mean1, mean2, sd1, sd2, n1, n2, 0.05);
 			}
+			#endregion
 
+			#region ChiSquare
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
+				Dictionary<string, int> counts, Dictionary<string, double> expected)
+			{
+				if (alpha <= 0 || alpha > 1)
+				{
+					throw new ArgumentOutOfRangeException("alpha",
+						"Alpha level must be inside of range (0, 1].");
+				}
+
+				if (counts == null)
+				{
+					throw new ArgumentNullException("counts", "Counts cannot be null.");
+				}
+
+				if (counts.Count == 0)
+				{
+					throw new ArgumentException("counts", "Counts cannot be empty.");
+				}
+
+				foreach (int n in counts.Values)
+				{
+					if (n < 0)
+					{
+						throw new ArgumentOutOfRangeException("counts",
+							"No count can be below zero.");
+					}
+
+					if (n < 5 && ThrowInappropriateException)
+					{
+						throw new StatisticInappropriateException(
+							"Counts should all be above 5.");
+					}
+				}
+
+				if (expected == null)
+				{
+					expected = new Dictionary<string, double>();
+					double mean = MathPlus.Stats.Mean(counts.Values.ToList());
+					foreach (string category in counts.Keys)
+					{
+						expected.Add(category, mean);
+					}
+				}
+
+				Dictionary<string, double> deviations = new Dictionary<string, double>();
+				foreach (string cat in counts.Keys)
+				{
+					deviations.Add(cat, counts[cat] - expected[cat]);
+				}
+
+				Dictionary<string, double> components = new Dictionary<string, double>();
+				foreach (string cat in counts.Keys)
+				{
+					double resid = deviations[cat];
+					components.Add(cat, (resid * resid) / expected[cat]);
+				}
+
+				double chiSquareValue = 0;
+				foreach (double val in components.Values)
+				{
+					chiSquareValue += val;
+				}
+
+				ChiSquareModel model = new ChiSquareModel(counts.Count - 1);
+				double prob = model.CDF(chiSquareValue);
+
+				return new ChiSquareTestResults(chiSquareValue, prob, counts.Count - 1, alpha);
+			}
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
+				Dictionary<string, double> counts, Dictionary<string, double> expected)
+			{
+				Dictionary<string, int> ints = new Dictionary<string, int>();
+				foreach (KeyValuePair<string, double> kvp in counts)
+				{
+					ints.Add(kvp.Key, (int)kvp.Value);
+				}
+
+				return ChiSquareGOFTest(alpha, ints, expected);
+			}
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha,
+				List<int> counts, List<int> expected)
+			{
+				Dictionary<string, int> dCounts = new Dictionary<string, int>();
+				Dictionary<string, double> dExp = new Dictionary<string, double>();
+				for (int i = 1; i <= counts.Count; i++)
+				{
+					dCounts.Add(i.ToString(), counts[i - 1]);
+					dExp.Add(i.ToString(), expected[i - 1]);
+				}
+
+				return ChiSquareGOFTest(alpha, dCounts, dExp);
+			}
+			public static ChiSquareTestResults ChiSquareGOFTest(double alpha, List<int> counts)
+			{
+				Dictionary<string, int> dCounts = new Dictionary<string, int>();
+				for (int i = 1; i <= counts.Count; i++)
+				{
+					dCounts.Add(i.ToString(), counts[i - 1]);
+				}
+
+				return ChiSquareGOFTest(alpha, dCounts, null);
+			}
+
+			public static ChiSquareTestResults ChiSquareTest(double alpha, 
+				MathMatrix observed, MathMatrix expected)
+			{
+				MathMatrix deviations = new MathMatrix(observed.Width, observed.Height);
+				for (int r = 0; r < observed.Height; r++)
+				{
+					for (int c = 0; c < observed.Width; c++) // actually C#
+					{
+						deviations[r, c] = observed[r, c] - expected[r, c];
+					}
+				}
+
+				double sigma = 0;
+				for (int r = 0; r < observed.Height; r++)
+				{
+					for (int c = 0; c < observed.Width; c++) // actually C#
+					{
+						sigma += (deviations[r, c] * deviations[r, c]) / expected[r, c];
+					}
+				}
+				double df = (observed.Width - 1) * (observed.Height - 1);
+
+				ChiSquareModel model = new ChiSquareModel(df);
+				double pval = model.CDF(sigma);
+
+				return new ChiSquareTestResults(sigma, pval, df, alpha);
+			}
+			public static ChiSquareTestResults ChiSquareTest(double alpha, 
+				MathMatrix observed)
+			{
+				MathMatrix expected = new MathMatrix(observed.Width, observed.Height);
+				double fullSum = observed.SumAll();
+
+				for (int r = 0; r < observed.Height; r++)
+				{
+					double rowSum = observed.SumRow(r);
+					
+					for (int c = 0; c < observed.Width; c++) // actually C#
+					{
+						double colSum = observed.SumColumn(c);
+						double exp = (rowSum / fullSum) * colSum;
+						if (ThrowInappropriateException && exp < 5.0)
+						{
+							throw new StatisticInappropriateException(
+								"Expected value should be above 5 for each cell.");
+						}
+
+						expected[r, c] = exp;
+					}
+				}
+
+				return ChiSquareTest(alpha, observed, expected);
+			}
+			public static ChiSquareTestResults ChiSquareTest(MathMatrix observed)
+			{
+				return ChiSquareTest(.05, observed);
+			}
+			#endregion
+
+			#region Intervals
 			public static Interval OnePropZInterval(double proportion, int n, double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
@@ -328,7 +612,8 @@ namespace MathPlusLib
 
 				return Interval.FromCenter(proportion, se * zCrit);
 			}
-			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, double confidence)
+			public static Interval TwoPropZInterval(double p1, double p2, int n1, int n2, 
+				double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -345,7 +630,8 @@ namespace MathPlusLib
 				return Interval.FromCenter(p2 - p1, se * zCrit);
 			}
 
-			public static Interval OneSampleTInterval(double mean, double sd, int n, double confidence)
+			public static Interval OneSampleTInterval(double mean, double sd, int n, 
+				double confidence)
 			{
 				if (confidence <= 0.0 || confidence >= 1.0)
 				{
@@ -381,12 +667,13 @@ namespace MathPlusLib
 
 				double se = Sqrt((sd1 * sd1 / (double)n1) + (sd2 * sd2 / (double)n2));
 				double tCrit = TModel.InverseCDF(1.0 - ((1.0 - confidence) / 2.0),
-					DegreesOfFreedom(sd1, sd2, n1, n2));
+					TDegreesOfFreedom(sd1, sd2, n1, n2));
 
 				return Interval.FromCenter(deltaMean, se * tCrit);
 			}
+			#endregion
 
-			public static double DegreesOfFreedom(double s1, double s2, int n1, int n2)
+			public static double TDegreesOfFreedom(double s1, double s2, int n1, int n2)
 			{
 				double upperInnerA = (s1 * s1) / (double)n1;
 				double upperInnerB = (s2 * s2) / (double)n2;
