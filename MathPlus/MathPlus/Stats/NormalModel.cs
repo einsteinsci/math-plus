@@ -45,11 +45,11 @@ namespace MathPlusLib.Stats
 
 		public static double CDF(double zTop)
 		{
-			return phi(zTop);
+			return cdf(zTop);
 		}
 		public static double CDF(double zBot, double zTop)
 		{
-			return phi(zTop) - phi(zBot);
+			return cdf(zTop) - cdf(zBot);
 		}
 
 		public static double InverseCDF(double p)
@@ -85,11 +85,36 @@ namespace MathPlusLib.Stats
 
 		private static double erf(double z, bool invert)
 		{
-			double derf = 0;
-			return derf;
+			if (z == 0)
+			{
+				return 0;
+			}
+
+			if (double.IsPositiveInfinity(z))
+			{
+				return 1;
+			}
+
+			if (double.IsNegativeInfinity(z))
+			{
+				return -1;
+			}
+
+			if (double.IsNaN(z))
+			{
+				return double.NaN;
+			}
+
+			if (z < 0)
+			{
+				if (!invert)
+				{
+
+				}
+			}
 		}
 
-		private static double phi(double x)
+		private static double cdf(double x)
 		{
 			// constants
 			double a1 = 0.254829592;
